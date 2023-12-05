@@ -22,31 +22,7 @@
         </tr>
         </tbody>
     </table>
-    <!-- 페이징처리 시작 -->
-    <div class="join w-full flex justify-center mt-1">
-        <a class="join-item btn" th:classappend="${paging.number < 5} ? 'disabled' : ''"
-           th:if="${paging.number >= 5}" th:href="@{|?page=${(paging.number/5 > 0) ? (paging.number-5) : 0}|}">
-            <span>이전</span>
-        </a>
 
-        <span th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"
-              th:if="${page >= (paging.number/5)*5 and page < ((paging.number/5)+1)*5}">
-        <a th:if="${page == paging.number}"
-           th:class="${'join-item btn btn-active'}"
-           th:text="${page + 1}"></a>
-        <a th:unless="${page == paging.number}"
-           th:class="${'join-item btn'}"
-           th:text="${page + 1}" th:href="@{|?page=${page}|}"></a>
-    </span>
-
-        <a class="join-item btn"
-           th:classappend="${paging.number + 5 >= paging.totalPages} ? 'disabled' : ''"
-           th:if="${paging.totalPages > 5 and (paging.number / 5 < (paging.totalPages - 1) / 5)}"
-           th:href="@{|?page=${(paging.number / 5 + 1) * 5}|}">
-            <span>다음</span>
-        </a>
-    </div>
-    <!-- 페이징처리 끝 -->
     <div class="mt-2 flex gap-2 flex justify-end">
         <a th:href="@{/post/create}" class="btn btn-outline mr-3 mb-2">글 등록</a>
     </div>

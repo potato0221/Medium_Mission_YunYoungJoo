@@ -1,7 +1,7 @@
-package com.ll.medium.domain.article.article.controller;
+package com.ll.medium.domain.post.post.controller;
 
-import com.ll.medium.domain.article.article.entity.Post;
-import com.ll.medium.domain.article.article.service.PostService;
+import com.ll.medium.domain.post.post.entity.Post;
+import com.ll.medium.domain.post.post.service.PostService;
 import com.ll.medium.domain.member.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -26,7 +26,6 @@ public class PostController {
         model.addAttribute("paging",paging);
         return "post/post/post_list";
     }
-
 
 
 }

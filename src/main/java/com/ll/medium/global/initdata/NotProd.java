@@ -1,7 +1,7 @@
 package com.ll.medium.global.initdata;
 
-import com.ll.medium.domain.article.article.entity.Post;
-import com.ll.medium.domain.article.article.service.PostService;
+import com.ll.medium.domain.post.post.entity.Post;
+import com.ll.medium.domain.post.post.service.PostService;
 import com.ll.medium.domain.member.member.entity.SiteMember;
 import com.ll.medium.domain.member.member.service.MemberService;
 import org.springframework.boot.ApplicationRunner;

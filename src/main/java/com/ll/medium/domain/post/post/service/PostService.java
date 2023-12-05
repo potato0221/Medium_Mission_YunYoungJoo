@@ -1,8 +1,9 @@
-package com.ll.medium.domain.article.article.service;
+package com.ll.medium.domain.post.post.service;
 
-import com.ll.medium.domain.article.article.entity.Post;
-import com.ll.medium.domain.article.article.repository.PostRepository;
 import com.ll.medium.domain.member.member.entity.SiteMember;
+import com.ll.medium.domain.post.post.entity.Post;
+import com.ll.medium.domain.post.post.repository.PostRepository;
+import com.ll.medium.global.exception.DataNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +31,15 @@ public class PostService {
         return this.postRepository.findAll(pageable);
     }
 
+    public Post getPost(Integer id){
+        Optional<Post> post=this.postRepository.findById(id);
+        if(post.isPresent()){
+            return post.get();
+        }else {
+            throw new DataNotFoundException("question is not found");
+        }
+    }
+
     public void create(String title, String content, SiteMember member) {
         Post post=new Post();
         post.setTitle(title);
@@ -36,5 +47,10 @@ public class PostService {
         post.setCreateDate(LocalDateTime.now());
         post.setAuthor(member);
         this.postRepository.save(post);
+    }
+
+    public Page<Post> getRecent30(int page){
+        Pageable pageable = PageRequest.of(page, 10);
+        return this.postRepository.findAll(PageRequest.of(0,30));
     }
 }

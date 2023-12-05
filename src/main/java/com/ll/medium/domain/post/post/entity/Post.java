@@ -1,4 +1,4 @@
-package com.ll.medium.domain.article.article.entity;
+package com.ll.medium.domain.post.post.entity;
 
 
 import com.ll.medium.domain.member.member.entity.SiteMember;
@@ -17,6 +17,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Post {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

@@ -1,4 +1,4 @@
-package com.ll.medium.domain.article.article.dto;
+package com.ll.medium.domain.post.post.dto;
 
 
 import jakarta.validation.constraints.NotEmpty;
