@@ -1,0 +1,31 @@
+<html layout:decorate="~{global/layout}">
+<div layout:fragment="content" class="my-3">
+    <div class="border-bottom">
+        <div>
+            <h2 class="bg-blue-800 text-white px-4 py-3 mb-2">회원가입</h2>
+        </div>
+    </div>
+    <form th:action="@{/user/signup}" th:object="${userCreateForm}" method="post" class="mx-2">
+        <div th:replace="~{global/form_errors :: formErrorsFragment}"></div>
+        <div class="mb-3">
+            <label for="username" class="form-label">아이디</label>
+            <input type="text" th:field="*{username}" class="form-control input input-bordered w-full mt-2">
+        </div>
+        <div class="mb-3">
+            <label for="password1" class="form-label">비밀번호</label>
+            <input type="password" th:field="*{password1}" class="form-control input input-bordered w-full mt-2">
+        </div>
+        <div class="mb-3">
+            <label for="password2" class="form-label">비밀번호 확인</label>
+            <input type="password" th:field="*{password2}" class="form-control input input-bordered w-full mt-2">
+        </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">이메일</label>
+            <input type="email" th:field="*{email}" class="form-control input input-bordered w-full mt-2">
+        </div>
+        <div class="mt-2 flex gap-2 flex justify-end">
+            <input type="submit" value="회원가입" class="btn btn-outline btn-primary mr-3">
+        </div>
+    </form>
+</div>
+</html>
