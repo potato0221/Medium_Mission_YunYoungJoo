@@ -5,7 +5,7 @@
             <h2 class="bg-blue-800 text-white px-4 py-3 mb-2">회원가입</h2>
         </div>
     </div>
-    <form th:action="@{/user/signup}" th:object="${userCreateForm}" method="post" class="mx-2">
+    <form th:action="@{/member/join}" th:object="${userCreateForm}" method="post" class="mx-2">
         <div th:replace="~{global/form_errors :: formErrorsFragment}"></div>
         <div class="mb-3">
             <label for="username" class="form-label">아이디</label>

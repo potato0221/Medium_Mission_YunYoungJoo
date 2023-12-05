@@ -13,17 +13,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @RequiredArgsConstructor
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/member")
 public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/signup")
+    @GetMapping("/join")
     public String signup(UserCreateForm userCreateForm){
         return "user/user/signup_form";
     }
 
-    @PostMapping("/signup")
+    @PostMapping("/join")
     public String signup(@Valid UserCreateForm userCreateForm, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             return "user/user/signup_form";
