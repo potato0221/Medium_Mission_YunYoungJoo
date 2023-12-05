@@ -1,5 +1,6 @@
 package com.ll.medium.domain.post.post.repository;
 
+import com.ll.medium.domain.member.member.entity.SiteMember;
 import com.ll.medium.domain.post.post.entity.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,4 +15,5 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
     List<Post> findByTitleLike(String title);
     Page<Post> findAll(Pageable pageable);
 
+    Page<Post> findByAuthor(Pageable pageable, SiteMember siteMember);
 }

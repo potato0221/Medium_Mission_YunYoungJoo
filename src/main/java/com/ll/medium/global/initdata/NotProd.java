@@ -47,6 +47,13 @@ public class NotProd {
                 );
             }
 
+            Post post = new Post();
+            postService.create(
+                    "내 글 테스트 용",
+                    "글 내용 ",
+                    siteMember2
+            );
+
 
         };
     }

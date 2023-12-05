@@ -1,5 +1,6 @@
 package com.ll.medium.domain.post.premium.repository;
 
+import com.ll.medium.domain.member.member.entity.SiteMember;
 import com.ll.medium.domain.post.post.entity.Post;
 import com.ll.medium.domain.post.premium.entity.PremiumPost;
 import org.springframework.data.domain.Page;
@@ -15,4 +16,5 @@ public interface PremiumPostRepository extends JpaRepository<PremiumPost, Intege
     List<PremiumPost> findByTitleLike(String title);
     Page<PremiumPost> findAll(Pageable pageable);
 
+    Page<PremiumPost> findByAuthor(Pageable pageable, SiteMember siteMember);
 }

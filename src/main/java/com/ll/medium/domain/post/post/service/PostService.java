@@ -36,8 +36,15 @@ public class PostService {
     }
 
     public Page<Post> getRecent30(int page){
-        Pageable pageable = PageRequest.of(page, 10);
-        return this.postRepository.findAll(PageRequest.of(0,30,Sort.by(Sort.Order.desc("createDate"))));
+        Pageable pageable = PageRequest.of(0,30,Sort.by(Sort.Order.desc("createDate")));
+        return this.postRepository.findAll(pageable);
+    }
+
+    public Page<Post> getListByUsername(int page, SiteMember siteMember) {
+        List<Sort.Order> sorts=new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        return this.postRepository.findByAuthor(pageable,siteMember);
     }
 
     public Post getPost(Integer id){
@@ -57,6 +64,7 @@ public class PostService {
         post.setAuthor(member);
         this.postRepository.save(post);
     }
+
 
 
 }
