@@ -1,7 +1,7 @@
 package com.ll.medium.global.initdata;
 
-import com.ll.medium.domain.user.user.entity.SiteUser;
-import com.ll.medium.domain.user.user.service.UserService;
+import com.ll.medium.domain.member.member.entity.SiteMember;
+import com.ll.medium.domain.member.member.service.MemberService;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,15 +13,15 @@ public class NotProd {
 
     @Bean
     public ApplicationRunner initNotProd(
-            UserService userService
+            MemberService memberService
     ) {
         return args -> {
 
-            if (userService.count() > 0) return;
-            SiteUser siteUser1 = new SiteUser();
-            SiteUser siteUser2 = new SiteUser();
-            siteUser1 = userService.create("user1", "www1@email.com", "1234");
-            siteUser2 = userService.create("user2", "www2@email.com", "1234");
+            if (memberService.count() > 0) return;
+            SiteMember siteMember1 = new SiteMember();
+            SiteMember siteMember2 = new SiteMember();
+            siteMember1 = memberService.create("user1", "www1@email.com", "1234");
+            siteMember2 = memberService.create("user2", "www2@email.com", "1234");
 
 
         };

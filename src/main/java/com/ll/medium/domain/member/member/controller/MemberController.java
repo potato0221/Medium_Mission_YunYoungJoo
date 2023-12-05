@@ -1,7 +1,7 @@
-package com.ll.medium.domain.user.user.controller;
+package com.ll.medium.domain.member.member.controller;
 
-import com.ll.medium.domain.user.user.dto.UserCreateForm;
-import com.ll.medium.domain.user.user.service.UserService;
+import com.ll.medium.domain.member.member.dto.MemberCreateForm;
+import com.ll.medium.domain.member.member.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -14,36 +14,36 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/member")
-public class UserController {
+public class MemberController {
 
-    private final UserService userService;
+    private final MemberService memberService;
 
     @GetMapping("/join")
-    public String signup(UserCreateForm userCreateForm){
-        return "user/user/signup_form";
+    public String signup(MemberCreateForm memberCreateForm){
+        return "member/member/signup_form";
     }
 
     @PostMapping("/join")
-    public String signup(@Valid UserCreateForm userCreateForm, BindingResult bindingResult){
+    public String signup(@Valid MemberCreateForm memberCreateForm, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
-            return "user/user/signup_form";
+            return "member/member/signup_form";
         }
-        if(!userCreateForm.getPassword1().equals(userCreateForm.getPassword2())){
+        if(!memberCreateForm.getPassword1().equals(memberCreateForm.getPassword2())){
             bindingResult.rejectValue("password2","passwordInCorrect",
                     "패스워드가 일치하지 않습니다.");
-            return "user/user/signup_form";
+            return "member/member/signup_form";
         }
         try {
-            userService.create(userCreateForm.getUsername(),
-                    userCreateForm.getEmail(), userCreateForm.getPassword1());
+            memberService.create(memberCreateForm.getUsername(),
+                    memberCreateForm.getEmail(), memberCreateForm.getPassword1());
         }catch(DataIntegrityViolationException e) {
             e.printStackTrace();
             bindingResult.reject("signupFailed", "이미 등록된 사용자입니다.");
-            return "user/user/signup_form";
+            return "member/member/signup_form";
         }catch(Exception e) {
             e.printStackTrace();
             bindingResult.reject("signupFailed", e.getMessage());
-            return "user/user/signup_form";
+            return "member/member/signup_form";
         }
         return "redirect:/";
     }

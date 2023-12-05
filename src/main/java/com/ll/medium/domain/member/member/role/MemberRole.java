@@ -1,16 +1,16 @@
-package com.ll.medium.domain.user.user.role;
+package com.ll.medium.domain.member.member.role;
 
 import lombok.Getter;
 
 @Getter
-public enum UserRole {
+public enum MemberRole {
     ADMIN("ROLE_ADMIN"),
     PREMIUM("ROLE_PREMIUM"),
     USER("ROLE_USER");
 
     private final String roleName;
 
-    UserRole(String roleName) {
+    MemberRole(String roleName) {
         this.roleName = roleName;
     }
 

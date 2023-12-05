@@ -1,4 +1,4 @@
-package com.ll.medium.domain.user.user.dto;
+package com.ll.medium.domain.member.member.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UserCreateForm {
+public class MemberCreateForm {
 
     @Size(min=3,max=25)
     @NotEmpty(message = "사용자 ID를 입력 해 주세요.")
