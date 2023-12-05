@@ -1,4 +1,4 @@
 package com.ll.medium.domain.article.article.service;
 
-public class ArticleService {
+public class PostService {
 }

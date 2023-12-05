@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ArticleForm {
+public class PostForm {
 
     @NotEmpty(message="제목을 입력 해 주세요.")
     @Size(max=200)

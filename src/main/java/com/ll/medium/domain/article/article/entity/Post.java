@@ -16,7 +16,7 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Article {
+public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -37,7 +37,7 @@ public class Article {
     @ManyToMany
     Set<SiteMember> voter;
 
-    public Article(String title, String content, LocalDateTime now){
+    public Post(String title, String content, LocalDateTime now){
         this.title=title;
         this.content=content;
         this.createDate=now;
