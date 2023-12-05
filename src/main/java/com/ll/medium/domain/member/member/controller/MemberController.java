@@ -5,6 +5,7 @@ import com.ll.medium.domain.member.member.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,11 +19,13 @@ public class MemberController {
 
     private final MemberService memberService;
 
+    @PreAuthorize("isAnonymous()")
     @GetMapping("/join")
     public String signup(MemberCreateForm memberCreateForm){
         return "member/member/signup_form";
     }
 
+    @PreAuthorize("isAnonymous()")
     @PostMapping("/join")
     public String signup(@Valid MemberCreateForm memberCreateForm, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
@@ -48,9 +51,13 @@ public class MemberController {
         return "redirect:/";
     }
 
+    @PreAuthorize("isAnonymous()")
     @GetMapping("/login")
     public String login(){
         return "member/member/login_form";
     }
+
+
+
 
 }
