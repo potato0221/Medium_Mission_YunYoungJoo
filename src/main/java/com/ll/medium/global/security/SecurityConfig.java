@@ -29,6 +29,13 @@ public class SecurityConfig {
                 .headers((headers)->headers
                         .addHeaderWriter(new XFrameOptionsHeaderWriter(
                                 XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN)))
+                .authorizeHttpRequests(
+                        authorizeHttpRequests -> authorizeHttpRequests
+                                .requestMatchers("/premium/**")
+                                .hasRole("PREMIUM")
+                                .anyRequest()
+                                .permitAll()
+                )
                 .formLogin((formLogin) -> formLogin
                         .loginPage("/member/login")
                         .defaultSuccessUrl("/"))

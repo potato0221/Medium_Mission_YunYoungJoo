@@ -38,4 +38,5 @@ public class MemberService {
     public long count() {
         return memberRepository.count();
     }
+
 }

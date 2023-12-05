@@ -19,4 +19,5 @@ public class SiteMember {
 
     @Column(unique = true)
     private String email;
+
 }
