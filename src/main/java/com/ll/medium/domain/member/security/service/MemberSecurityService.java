@@ -44,6 +44,7 @@ public class MemberSecurityService implements UserDetailsService {
         return new User(siteMember.getUsername(), siteMember.getPassword(), authorities);
     }
 
+    // 결제 도입 시 사용
     public void addPremiumRole(SiteMember siteMember) {
 
     }
