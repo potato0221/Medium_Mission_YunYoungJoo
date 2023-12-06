@@ -31,8 +31,11 @@ public class PostService {
     }
 
     public Page<Post> getList(int page) {
-        SiteMember siteMember=rq.getMember();
-        Long authorId=siteMember.getId();
+        Long authorId=null;
+        if(rq.isLogined()){
+            SiteMember siteMember=rq.getMember();
+            authorId=siteMember.getId();
+        }
         List<Sort.Order> sorts=new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
@@ -92,5 +95,9 @@ public class PostService {
         post.setPublished(isPublished);
         this.postRepository.save(post);
 
+    }
+    @Transactional
+    public void delete(Post post) {
+        this.postRepository.delete(post);
     }
 }
