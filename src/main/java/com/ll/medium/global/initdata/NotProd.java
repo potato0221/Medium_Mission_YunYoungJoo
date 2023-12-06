@@ -4,8 +4,6 @@ import com.ll.medium.domain.member.member.entity.SiteMember;
 import com.ll.medium.domain.member.member.service.MemberService;
 import com.ll.medium.domain.post.post.entity.Post;
 import com.ll.medium.domain.post.post.service.PostService;
-import com.ll.medium.domain.post.premium.entity.PremiumPost;
-import com.ll.medium.domain.post.premium.service.PremiumPostService;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,8 +16,7 @@ public class NotProd {
     @Bean
     public ApplicationRunner initNotProd(
             MemberService memberService,
-            PostService postService,
-            PremiumPostService premiumPostService
+            PostService postService
     ) {
         return args -> {
 
@@ -39,12 +36,13 @@ public class NotProd {
                 );
             }
 
-            for(int i=1;i<=20;i++){
-                PremiumPost premiumPost=new PremiumPost();
-                premiumPostService.create(
+            for(int i=61;i<=80;i++){
+                Post post=new Post();
+                postService.create(
                         "유료 글 "+i,
                         "유료 글 내용" + i,
                         siteMember2
+                        , true
                 );
             }
 
