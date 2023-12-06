@@ -38,6 +38,8 @@ public class Post {
     @ManyToMany
     Set<SiteMember> voter;
 
+    private boolean isPremium;
+
     public Post(String title, String content, LocalDateTime now){
         this.title=title;
         this.content=content;

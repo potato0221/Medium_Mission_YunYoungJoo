@@ -69,7 +69,8 @@ public class PostController {
         if(bindingResult.hasErrors()){
             return "post/post/post_form";
         }
-        this.postService.create(postForm.getTitle(),postForm.getContent(),rq.getMember());
+
+        this.postService.create(postForm.getTitle(),postForm.getContent(),rq.getMember(),postForm.isPremium());
         return "redirect:/post/list";
     }
 

@@ -35,6 +35,7 @@ public class NotProd {
                         "글 제목 " + i,
                         "글 내용 " + i,
                         siteMember1
+                        ,false
                 );
             }
 
@@ -51,7 +52,8 @@ public class NotProd {
             postService.create(
                     "내 글 테스트 용",
                     "글 내용 ",
-                    siteMember2
+                    siteMember2,
+                    false
             );
 
 

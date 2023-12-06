@@ -57,12 +57,13 @@ public class PostService {
     }
 
     @Transactional
-    public void create(String title, String content, SiteMember member) {
+    public void create(String title, String content, SiteMember member, boolean isPremium) {
         Post post=new Post();
         post.setTitle(title);
         post.setContent(content);
         post.setCreateDate(LocalDateTime.now());
         post.setAuthor(member);
+        post.setPremium(isPremium);
         this.postRepository.save(post);
     }
 
