@@ -13,10 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
@@ -50,6 +47,13 @@ public class PremiumPostController {
         return "post/premium/premium_post_list";
     }
 
+    @GetMapping(value = "/post/detail/{id}")
+    public String detail(Model model, @PathVariable("id") Integer id) {
+        PremiumPost premiumPost = this.premiumPostService.getPost(id);
+        model.addAttribute("premiumPost", premiumPost);
+        return "post/premium/premium_post_detail";
+    }
+
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/post/create")
     public String postCreate(PremiumPostForm premiumPostForm){
@@ -66,6 +70,8 @@ public class PremiumPostController {
         this.premiumPostService.create(premiumPostForm.getTitle(),premiumPostForm.getContent(),rq.getMember());
         return "redirect:/premium/post/list";
     }
+
+
 
 
 }

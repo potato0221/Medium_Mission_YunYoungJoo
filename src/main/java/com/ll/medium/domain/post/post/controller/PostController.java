@@ -64,5 +64,11 @@ public class PostController {
         return "redirect:/post/list";
     }
 
+    @GetMapping(value = "/detail/{id}")
+    public String detail(Model model, @PathVariable("id") Integer id) {
+        Post post = this.postService.getPost(id);
+        model.addAttribute("post", post);
+        return "post/post/post_detail";
+    }
 
 }
