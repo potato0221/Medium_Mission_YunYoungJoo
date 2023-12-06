@@ -37,7 +37,7 @@ public class NotProd {
                 );
             }
 
-            for(int i=61;i<=80;i++){
+            for(int i=1;i<=20;i++){
                 Post post=new Post();
                 postService.create(
                         "유료 글 "+i,

@@ -18,7 +18,7 @@
                 <span th:unless="${post.isPremium and not @rq.isPremium()}" class="text-info-content">
                 <a th:href="@{|/post/detail/${post.id}|}" th:text="${post.title}"></a>
             </span>
-                <span th:if="${post.isPremium and not @rq.isPremium()}" th:text="${post.title}"></span>
+                <span th:if="${post.isPremium and not @rq.isPremium()}">멤버십 회원만 열람 가능 한 글 입니다.</span>
             </td>
             <td class="border border-white px-4 py-2"><span th:if="${post.author != null}" th:text="${post.author.username}"></span></td>
             <td class="border border-white px-4 py-2" th:text="${#temporals.format(post.createDate, 'yyyy-MM-dd HH:mm')}"></td>
