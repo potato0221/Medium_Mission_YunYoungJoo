@@ -4,6 +4,7 @@ import com.ll.medium.domain.member.member.entity.SiteMember;
 import com.ll.medium.domain.post.post.entity.Post;
 import com.ll.medium.domain.post.post.repository.PostRepository;
 import com.ll.medium.global.exception.DataNotFoundException;
+import com.ll.medium.global.rq.Rq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,21 +24,29 @@ import java.util.Optional;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final Rq rq;
 
     public List<Post> getList(){
         return this.postRepository.findAll();
     }
 
     public Page<Post> getList(int page) {
+        SiteMember siteMember=rq.getMember();
+        Long authorId=siteMember.getId();
         List<Sort.Order> sorts=new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
-        return this.postRepository.findAll(pageable);
+        return this.postRepository.findPublishedPostsByAuthorOrPublic(authorId,pageable);
     }
 
     public Page<Post> getRecent30(int page){
+        Long authorId=null;
+        if(rq.isLogined()){
+            SiteMember siteMember=rq.getMember();
+            authorId=siteMember.getId();
+        }
         Pageable pageable = PageRequest.of(0,30,Sort.by(Sort.Order.desc("createDate")));
-        return this.postRepository.findAll(pageable);
+        return this.postRepository.findPublishedPostsByAuthorOrPublic(authorId, pageable);
     }
 
     public Page<Post> getListByUsername(int page, SiteMember siteMember) {
@@ -52,7 +61,7 @@ public class PostService {
         if(post.isPresent()){
             return post.get();
         }else {
-            throw new DataNotFoundException("question is not found");
+            throw new DataNotFoundException("post is not found");
         }
     }
 
