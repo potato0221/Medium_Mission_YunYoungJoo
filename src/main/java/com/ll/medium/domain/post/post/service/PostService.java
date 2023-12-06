@@ -57,13 +57,14 @@ public class PostService {
     }
 
     @Transactional
-    public void create(String title, String content, SiteMember member, boolean isPremium) {
+    public void create(String title, String content, SiteMember member, boolean isPremium, boolean isPublished) {
         Post post=new Post();
         post.setTitle(title);
         post.setContent(content);
         post.setCreateDate(LocalDateTime.now());
         post.setAuthor(member);
         post.setPremium(isPremium);
+        post.setPublished(isPublished);
         this.postRepository.save(post);
     }
 
@@ -74,10 +75,12 @@ public class PostService {
     }
 
     @Transactional
-    public void modify(Post post, String title, String content) {
+    public void modify(Post post, String title, String content,boolean isPremium, boolean isPublished) {
         post.setTitle(title);
         post.setContent(content);
         post.setModifyDate(LocalDateTime.now());
+        post.setPremium(isPremium);
+        post.setPublished(isPublished);
         this.postRepository.save(post);
 
     }

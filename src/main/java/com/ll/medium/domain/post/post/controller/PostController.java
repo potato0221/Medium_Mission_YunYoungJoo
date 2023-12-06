@@ -70,7 +70,7 @@ public class PostController {
             return "post/post/post_form";
         }
 
-        this.postService.create(postForm.getTitle(),postForm.getContent(),rq.getMember(),postForm.isPremium());
+        this.postService.create(postForm.getTitle(),postForm.getContent(),rq.getMember(),postForm.isPremium(),postForm.isPublished());
         return "redirect:/post/list";
     }
 
@@ -87,6 +87,8 @@ public class PostController {
         }
         postForm.setTitle(post.getTitle());
         postForm.setContent(post.getContent());
+        postForm.setPremium(post.isPremium());
+        postForm.setPublished(post.isPublished());
         return "post/post/post_form";
 
     }
@@ -102,7 +104,7 @@ public class PostController {
         if (!post.getAuthor().getUsername().equals(principal.getName())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
         }
-        this.postService.modify(post, postForm.getTitle(), postForm.getContent());
+        this.postService.modify(post, postForm.getTitle(), postForm.getContent(),postForm.isPremium(),postForm.isPublished());
         return String.format("redirect:/post/detail/%s", id);
     }
 

@@ -32,7 +32,8 @@ public class NotProd {
                         "글 제목 " + i,
                         "글 내용 " + i,
                         siteMember1
-                        ,false
+                        ,false,
+                        false
                 );
             }
 
@@ -42,18 +43,10 @@ public class NotProd {
                         "유료 글 "+i,
                         "유료 글 내용" + i,
                         siteMember2
-                        , true
+                        , true,
+                        false
                 );
             }
-
-            Post post = new Post();
-            postService.create(
-                    "내 글 테스트 용",
-                    "글 내용 ",
-                    siteMember2,
-                    false
-            );
-
 
         };
     }

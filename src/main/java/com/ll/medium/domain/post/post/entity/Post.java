@@ -39,6 +39,7 @@ public class Post {
     Set<SiteMember> voter;
 
     private boolean isPremium;
+    private boolean isPublished;
 
     public Post(String title, String content, LocalDateTime now){
         this.title=title;
