@@ -15,7 +15,7 @@
             <td class="border border-white px-4 py-2 text-start">
                 <!-- Add [M] if the post is premium -->
                 <span th:if="${post.isPremium}">[M] </span>
-                <span th:unless="${post.isPremium and not @rq.isPremium()}" class="text-info-content">
+                <span th:unless="${post.isPremium and not @rq.isPremium()}" class="text-info-content" >
                 <a th:href="@{|/post/detail/${post.id}|}" th:text="${post.title}"></a>
             </span>
                 <span th:if="${post.isPremium and not @rq.isPremium()}" th:text="${post.title}"></span>
