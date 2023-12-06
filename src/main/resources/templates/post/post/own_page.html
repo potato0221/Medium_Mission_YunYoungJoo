@@ -10,10 +10,11 @@
                     <div>
                         <span th:if="${post.isPremium}">[M] </span>
                         <span th:if="${post.isPublished()}"><i class="fas fa-lock"></i> </span>
-                        <span th:unless="${post.isPremium and not @rq.isPremium()}" class="text-info-content">
+                        <span th:unless="${post.isPremium and not @rq.isPremium() or post.isPublished() and (@rq.getMember()!=post.getAuthor())}" class="text-info-content">
                         <h2 class="card-title" th:text="${post.title}"></h2>
                         </span>
                         <span th:if="${post.isPremium and not @rq.isPremium()}">멤버십 회원만 열람 가능 한 글 입니다.</span>
+                        <span th:if="${post.isPublished() and (@rq.getMember()!=post.getAuthor())}">비공개 게시물 입니다.</span>
 
                     </div>
 
