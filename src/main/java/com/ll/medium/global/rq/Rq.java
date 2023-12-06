@@ -67,6 +67,26 @@ public class Rq {
         req.getSession().removeAttribute(name);
     }
 
+    public boolean isAdmin() {
+        if (!isLogined()) {
+            return false;
+        }
+
+        return user.getAuthorities()
+                .stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+    }
+
+    public boolean isPremium() {
+        if (!isLogined()) {
+            return false;
+        }
+
+        return user.getAuthorities()
+                .stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_PREMIUM"));
+    }
+
 
 
 }
