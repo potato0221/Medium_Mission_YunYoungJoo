@@ -29,7 +29,7 @@ public class MemberService {
         return user;
     }
     public SiteMember getUser(String username){
-        Optional<SiteMember> siteUser=this.memberRepository.findByusername(username);
+        Optional<SiteMember> siteUser=this.memberRepository.findByUsername(username);
         if(siteUser.isPresent()){
             return siteUser.get();
         }else {
@@ -44,6 +44,6 @@ public class MemberService {
 
     public Optional<SiteMember> findByUsername(String username) {
 
-        return memberRepository.findByusername(username);
+        return memberRepository.findByUsername(username);
     }
 }

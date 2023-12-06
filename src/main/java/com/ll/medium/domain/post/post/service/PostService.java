@@ -55,9 +55,11 @@ public class PostService {
     public Page<Post> getListByUsername(int page, SiteMember siteMember) {
         List<Sort.Order> sorts=new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
+        Long authorId=siteMember.getId();
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
         return this.postRepository.findByAuthor(pageable,siteMember);
     }
+
 
     public Post getPost(Integer id){
         Optional<Post> post=this.postRepository.findById(id);
@@ -100,4 +102,6 @@ public class PostService {
     public void delete(Post post) {
         this.postRepository.delete(post);
     }
+
+
 }

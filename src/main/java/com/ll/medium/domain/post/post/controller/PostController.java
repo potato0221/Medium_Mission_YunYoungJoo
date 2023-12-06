@@ -30,24 +30,25 @@ public class PostController {
 
     @GetMapping("/list")
     public String list(Model model,
-                       @RequestParam(value="page",defaultValue = "0") int page){
+                       @RequestParam(value = "page", defaultValue = "0") int page) {
 
-        Page<Post> paging=this.postService.getList(page);
-        model.addAttribute("paging",paging);
+        Page<Post> paging = this.postService.getList(page);
+        model.addAttribute("paging", paging);
         return "post/post/post_list";
     }
 
     @GetMapping("/myList")
     public String myList(
             Model model,
-            @RequestParam(value = "page",defaultValue = "0") int page,
+            @RequestParam(value = "page", defaultValue = "0") int page,
             Principal principal
-    ){
+    ) {
         SiteMember siteMember = this.memberService.getUser(principal.getName());
-        Page<Post> paging=this.postService.getListByUsername(page,siteMember);
-        model.addAttribute("paging",paging);
+        Page<Post> paging = this.postService.getListByUsername(page, siteMember);
+        model.addAttribute("paging", paging);
         return "post/post/post_list";
     }
+
 
     @GetMapping(value = "/detail/{id}")
     public String detail(Model model, @PathVariable("id") Integer id) {
@@ -56,21 +57,22 @@ public class PostController {
         return "post/post/post_detail";
     }
 
+
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/create")
-    public String postCreate(PostForm postForm){
+    public String postCreate(PostForm postForm) {
         return "post/post/post_form";
     }
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/create")
     public String postCreate(@Valid PostForm postForm,
-                             BindingResult bindingResult){
-        if(bindingResult.hasErrors()){
+                             BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
             return "post/post/post_form";
         }
 
-        this.postService.create(postForm.getTitle(),postForm.getContent(),rq.getMember(),postForm.isPremium(),postForm.isPublished());
+        this.postService.create(postForm.getTitle(), postForm.getContent(), rq.getMember(), postForm.isPremium(), postForm.isPublished());
         return "redirect:/post/list";
     }
 
@@ -104,7 +106,7 @@ public class PostController {
         if (!post.getAuthor().getUsername().equals(principal.getName())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
         }
-        this.postService.modify(post, postForm.getTitle(), postForm.getContent(),postForm.isPremium(),postForm.isPublished());
+        this.postService.modify(post, postForm.getTitle(), postForm.getContent(), postForm.isPremium(), postForm.isPublished());
         return String.format("redirect:/post/detail/%s", id);
     }
 
@@ -113,10 +115,10 @@ public class PostController {
     public String postDelete(
             Principal principal,
             @PathVariable("id") Integer id
-    ){
-        Post post=this.postService.getPost(id);
-        if(!post.getAuthor().getUsername().equals(principal.getName())){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"삭제 권한이 없습니다.");
+    ) {
+        Post post = this.postService.getPost(id);
+        if (!post.getAuthor().getUsername().equals(principal.getName())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제 권한이 없습니다.");
         }
         this.postService.delete(post);
         return "redirect:/";

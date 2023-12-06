@@ -13,12 +13,16 @@ import java.util.List;
 public interface PostRepository extends JpaRepository<Post, Integer> {
 
     Post findByTitle(String title);
+
     Post findByTitleAndContent(String title, String content);
+
     List<Post> findByTitleLike(String title);
+
     Page<Post> findAll(Pageable pageable);
 
-    Page<Post> findByAuthor(Pageable pageable, SiteMember siteMember);
 
+
+    Page<Post> findByAuthor(Pageable pageable, SiteMember siteMember);
 
 
 
@@ -29,7 +33,5 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
             "OR p.isPublished = false"
     )
     Page<Post> findPublishedPostsByAuthorOrPublic(@Param("authorId") Long authorId, Pageable pageable);
-
-
 
 }
