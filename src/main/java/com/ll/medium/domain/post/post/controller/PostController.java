@@ -9,11 +9,13 @@ import com.ll.medium.global.rq.Rq;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 
@@ -47,6 +49,13 @@ public class PostController {
         return "post/post/post_list";
     }
 
+    @GetMapping(value = "/detail/{id}")
+    public String detail(Model model, @PathVariable("id") Integer id) {
+        Post post = this.postService.getPost(id);
+        model.addAttribute("post", post);
+        return "post/post/post_detail";
+    }
+
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/create")
     public String postCreate(PostForm postForm){
@@ -64,11 +73,37 @@ public class PostController {
         return "redirect:/post/list";
     }
 
-    @GetMapping(value = "/detail/{id}")
-    public String detail(Model model, @PathVariable("id") Integer id) {
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/modify/{id}")
+    public String questionModify(
+            PostForm postForm,
+            @PathVariable("id") Integer id,
+            Principal principal
+    ) {
         Post post = this.postService.getPost(id);
-        model.addAttribute("post", post);
-        return "post/post/post_detail";
+        if (!post.getAuthor().getUsername().equals(principal.getName())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없습니다.");
+        }
+        postForm.setTitle(post.getTitle());
+        postForm.setContent(post.getContent());
+        return "post/post/post_form";
+
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/modify/{id}")
+    public String questionModify(@Valid PostForm postForm, BindingResult bindingResult,
+                                 Principal principal, @PathVariable("id") Integer id) {
+        if (bindingResult.hasErrors()) {
+            return "post/post/post_form";
+        }
+        Post post = this.postService.getPost(id);
+        if (!post.getAuthor().getUsername().equals(principal.getName())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
+        }
+        this.postService.modify(post, postForm.getTitle(), postForm.getContent());
+        return String.format("redirect:/post/detail/%s", id);
+    }
+
 
 }

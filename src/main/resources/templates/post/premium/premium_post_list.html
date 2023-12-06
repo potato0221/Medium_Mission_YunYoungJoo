@@ -14,7 +14,7 @@
             <td class="border border-white px-4 py-2" th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>
             <td class="border border-white px-4 py-2 text-start">
                 <a class="text-info-content" th:href="@{|/premium/post/detail/${post.id}|}"
-                   th:text="${post.title}"></a>
+                   th:text="|[M] ${post.title}|"></a>
             </td>
             <td class="border border-white px-4 py-2"><span th:if="${post.author != null}" th:text="${post.author.username}"></span></td>
             <td class="border border-white px-4 py-2"

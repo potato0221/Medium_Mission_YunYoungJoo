@@ -49,6 +49,7 @@ public class PremiumPostService {
         }
     }
 
+    @Transactional
     public void create(String title, String content, SiteMember member) {
         PremiumPost premiumPost=new PremiumPost();
         premiumPost.setTitle(title);
@@ -64,5 +65,13 @@ public class PremiumPostService {
         sorts.add(Sort.Order.desc("createDate"));
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
         return this.premiumPostRepository.findByAuthor(pageable,siteMember);
+    }
+
+    @Transactional
+    public void modify(PremiumPost premiumPost, String title, String content) {
+        premiumPost.setTitle(title);
+        premiumPost.setContent(content);
+        premiumPost.setModifyDate(LocalDateTime.now());
+        this.premiumPostRepository.save(premiumPost);
     }
 }

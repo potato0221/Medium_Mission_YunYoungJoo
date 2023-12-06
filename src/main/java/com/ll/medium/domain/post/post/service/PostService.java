@@ -56,6 +56,7 @@ public class PostService {
         }
     }
 
+    @Transactional
     public void create(String title, String content, SiteMember member) {
         Post post=new Post();
         post.setTitle(title);
@@ -66,5 +67,17 @@ public class PostService {
     }
 
 
+    public boolean canModify(SiteMember member, Post post) {
+        if(member==null) return false;
+        return post.getAuthor().equals(member);
+    }
 
+    @Transactional
+    public void modify(Post post, String title, String content) {
+        post.setTitle(title);
+        post.setContent(content);
+        post.setModifyDate(LocalDateTime.now());
+        this.postRepository.save(post);
+
+    }
 }
