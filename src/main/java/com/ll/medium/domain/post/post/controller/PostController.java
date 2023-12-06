@@ -1,9 +1,10 @@
 package com.ll.medium.domain.post.post.controller;
 
 import com.ll.medium.domain.member.member.entity.SiteMember;
+import com.ll.medium.domain.member.member.service.MemberService;
 import com.ll.medium.domain.post.post.entity.Post;
 import com.ll.medium.domain.post.post.service.PostService;
-import com.ll.medium.domain.member.member.service.MemberService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -24,7 +25,10 @@ public class PostController {
 
     @GetMapping("/list")
     public String list(Model model,
+                       HttpServletResponse req,
                        @RequestParam(value="page",defaultValue = "0") int page){
+
+
         Page<Post> paging=this.postService.getList(page);
         model.addAttribute("paging",paging);
         return "post/post/post_list";

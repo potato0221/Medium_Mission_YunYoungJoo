@@ -37,11 +37,11 @@
             <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
                 <li><a href="/post/list"><i class="fa-solid fa-list"></i> 일반 글 목록</a></li>
                 <li sec:authorize="hasRole('PREMIUM')"><a href="/premium/post/list"><i class="fa-solid fa-list"></i> 멤버십 글 목록</a></li>
-                <li sec:authorize="isAuthenticated()"><a href="/post/myList"><i class="fa-solid fa-list"></i> 내 글 목록 (일반)</a></li>
+                <li th:if="${@rq.logined}"><a href="/post/myList"><i class="fa-solid fa-list"></i> 내 글 목록 (일반)</a></li>
                 <li sec:authorize="hasRole('PREMIUM')"><a href="/premium/post/myList"><i class="fa-solid fa-list"></i> 내 글 목록 (멤버십)</a></li>
-                <li sec:authorize="isAnonymous()"><a href="/member/join"><i class="fa-solid fa-user-plus"></i> 회원가입</a></li>
-                <li sec:authorize="isAnonymous()"><a th:href="@{/member/login}"><i class="fa-solid fa-right-to-bracket"></i> 로그인</a></li>
-                <li sec:authorize="isAuthenticated()"><a th:href="@{/member/logout}"><i class="fa-solid fa-right-from-bracket"></i> 로그아웃</a></li>
+                <li th:unless="${@rq.logined}"><a href="/member/join"><i class="fa-solid fa-user-plus"></i> 회원가입</a></li>
+                <li th:unless="${@rq.logined}"><a th:href="@{/member/login}"><i class="fa-solid fa-right-to-bracket"></i> 로그인</a></li>
+                <li th:if="${@rq.logined}"><a th:href="@{/member/logout}"><i class="fa-solid fa-right-from-bracket"></i> 로그아웃</a></li>
             </ul>
         </div>
     </div>

@@ -42,4 +42,8 @@ public class MemberService {
         return memberRepository.count();
     }
 
+    public Optional<SiteMember> findByUsername(String username) {
+
+        return memberRepository.findByusername(username);
+    }
 }
