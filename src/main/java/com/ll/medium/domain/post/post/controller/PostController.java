@@ -143,13 +143,21 @@ public class PostController {
 
     }
 
-
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/vote/{id}")
-    public String questionVote(Principal principal, @PathVariable("id") Integer id) {
+    @GetMapping("/{id}/like")
+    public String postVote(Principal principal, @PathVariable("id") Integer id) {
         Post post = this.postService.getPost(id);
         SiteMember siteMember = this.memberService.getUser(principal.getName());
         this.postService.vote(post, siteMember);
+        return String.format("redirect:/post/detail/%s", id);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/{id}/cancelLike")
+    public String deletePostVote(Principal principal, @PathVariable("id") Integer id) {
+        Post post = this.postService.getPost(id);
+        SiteMember siteMember = this.memberService.getUser(principal.getName());
+        this.postService.deleteVote(post, siteMember);
         return String.format("redirect:/post/detail/%s", id);
     }
 

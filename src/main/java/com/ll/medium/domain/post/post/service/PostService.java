@@ -113,4 +113,9 @@ public class PostService {
         post.getVoter().add(siteMember);
         this.postRepository.save(post);
     }
+    @Transactional
+    public void deleteVote(Post post, SiteMember siteMember) {
+        post.getVoter().remove(siteMember);
+        this.postRepository.save(post);
+    }
 }

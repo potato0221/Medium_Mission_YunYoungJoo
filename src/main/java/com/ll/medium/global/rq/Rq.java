@@ -2,6 +2,7 @@ package com.ll.medium.global.rq;
 
 import com.ll.medium.domain.member.member.entity.SiteMember;
 import com.ll.medium.domain.member.member.service.MemberService;
+import com.ll.medium.domain.post.post.entity.Post;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -86,6 +87,12 @@ public class Rq {
                 .anyMatch(a -> a.getAuthority().equals("ROLE_PREMIUM"));
     }
 
+    public boolean isLiked(Post post){
+        if(post.getVoter().contains(getMember())){
+            return true;
+        }
+        return false;
+    }
 
 
 }

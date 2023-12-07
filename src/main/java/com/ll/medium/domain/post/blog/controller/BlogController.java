@@ -65,7 +65,7 @@ public class BlogController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{username}/vote/{id}")
-    public String questionVote(@PathVariable("id") Integer id,
+    public String postVote(@PathVariable("id") Integer id,
                                @PathVariable("username") String username) {
         SiteMember siteMember = this.memberService.getUser(username);
 
