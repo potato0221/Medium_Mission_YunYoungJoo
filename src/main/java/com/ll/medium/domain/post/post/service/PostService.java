@@ -71,7 +71,7 @@ public class PostService {
     }
 
     @Transactional
-    public void create(String title, String content, SiteMember member, boolean isPremium, boolean isPublished) {
+    public void create(String title, String content, SiteMember member, boolean isPremium, boolean isPublished, Integer count) {
         Post post=new Post();
         post.setTitle(title);
         post.setContent(content);
@@ -79,6 +79,7 @@ public class PostService {
         post.setAuthor(member);
         post.setPremium(isPremium);
         post.setPublished(isPublished);
+        post.setCountByMember(count);
         this.postRepository.save(post);
     }
 

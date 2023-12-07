@@ -40,6 +40,7 @@ public class Post {
 
     private boolean isPremium;
     private boolean isPublished;
+    private Integer countByMember;
 
     public Post(String title, String content, LocalDateTime now){
         this.title=title;

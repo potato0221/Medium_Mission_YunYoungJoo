@@ -83,11 +83,14 @@ public class PostController {
     @PostMapping("/create")
     public String postCreate(@Valid PostForm postForm,
                              BindingResult bindingResult) {
+        SiteMember member=rq.getMember();
+        Integer count=member.getCount();
+        count++;
         if (bindingResult.hasErrors()) {
             return "post/post/post_form";
         }
 
-        this.postService.create(postForm.getTitle(), postForm.getContent(), rq.getMember(), postForm.isPremium(), postForm.isPublished());
+        this.postService.create(postForm.getTitle(), postForm.getContent(), rq.getMember(), postForm.isPremium(), postForm.isPublished(), count);
         return "redirect:/post/list";
     }
 

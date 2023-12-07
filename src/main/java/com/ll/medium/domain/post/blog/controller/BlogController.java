@@ -60,23 +60,7 @@ public class BlogController {
 
         return "post/post/post_detail";
     }
-
-    @GetMapping(value = "/detail/{id}")
-    public String detail(Model model, @PathVariable("id") Integer id) {
-        Post post = this.postService.getPost(id);
-        model.addAttribute("post", post);
-        if (post.isPremium()) {
-            if(!rq.isPremium()){
-                return "redirect:/post/access_denied";
-            }
-        }else if (post.isPublished()){
-            if(rq.getMember()!=post.getAuthor()){
-                return "redirect:/post/access_denied";
-            }
-        }
-        return "post/post/post_detail";
-
-    }
+    
 
 
 }
