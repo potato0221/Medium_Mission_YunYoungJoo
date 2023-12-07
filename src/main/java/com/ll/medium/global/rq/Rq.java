@@ -2,7 +2,6 @@ package com.ll.medium.global.rq;
 
 import com.ll.medium.domain.member.member.entity.SiteMember;
 import com.ll.medium.domain.member.member.service.MemberService;
-import com.ll.medium.domain.post.post.entity.Post;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -56,17 +55,6 @@ public class Rq {
         return member;
     }
 
-    public void setSessionAttr(String name, Object value) {
-        req.getSession().setAttribute(name, value);
-    }
-
-    public <T> T getSessionAttr(String name) {
-        return (T) req.getSession().getAttribute(name);
-    }
-
-    public void removeSessionAttr(String name) {
-        req.getSession().removeAttribute(name);
-    }
 
     public boolean isAdmin() {
         if (!isLogined()) {
@@ -85,13 +73,6 @@ public class Rq {
         return user.getAuthorities()
                 .stream()
                 .anyMatch(a -> a.getAuthority().equals("ROLE_PREMIUM"));
-    }
-
-    public boolean isLiked(Post post){
-        if(post.getVoter().contains(getMember())){
-            return true;
-        }
-        return false;
     }
 
 

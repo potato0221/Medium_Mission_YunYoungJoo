@@ -21,10 +21,7 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
     Page<Post> findAll(Pageable pageable);
 
 
-
     Page<Post> findByAuthor(Pageable pageable, SiteMember siteMember);
-
-
 
 
     @Query("SELECT p FROM Post p " +

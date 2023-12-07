@@ -26,38 +26,38 @@ public class PostService {
     private final PostRepository postRepository;
     private final Rq rq;
 
-    public List<Post> getList(){
+    public List<Post> getList() {
         return this.postRepository.findAll();
     }
 
     public Page<Post> getList(int page) {
-        Long authorId=null;
-        if(rq.isLogined()){
-            SiteMember siteMember=rq.getMember();
-            authorId=siteMember.getId();
+        Long authorId = null;
+        if (rq.isLogined()) {
+            SiteMember siteMember = rq.getMember();
+            authorId = siteMember.getId();
         }
-        List<Sort.Order> sorts=new ArrayList<>();
+        List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
-        return this.postRepository.findPublishedPostsByAuthorOrPublic(authorId,pageable);
+        return this.postRepository.findPublishedPostsByAuthorOrPublic(authorId, pageable);
     }
 
-    public Page<Post> getRecent30(int page){
-        Long authorId=null;
-        if(rq.isLogined()){
-            SiteMember siteMember=rq.getMember();
-            authorId=siteMember.getId();
+    public Page<Post> getRecent30(int page) {
+        Long authorId = null;
+        if (rq.isLogined()) {
+            SiteMember siteMember = rq.getMember();
+            authorId = siteMember.getId();
         }
-        Pageable pageable = PageRequest.of(0,30,Sort.by(Sort.Order.desc("createDate")));
+        Pageable pageable = PageRequest.of(0, 30, Sort.by(Sort.Order.desc("createDate")));
         return this.postRepository.findPublishedPostsByAuthorOrPublic(authorId, pageable);
     }
 
     public Page<Post> getListByUsername(int page, SiteMember siteMember) {
-        List<Sort.Order> sorts=new ArrayList<>();
+        List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
-        Long authorId=siteMember.getId();
+        Long authorId = siteMember.getId();
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
-        return this.postRepository.findByAuthor(pageable,siteMember);
+        return this.postRepository.findByAuthor(pageable, siteMember);
     }
 
     public Post getPostById(Integer id) {
@@ -65,18 +65,18 @@ public class PostService {
     }
 
 
-    public Post getPost(Integer id){
-        Optional<Post> post=this.postRepository.findById(id);
-        if(post.isPresent()){
+    public Post getPost(Integer id) {
+        Optional<Post> post = this.postRepository.findById(id);
+        if (post.isPresent()) {
             return post.get();
-        }else {
+        } else {
             throw new DataNotFoundException("post is not found");
         }
     }
 
     @Transactional
     public void create(String title, String content, SiteMember member, boolean isPremium, boolean isPublished, Integer count, Integer viewCount) {
-        Post post=new Post();
+        Post post = new Post();
         post.setTitle(title);
         post.setContent(content);
         post.setCreateDate(LocalDateTime.now());
@@ -90,12 +90,12 @@ public class PostService {
 
 
     public boolean canModify(SiteMember member, Post post) {
-        if(member==null) return false;
+        if (member == null) return false;
         return post.getAuthor().equals(member);
     }
 
     @Transactional
-    public void modify(Post post, String title, String content,boolean isPremium, boolean isPublished) {
+    public void modify(Post post, String title, String content, boolean isPremium, boolean isPublished) {
         post.setTitle(title);
         post.setContent(content);
         post.setModifyDate(LocalDateTime.now());
@@ -104,6 +104,7 @@ public class PostService {
         this.postRepository.save(post);
 
     }
+
     @Transactional
     public void delete(Post post) {
         this.postRepository.delete(post);
@@ -111,21 +112,24 @@ public class PostService {
 
 
     public Post getPostByCountByMemberAndMember(SiteMember siteMember, Integer id) {
-        return postRepository.findByCountByMemberAndMember(siteMember,id);
+        return postRepository.findByCountByMemberAndMember(siteMember, id);
     }
+
     @Transactional
-    public void vote(Post post, SiteMember siteMember){
+    public void vote(Post post, SiteMember siteMember) {
         post.getVoter().add(siteMember);
         this.postRepository.save(post);
     }
+
     @Transactional
     public void deleteVote(Post post, SiteMember siteMember) {
         post.getVoter().remove(siteMember);
         this.postRepository.save(post);
     }
+
     @Transactional
     public void incrementPostViewCount(Post post) {
-        post.setViewCount(post.getViewCount()+1);
+        post.setViewCount(post.getViewCount() + 1);
         this.postRepository.save(post);
     }
 

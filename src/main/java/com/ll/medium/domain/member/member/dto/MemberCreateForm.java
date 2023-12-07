@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 public class MemberCreateForm {
 
-    @Size(min=3,max=25)
+    @Size(min = 3, max = 25)
     @NotEmpty(message = "사용자 ID를 입력 해 주세요.")
     private String username;
 

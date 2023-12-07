@@ -10,11 +10,11 @@ import lombok.Setter;
 @Setter
 public class PostForm {
 
-    @NotEmpty(message="제목을 입력 해 주세요.")
-    @Size(max=200)
+    @NotEmpty(message = "제목을 입력 해 주세요.")
+    @Size(max = 200)
     private String title;
 
-    @NotEmpty(message="내용을 입력 해 주세요.")
+    @NotEmpty(message = "내용을 입력 해 주세요.")
     private String content;
 
     private boolean isPremium;

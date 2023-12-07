@@ -33,15 +33,15 @@ public class SecurityConfig {
                                 .anyRequest()
                                 .permitAll()
                 )
-                .csrf((csrf)->csrf
+                .csrf((csrf) -> csrf
                         .ignoringRequestMatchers(new AntPathRequestMatcher("/h2-console/**")))
-                .headers((headers)->headers
+                .headers((headers) -> headers
                         .addHeaderWriter(new XFrameOptionsHeaderWriter(
                                 XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN)))
                 .formLogin((formLogin) -> formLogin
                         .loginPage("/member/login")
                         .defaultSuccessUrl("/"))
-                .logout((logout)->logout
+                .logout((logout) -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
                         .logoutSuccessUrl("/")
                         .invalidateHttpSession(true));
@@ -50,7 +50,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    PasswordEncoder passwordEncoder(){
+    PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 

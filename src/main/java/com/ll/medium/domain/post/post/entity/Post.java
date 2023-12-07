@@ -22,7 +22,7 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(length=200)
+    @Column(length = 200)
     private String title;
 
     @Column(columnDefinition = "Text")
@@ -44,10 +44,10 @@ public class Post {
     private Integer countByMember;
     private Integer viewCount;
 
-    public Post(String title, String content, LocalDateTime now){
-        this.title=title;
-        this.content=content;
-        this.createDate=now;
+    public Post(String title, String content, LocalDateTime now) {
+        this.title = title;
+        this.content = content;
+        this.createDate = now;
     }
 
 }

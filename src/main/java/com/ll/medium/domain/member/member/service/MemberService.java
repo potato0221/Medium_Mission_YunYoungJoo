@@ -20,8 +20,8 @@ public class MemberService {
 
 
     @Transactional
-    public SiteMember create(String username, String email, String password, Integer count){
-        SiteMember user=new SiteMember();
+    public SiteMember create(String username, String email, String password, Integer count) {
+        SiteMember user = new SiteMember();
         user.setUsername(username);
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(password));
@@ -29,11 +29,12 @@ public class MemberService {
         this.memberRepository.save(user);
         return user;
     }
-    public SiteMember getUser(String username){
-        Optional<SiteMember> siteUser=this.memberRepository.findByUsername(username);
-        if(siteUser.isPresent()){
+
+    public SiteMember getUser(String username) {
+        Optional<SiteMember> siteUser = this.memberRepository.findByUsername(username);
+        if (siteUser.isPresent()) {
             return siteUser.get();
-        }else {
+        } else {
             throw new DataNotFoundException("siteuser not found");
         }
     }

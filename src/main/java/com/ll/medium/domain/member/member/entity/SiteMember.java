@@ -9,11 +9,11 @@ import lombok.Setter;
 @Entity
 public class SiteMember {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(unique = true)
-    private  String username;
+    private String username;
 
     private String password;
 

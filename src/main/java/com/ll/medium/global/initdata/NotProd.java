@@ -23,18 +23,18 @@ public class NotProd {
             if (memberService.count() > 0) return;
             SiteMember siteMember1 = new SiteMember();
             SiteMember siteMember2 = new SiteMember();
-            siteMember1 = memberService.create("user1", "www1@email.com", "1234",0);
-            siteMember2 = memberService.create("premium1", "www2@email.com", "1234",0);
+            siteMember1 = memberService.create("user1", "www1@email.com", "1234", 0);
+            siteMember2 = memberService.create("premium1", "www2@email.com", "1234", 0);
 
             for (int i = 1; i <= 60; i++) {
                 Post post = new Post();
-                siteMember1.setCount(siteMember1.getCount()+1);
+                siteMember1.setCount(siteMember1.getCount() + 1);
                 memberService.save(siteMember1);
                 postService.create(
                         "글 제목 " + i,
                         "글 내용 " + i,
                         siteMember1
-                        ,false,
+                        , false,
                         false,
                         siteMember1.getCount(),
                         0
@@ -43,13 +43,13 @@ public class NotProd {
 
             }
 
-            Integer count2=0;
-            for(int i=1;i<=20;i++){
-                Post post=new Post();
-                siteMember2.setCount(siteMember2.getCount()+1);
+            Integer count2 = 0;
+            for (int i = 1; i <= 20; i++) {
+                Post post = new Post();
+                siteMember2.setCount(siteMember2.getCount() + 1);
                 memberService.save(siteMember2);
                 postService.create(
-                        "유료 글 "+i,
+                        "유료 글 " + i,
                         "유료 글 내용" + i,
                         siteMember2
                         , true,

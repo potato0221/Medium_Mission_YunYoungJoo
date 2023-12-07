@@ -62,11 +62,11 @@ public class PostController {
         Post post = this.postService.getPost(id);
         model.addAttribute("post", post);
         if (post.isPremium()) {
-            if(!rq.isPremium()){
+            if (!rq.isPremium()) {
                 return "redirect:/post/access_denied";
             }
-        }else if (post.isPublished()){
-            if(rq.getMember()!=post.getAuthor()){
+        } else if (post.isPublished()) {
+            if (rq.getMember() != post.getAuthor()) {
                 return "redirect:/post/access_denied";
             }
         }
@@ -98,7 +98,7 @@ public class PostController {
     }
 
     @GetMapping("/access_denied")
-    public String accessDenied(){
+    public String accessDenied() {
         return "global/access_denied";
     }
 
@@ -113,20 +113,20 @@ public class PostController {
     @PostMapping("/create")
     public String postCreate(@Valid PostForm postForm,
                              BindingResult bindingResult) {
-        SiteMember member=rq.getMember();
-        member.setCount(member.getCount()+1);
+        SiteMember member = rq.getMember();
+        member.setCount(member.getCount() + 1);
         this.memberService.save(member);
         if (bindingResult.hasErrors()) {
             return "post/post/post_form";
         }
 
-        this.postService.create(postForm.getTitle(), postForm.getContent(), rq.getMember(), postForm.isPremium(), postForm.isPublished(), member.getCount(),0);
+        this.postService.create(postForm.getTitle(), postForm.getContent(), rq.getMember(), postForm.isPremium(), postForm.isPublished(), member.getCount(), 0);
         return "redirect:/post/list";
     }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/modify/{id}")
-    public String questionModify(
+    public String postModify(
             PostForm postForm,
             @PathVariable("id") Integer id,
             Principal principal
@@ -145,8 +145,8 @@ public class PostController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/modify/{id}")
-    public String questionModify(@Valid PostForm postForm, BindingResult bindingResult,
-                                 Principal principal, @PathVariable("id") Integer id) {
+    public String postModify(@Valid PostForm postForm, BindingResult bindingResult,
+                             Principal principal, @PathVariable("id") Integer id) {
         if (bindingResult.hasErrors()) {
             return "post/post/post_form";
         }
