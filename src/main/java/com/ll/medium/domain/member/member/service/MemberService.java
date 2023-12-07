@@ -20,11 +20,12 @@ public class MemberService {
 
 
     @Transactional
-    public SiteMember create(String username, String email, String password){
+    public SiteMember create(String username, String email, String password, Integer count){
         SiteMember user=new SiteMember();
         user.setUsername(username);
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(password));
+        user.setCount(count);
         this.memberRepository.save(user);
         return user;
     }
@@ -45,5 +46,11 @@ public class MemberService {
     public Optional<SiteMember> findByUsername(String username) {
 
         return memberRepository.findByUsername(username);
+    }
+
+    @Transactional
+    public void save(SiteMember siteMember) {
+        memberRepository.save(siteMember);
+
     }
 }

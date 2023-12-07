@@ -84,13 +84,13 @@ public class PostController {
     public String postCreate(@Valid PostForm postForm,
                              BindingResult bindingResult) {
         SiteMember member=rq.getMember();
-        Integer count=member.getCount();
-        count++;
+        member.setCount(member.getCount()+1);
+        memberService.save(member);
         if (bindingResult.hasErrors()) {
             return "post/post/post_form";
         }
 
-        this.postService.create(postForm.getTitle(), postForm.getContent(), rq.getMember(), postForm.isPremium(), postForm.isPublished(), count);
+        this.postService.create(postForm.getTitle(), postForm.getContent(), rq.getMember(), postForm.isPremium(), postForm.isPublished(), member.getCount());
         return "redirect:/post/list";
     }
 
