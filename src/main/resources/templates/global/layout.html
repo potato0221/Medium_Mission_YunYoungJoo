@@ -52,7 +52,7 @@
         <a href="/" class="btn btn-ghost text-xl">Medium</a>
     </div>
     <div class="navbar-end">
-        <a th:if="${@rq.isLogined}" href="/post/myList" class="btn btn-ghost text-xl">
+        <a th:if="${@rq.isLogined}" th:href="@{'/b/' + ${@rq.member.username}}" class="btn btn-ghost text-xl">
             <span th:text="${@rq.member.username}"></span>
         </a>
     </div>
