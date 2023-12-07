@@ -43,7 +43,8 @@ public class BlogController {
                          @PathVariable("id") Integer id,
                          @PathVariable("username") String username) {
         SiteMember siteMember=this.memberService.getUser(username);
-        Post post = this.postService.getPost(id);
+
+        Post post = this.postService.getPostByCountByMemberAndMember(siteMember, id);
 
         model.addAttribute("username", username);
         model.addAttribute("post", post);
@@ -60,7 +61,7 @@ public class BlogController {
 
         return "post/post/post_detail";
     }
-    
+
 
 
 }

@@ -20,7 +20,7 @@
 
                     <div class="card-actions justify-end">
                         <a th:unless="${post.isPublished() and (@rq.getMember()!=post.getAuthor()) or (post.isPremium() and not @rq.isPremium())}"
-                           th:href="@{|/b/${post.author.username}/${post.id}|}" class="btn btn-primary">글 보기</a>
+                           th:href="@{|/b/${post.author.username}/${post.countByMember}|}" class="btn btn-primary">글 보기</a>
                     </div>
                 </div>
             </div>

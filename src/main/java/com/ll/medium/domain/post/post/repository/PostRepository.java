@@ -34,4 +34,6 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
     )
     Page<Post> findPublishedPostsByAuthorOrPublic(@Param("authorId") Long authorId, Pageable pageable);
 
+    @Query("SELECT p FROM Post p WHERE p.countByMember = :id AND p.author = :siteMember")
+    Post findByCountByMemberAndMember(SiteMember siteMember, Integer id);
 }

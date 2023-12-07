@@ -105,4 +105,7 @@ public class PostService {
     }
 
 
+    public Post getPostByCountByMemberAndMember(SiteMember siteMember, Integer id) {
+        return postRepository.findByCountByMemberAndMember(siteMember,id);
+    }
 }
