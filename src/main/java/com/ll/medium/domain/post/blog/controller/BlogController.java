@@ -5,6 +5,9 @@ import com.ll.medium.domain.member.member.service.MemberService;
 import com.ll.medium.domain.post.post.entity.Post;
 import com.ll.medium.domain.post.post.service.PostService;
 import com.ll.medium.global.rq.Rq;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -42,7 +45,9 @@ public class BlogController {
     @GetMapping(value = "/{username}/{id}")
     public String detail(Model model,
                          @PathVariable("id") Integer id,
-                         @PathVariable("username") String username) {
+                         @PathVariable("username") String username,
+                         HttpServletRequest request,
+                         HttpServletResponse response) {
         SiteMember siteMember = this.memberService.getUser(username);
 
         Post post = this.postService.getPostByCountByMemberAndMember(siteMember, id);
@@ -58,6 +63,27 @@ public class BlogController {
             if (rq.getMember() != post.getAuthor()) {
                 return "redirect:/post/access_denied";
             }
+        }
+
+        String postId = String.valueOf(id);
+        Cookie[] cookies = request.getCookies();
+        boolean viewed = false;
+
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("viewedPosts") && cookie.getValue().contains(postId)) {
+                    viewed = true;
+                    break;
+                }
+            }
+        }
+        if (!viewed) {
+            postService.incrementPostViewCount(post);
+
+            // 중복 조회 방지를 위해 쿠키에 게시물 ID 저장
+            Cookie cookie = new Cookie("viewedPosts", postId);
+            cookie.setMaxAge(1 * 60 * 60); // 쿠키 유지 시간 1시간
+            response.addCookie(cookie);
         }
 
         return "post/post/own_detail";

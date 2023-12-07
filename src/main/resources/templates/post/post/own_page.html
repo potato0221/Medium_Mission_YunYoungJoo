@@ -10,8 +10,12 @@
                     <div>
                         <span th:if="${post.isPremium}"><i class="fa-solid fa-m"></i> . </span>
                         <span th:if="${post.isPublished()}"><i class="fas fa-lock"></i> </span>
-                        <span th:unless="${post.isPremium and not @rq.isPremium() or post.isPublished() and (@rq.getMember()!=post.getAuthor())}" class="text-info-content">
-                        <h2 class="card-title" th:text="${post.title}"></h2>
+                        <span th:unless="${post.isPremium and not @rq.isPremium() or post.isPublished() and (@rq.getMember()!=post.getAuthor())}"
+                              class="text-info-content">
+                        <div class="flex justify-between">
+                            <h2 class="card-title" th:text="${post.title}"></h2>
+                            <div class="badge badge-ghost" th:text="${'조회수 : ' + post.viewCount}"></div>
+                        </div>
                         </span>
                         <span th:if="${post.isPremium and not @rq.isPremium()}">멤버십 회원만 열람 가능 한 글 입니다.</span>
                         <span th:if="${post.isPublished() and (@rq.getMember()!=post.getAuthor())}">비공개 게시물 입니다.</span>
@@ -20,7 +24,8 @@
 
                     <div class="card-actions justify-end">
                         <a th:unless="${post.isPublished() and (@rq.getMember()!=post.getAuthor()) or (post.isPremium() and not @rq.isPremium())}"
-                           th:href="@{|/b/${post.author.username}/${post.countByMember}|}" class="btn btn-primary">글 보기</a>
+                           th:href="@{|/b/${post.author.username}/${post.countByMember}|}" class="btn btn-primary">글
+                            보기</a>
                     </div>
                 </div>
             </div>

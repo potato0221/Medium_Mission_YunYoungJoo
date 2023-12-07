@@ -60,6 +60,10 @@ public class PostService {
         return this.postRepository.findByAuthor(pageable,siteMember);
     }
 
+    public Post getPostById(Integer id) {
+        return postRepository.findById(id).orElse(null);
+    }
+
 
     public Post getPost(Integer id){
         Optional<Post> post=this.postRepository.findById(id);
@@ -71,7 +75,7 @@ public class PostService {
     }
 
     @Transactional
-    public void create(String title, String content, SiteMember member, boolean isPremium, boolean isPublished, Integer count) {
+    public void create(String title, String content, SiteMember member, boolean isPremium, boolean isPublished, Integer count, Integer viewCount) {
         Post post=new Post();
         post.setTitle(title);
         post.setContent(content);
@@ -80,6 +84,7 @@ public class PostService {
         post.setPremium(isPremium);
         post.setPublished(isPublished);
         post.setCountByMember(count);
+        post.setViewCount(viewCount);
         this.postRepository.save(post);
     }
 
@@ -118,4 +123,10 @@ public class PostService {
         post.getVoter().remove(siteMember);
         this.postRepository.save(post);
     }
+    @Transactional
+    public void incrementPostViewCount(Post post) {
+        post.setViewCount(post.getViewCount()+1);
+        this.postRepository.save(post);
+    }
+
 }

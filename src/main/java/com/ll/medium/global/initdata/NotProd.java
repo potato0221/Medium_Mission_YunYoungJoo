@@ -36,7 +36,8 @@ public class NotProd {
                         siteMember1
                         ,false,
                         false,
-                        siteMember1.getCount()
+                        siteMember1.getCount(),
+                        0
                 );
 
 
@@ -53,7 +54,8 @@ public class NotProd {
                         siteMember2
                         , true,
                         false,
-                        siteMember2.getCount()
+                        siteMember2.getCount(),
+                        0
                 );
             }
 

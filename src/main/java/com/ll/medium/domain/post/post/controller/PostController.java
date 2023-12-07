@@ -6,6 +6,9 @@ import com.ll.medium.domain.post.post.dto.PostForm;
 import com.ll.medium.domain.post.post.entity.Post;
 import com.ll.medium.domain.post.post.service.PostService;
 import com.ll.medium.global.rq.Rq;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -51,7 +54,11 @@ public class PostController {
 
 
     @GetMapping(value = "/detail/{id}")
-    public String detail(Model model, @PathVariable("id") Integer id) {
+    public String detail(Model model,
+                         @PathVariable("id") Integer id,
+                         HttpServletRequest request,
+                         HttpServletResponse response
+    ) {
         Post post = this.postService.getPost(id);
         model.addAttribute("post", post);
         if (post.isPremium()) {
@@ -63,6 +70,29 @@ public class PostController {
                 return "redirect:/post/access_denied";
             }
         }
+        // 쿠키 또는 세션을 사용하여 중복 요청 필터링
+        String postId = String.valueOf(id);
+        Cookie[] cookies = request.getCookies();
+        boolean viewed = false;
+
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("viewedPosts") && cookie.getValue().contains(postId)) {
+                    viewed = true;
+                    break;
+                }
+            }
+        }
+        if (!viewed) {
+            postService.incrementPostViewCount(post);
+
+            // 중복 조회 방지를 위해 쿠키에 게시물 ID 저장
+            Cookie cookie = new Cookie("viewedPosts", postId);
+            cookie.setMaxAge(1 * 60 * 60); // 쿠키 유지 시간 1시간
+            response.addCookie(cookie);
+        }
+
+
         return "post/post/post_detail";
 
     }
@@ -85,12 +115,12 @@ public class PostController {
                              BindingResult bindingResult) {
         SiteMember member=rq.getMember();
         member.setCount(member.getCount()+1);
-        memberService.save(member);
+        this.memberService.save(member);
         if (bindingResult.hasErrors()) {
             return "post/post/post_form";
         }
 
-        this.postService.create(postForm.getTitle(), postForm.getContent(), rq.getMember(), postForm.isPremium(), postForm.isPublished(), member.getCount());
+        this.postService.create(postForm.getTitle(), postForm.getContent(), rq.getMember(), postForm.isPremium(), postForm.isPublished(), member.getCount(),0);
         return "redirect:/post/list";
     }
 
