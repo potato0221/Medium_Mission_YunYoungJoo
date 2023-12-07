@@ -42,6 +42,7 @@ public class BlogController {
                          @PathVariable("username") String username) {
         SiteMember siteMember=this.memberService.getUser(username);
         Post post = this.postService.getPost(id);
+
         model.addAttribute("username", username);
         model.addAttribute("post", post);
         return "post/post/post_detail";

@@ -54,7 +54,15 @@ public class PostController {
     public String detail(Model model, @PathVariable("id") Integer id) {
         Post post = this.postService.getPost(id);
         model.addAttribute("post", post);
+        if (post.isPremium()) {
+            return "redirect:/premium/detail/" + id; // 프리미엄 게시물일 경우 '/premium'을 추가하여 리다이렉트
+        }else if (post.isPublished()){
+            if(rq.getMember()!=post.getAuthor()){
+                return "redirect:/access-denied";
+            }
+        }
         return "post/post/post_detail";
+
     }
 
 
