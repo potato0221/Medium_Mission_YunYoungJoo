@@ -29,11 +29,17 @@
                 </div>
                 <div class="my-3 flex justify-between">
                     <div>
-                        <a href="javascript:void(0);" class="recommend btn btn-sm btn-ghost"
-                           th:data-uri="@{|/b/${post.author.username}/vote/${post.countByMember}|}">
-                            <i class="fa-regular fa-heart fa-xl"></i>
-                            <span class="badge rounded-pill bg-error" th:text="${#lists.size(post.voter)}"></span>
-                        </a>
+                        <div>
+                            <a href="javascript:void(0);" class="like btn btn-sm btn-ghost"
+                               th:data-uri="@{|/b/${post.author.username}/${post.countByMember}/like|}">
+                                <i class="fa-regular fa-heart fa-xl"></i>
+                                <span class="badge rounded-pill bg-error" th:text="${#lists.size(post.voter)}"></span>
+                            </a>
+                            <a href="javascript:void(0);" class="deleteLike btn btn-sm btn-ghost"
+                               th:data-uri="@{|/b/${post.author.username}/${post.countByMember}/cancelLike|}">
+                                <i class="fa-solid fa-heart-crack fa-xl"></i>
+                            </a>
+                        </div>
                     </div>
                     <div>
                         <a th:href="@{|/post/modify/${post.id}|}" class="btn btn-outline btn-sm mr-3"
@@ -60,12 +66,23 @@
         });
     });
 
-    const recommend_elements = document.getElementsByClassName("recommend");
-    Array.from(recommend_elements).forEach(function(element) {
-        element.addEventListener('click', function() {
-            if(confirm("정말로 추천하시겠습니까?")) {
+    const like_elements = document.getElementsByClassName("like");
+    Array.from(like_elements).forEach(function (element) {
+        element.addEventListener('click', function () {
+            if (confirm("추천 하시겠습니까?")) {
                 location.href = this.dataset.uri;
-            };
+            }
+            ;
+        });
+    });
+
+    const deleteLike_elements = document.getElementsByClassName("deleteLike");
+    Array.from(deleteLike_elements).forEach(function (element) {
+        element.addEventListener('click', function () {
+            if (confirm("추천을 취소 하시겠습니까?")) {
+                location.href = this.dataset.uri;
+            }
+            ;
         });
     });
 

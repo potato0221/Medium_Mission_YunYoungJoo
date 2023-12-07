@@ -90,15 +90,25 @@ public class BlogController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/{username}/vote/{id}")
+    @GetMapping("/{username}/{id}/like")
     public String postVote(@PathVariable("id") Integer id,
-                               @PathVariable("username") String username) {
+                           @PathVariable("username") String username) {
         SiteMember siteMember = this.memberService.getUser(username);
 
         Post post = this.postService.getPostByCountByMemberAndMember(siteMember, id);
 
         this.postService.vote(post, siteMember);
-        return String.format("redirect:/b/%s/%s",username, id);
+        return String.format("redirect:/b/%s/%s", username, id);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/{username}/{id}/cancelLike")
+    public String deletePostVote(@PathVariable("id") Integer id,
+                                 @PathVariable("username") String username) {
+        Post post = this.postService.getPost(id);
+        SiteMember siteMember = this.memberService.getUser(username);
+        this.postService.deleteVote(post, siteMember);
+        return String.format("redirect:/b/%s/%s", username, id);
     }
 
 }
