@@ -27,7 +27,7 @@
                 <div class="my-3 flex justify-between">
                     <div>
                         <a href="javascript:void(0);" class="recommend btn btn-sm btn-ghost"
-                           th:data-uri="@{|/post/vote/${post.id}|}">
+                           th:data-uri="@{|/b/${post.author.username}/vote/${post.countByMember}|}">
                             <i class="fa-regular fa-heart fa-xl"></i>
                             <span class="badge rounded-pill bg-error" th:text="${#lists.size(post.voter)}"></span>
                         </a>

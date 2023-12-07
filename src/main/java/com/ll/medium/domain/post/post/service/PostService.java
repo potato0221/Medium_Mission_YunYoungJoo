@@ -108,4 +108,9 @@ public class PostService {
     public Post getPostByCountByMemberAndMember(SiteMember siteMember, Integer id) {
         return postRepository.findByCountByMemberAndMember(siteMember,id);
     }
+    @Transactional
+    public void vote(Post post, SiteMember siteMember){
+        post.getVoter().add(siteMember);
+        this.postRepository.save(post);
+    }
 }

@@ -38,6 +38,7 @@ public class Post {
     @ManyToMany
     Set<SiteMember> voter;
 
+
     private boolean isPremium;
     private boolean isPublished;
     private Integer countByMember;

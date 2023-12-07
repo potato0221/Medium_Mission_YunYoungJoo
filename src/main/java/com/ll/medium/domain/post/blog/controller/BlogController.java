@@ -7,6 +7,7 @@ import com.ll.medium.domain.post.post.service.PostService;
 import com.ll.medium.global.rq.Rq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,8 +30,8 @@ public class BlogController {
             @PathVariable("username") String username,
             @RequestParam(value = "page", defaultValue = "0") int page) {
 
-        SiteMember siteMember =this.memberService.getUser(username);
-        Page<Post> paging = this.postService.getListByUsername(page,siteMember);
+        SiteMember siteMember = this.memberService.getUser(username);
+        Page<Post> paging = this.postService.getListByUsername(page, siteMember);
 
 
         model.addAttribute("username", username);
@@ -42,7 +43,7 @@ public class BlogController {
     public String detail(Model model,
                          @PathVariable("id") Integer id,
                          @PathVariable("username") String username) {
-        SiteMember siteMember=this.memberService.getUser(username);
+        SiteMember siteMember = this.memberService.getUser(username);
 
         Post post = this.postService.getPostByCountByMemberAndMember(siteMember, id);
 
@@ -50,18 +51,28 @@ public class BlogController {
         model.addAttribute("post", post);
 
         if (post.isPremium()) {
-            if(!rq.isPremium()){
+            if (!rq.isPremium()) {
                 return "redirect:/post/access_denied";
             }
-        }else if (post.isPublished()){
-            if(rq.getMember()!=post.getAuthor()){
+        } else if (post.isPublished()) {
+            if (rq.getMember() != post.getAuthor()) {
                 return "redirect:/post/access_denied";
             }
         }
 
-        return "post/post/post_detail";
+        return "post/post/own_detail";
     }
 
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/{username}/vote/{id}")
+    public String questionVote(@PathVariable("id") Integer id,
+                               @PathVariable("username") String username) {
+        SiteMember siteMember = this.memberService.getUser(username);
 
+        Post post = this.postService.getPostByCountByMemberAndMember(siteMember, id);
+
+        this.postService.vote(post, siteMember);
+        return String.format("redirect:/b/%s/%s",username, id);
+    }
 
 }
