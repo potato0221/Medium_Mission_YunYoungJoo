@@ -4,6 +4,7 @@ import com.ll.medium.domain.member.member.entity.SiteMember;
 import com.ll.medium.domain.member.member.service.MemberService;
 import com.ll.medium.domain.post.post.entity.Post;
 import com.ll.medium.domain.post.post.service.PostService;
+import com.ll.medium.global.rq.Rq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,7 @@ public class BlogController {
 
     private final PostService postService;
     private final MemberService memberService;
+    private final Rq rq;
 
     @GetMapping(value = "/{username}")
     public String getPostsByUser(
@@ -45,7 +47,35 @@ public class BlogController {
 
         model.addAttribute("username", username);
         model.addAttribute("post", post);
+
+        if (post.isPremium()) {
+            if(!rq.isPremium()){
+                return "redirect:/post/access_denied";
+            }
+        }else if (post.isPublished()){
+            if(rq.getMember()!=post.getAuthor()){
+                return "redirect:/post/access_denied";
+            }
+        }
+
         return "post/post/post_detail";
+    }
+
+    @GetMapping(value = "/detail/{id}")
+    public String detail(Model model, @PathVariable("id") Integer id) {
+        Post post = this.postService.getPost(id);
+        model.addAttribute("post", post);
+        if (post.isPremium()) {
+            if(!rq.isPremium()){
+                return "redirect:/post/access_denied";
+            }
+        }else if (post.isPublished()){
+            if(rq.getMember()!=post.getAuthor()){
+                return "redirect:/post/access_denied";
+            }
+        }
+        return "post/post/post_detail";
+
     }
 
 
