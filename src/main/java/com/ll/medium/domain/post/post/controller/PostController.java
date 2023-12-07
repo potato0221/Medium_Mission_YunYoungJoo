@@ -55,14 +55,21 @@ public class PostController {
         Post post = this.postService.getPost(id);
         model.addAttribute("post", post);
         if (post.isPremium()) {
-            return "redirect:/premium/detail/" + id; // 프리미엄 게시물일 경우 '/premium'을 추가하여 리다이렉트
+            if(!rq.isPremium()){
+                return "redirect:/post/access_denied";
+            }
         }else if (post.isPublished()){
             if(rq.getMember()!=post.getAuthor()){
-                return "redirect:/access-denied";
+                return "redirect:/post/access_denied";
             }
         }
         return "post/post/post_detail";
 
+    }
+
+    @GetMapping("/access_denied")
+    public String accessDenied(){
+        return "post/post/access_denied";
     }
 
 
