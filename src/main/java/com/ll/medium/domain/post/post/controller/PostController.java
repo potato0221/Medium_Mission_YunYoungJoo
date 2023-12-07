@@ -69,7 +69,7 @@ public class PostController {
 
     @GetMapping("/access_denied")
     public String accessDenied(){
-        return "post/post/access_denied";
+        return "global/access_denied";
     }
 
 
