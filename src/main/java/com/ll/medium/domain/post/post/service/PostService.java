@@ -38,7 +38,7 @@ public class PostService {
         }
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
-        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        Pageable pageable = PageRequest.of(page, 9, Sort.by(sorts));
         return this.postRepository.findPublishedPostsByAuthorOrPublic(authorId, pageable);
     }
 
@@ -53,6 +53,14 @@ public class PostService {
     }
 
     public Page<Post> getListByUsername(int page, SiteMember siteMember) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Long authorId = siteMember.getId();
+        Pageable pageable = PageRequest.of(page, 9, Sort.by(sorts));
+        return this.postRepository.findByAuthor(pageable, siteMember);
+    }
+
+    public Page<Post> getOwnListByUsername(int page, SiteMember siteMember) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
         Long authorId = siteMember.getId();

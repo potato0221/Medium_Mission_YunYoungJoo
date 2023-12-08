@@ -34,7 +34,7 @@ public class BlogController {
             @RequestParam(value = "page", defaultValue = "0") int page) {
 
         SiteMember siteMember = this.memberService.getUser(username);
-        Page<Post> paging = this.postService.getListByUsername(page, siteMember);
+        Page<Post> paging = this.postService.getOwnListByUsername(page, siteMember);
 
 
         model.addAttribute("username", username);
