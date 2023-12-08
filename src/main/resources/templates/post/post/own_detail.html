@@ -55,6 +55,79 @@
             </div>
         </div>
     </div>
+
+    <!--댓글-->
+    <h5 class="bg-blue-800 text-white px-4 py-3 my-2" th:text="|${#lists.size(post.commentList)}개의 답변이 있습니다.|"></h5>
+    <div>
+        <ul>
+            <li th:each="comment : ${post.commentList}">
+                <div class="card w-96 bg-base-100 shadow-xl mt-3 w-full">
+                    <!--수정 일시-->
+                    <div class="card-body">
+                        <p th:text="${comment.content}"></p>
+                        <div class="flex justify-end">
+                            <div th:if="${comment.modifyDate != null}" class="badge badge-ghost dark:text-gray-300 p-2">
+                                <div class="mr-2">modified at</div>
+                                <div th:text="${#temporals.format(comment.modifyDate, 'yyyy-MM-dd HH:mm')}"></div>
+                            </div>
+                        </div>
+                        <!--유저명+작성 일시-->
+                        <div class=" flex justify-end">
+                            <div class="badge badge-ghost dark:text-gray-300 p-2">
+                                <div class="mr-2">
+                                    <span th:if="${comment.author != null}" th:text="${comment.author.username}"></span>
+                                </div>
+                                <div>
+                                    <div th:text="${#temporals.format(comment.createDate, 'yyyy-MM-dd HH:mm')}"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--추천,수정,삭제 버튼-->
+                        <div class="my-3 flex justify-between">
+                            <div>
+                                <div>
+                                    <a href="javascript:void(0);" class="like btn btn-sm btn-ghost"
+                                       th:data-uri="@{|/b/comment/${post.author.username}/${post.countByMember}/like/${comment.id}|}">
+                                        <i class="fa-regular fa-heart fa-xl"></i>
+                                        <span class="badge rounded-pill bg-error"
+                                              th:text="${#lists.size(comment.voter)}"></span>
+                                    </a>
+                                    <a href="javascript:void(0);" class="deleteLike btn btn-sm btn-ghost"
+                                       th:data-uri="@{|/b/comment/${post.author.username}/${post.countByMember}/cancelLike/${comment.id}|}">
+                                        <i class="fa-solid fa-heart-crack fa-xl"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div>
+                                <a th:href="@{|/b/comment/${post.author.username}/${post.countByMember}/modify/${comment.id}|}" class="btn btn-outline btn-sm mr-3"
+                                   sec:authorize="isAuthenticated()"
+                                   th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.username}"
+                                   th:text="수정"></a>
+                                <a href="javascript:void(0);" th:data-uri="@{|/b/comment/${post.author.username}/${post.countByMember}/delete/${comment.id}|}"
+                                   class="delete btn btn-outline btn-sm" sec:authorize="isAuthenticated()"
+                                   th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.username}"
+                                   th:text="삭제"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="mt-3 mx-3">
+
+        <form th:action="@{|/b/comment/${post.author.username}/${post.countByMember}/create|}" th:object="${commentForm}" method="post">
+            <textarea class=" textarea textarea-bordered w-full" rows="3" id="content" name="content"></textarea>
+            <div class="mt-3 flex justify-end">
+                <input type="submit" value="댓글 등록" class="btn btn-outline btn-primary mr-3">
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
 </div>
 <script layout:fragment="script" type='text/javascript'>
     const delete_elements = document.getElementsByClassName("delete");

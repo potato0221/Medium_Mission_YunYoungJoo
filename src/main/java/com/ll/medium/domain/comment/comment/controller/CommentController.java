@@ -26,7 +26,7 @@ import java.security.Principal;
 @RequestMapping("/comment")
 @RequiredArgsConstructor
 @Controller
-public class Commentcontroller {
+public class CommentController {
 
     private final PostService postService;
     private final CommentService commentService;

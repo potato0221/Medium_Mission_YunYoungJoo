@@ -35,7 +35,7 @@ public class CommentService {
         if(comment.isPresent()){
             return comment.get();
         }else {
-            throw new DataNotFoundException("answer not found");
+            throw new DataNotFoundException("comment not found");
         }
 
     }
@@ -59,4 +59,6 @@ public class CommentService {
         comment.getVoter().remove(siteMember);
         this.commentRepository.save(comment);
     }
+
+
 }
