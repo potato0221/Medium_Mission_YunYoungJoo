@@ -2,21 +2,23 @@ package com.ll.medium.domain.post.post.controller;
 
 import com.ll.medium.domain.member.member.entity.SiteMember;
 import com.ll.medium.domain.member.member.service.MemberService;
+import com.ll.medium.domain.post.post.dto.PostForm;
 import com.ll.medium.domain.post.post.entity.Post;
 import com.ll.medium.domain.post.post.service.PostService;
 import com.ll.medium.global.rq.Rq;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @RequestMapping("/b")
 @RequiredArgsConstructor
@@ -94,10 +96,10 @@ public class BlogController {
     public String postVote(@PathVariable("id") Integer id,
                            @PathVariable("username") String username) {
         SiteMember siteMember = this.memberService.getUser(username);
-
+        SiteMember siteMember2=rq.getMember();
         Post post = this.postService.getPostByCountByMemberAndMember(siteMember, id);
 
-        this.postService.vote(post, siteMember);
+        this.postService.vote(post, siteMember2);
         return String.format("redirect:/b/%s/%s", username, id);
     }
 
@@ -105,10 +107,69 @@ public class BlogController {
     @GetMapping("/{username}/{id}/cancelLike")
     public String deletePostVote(@PathVariable("id") Integer id,
                                  @PathVariable("username") String username) {
-        Post post = this.postService.getPost(id);
         SiteMember siteMember = this.memberService.getUser(username);
-        this.postService.deleteVote(post, siteMember);
+        SiteMember siteMember2=rq.getMember();
+        Post post = this.postService.getPostByCountByMemberAndMember(siteMember,id);
+        this.postService.deleteVote(post, siteMember2);
         return String.format("redirect:/b/%s/%s", username, id);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/{username}/{id}/modify")
+    public String postModify(
+            PostForm postForm,
+            @PathVariable("id") Integer id,
+            Principal principal,
+            @PathVariable("username") String username
+    ) {
+
+        SiteMember siteMember=this.memberService.getUser(username);
+        Post post = this.postService.getPostByCountByMemberAndMember(siteMember,id);
+        if (!post.getAuthor().getUsername().equals(principal.getName())) {
+            return "redirect:/post/access_denied";
+        }
+        postForm.setTitle(post.getTitle());
+        postForm.setContent(post.getContent());
+        postForm.setPremium(post.isPremium());
+        postForm.setPublished(post.isPublished());
+        return "post/post/post_form";
+
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/{username}/{id}/modify")
+    public String postModify(@Valid PostForm postForm,
+                             BindingResult bindingResult,
+                             Principal principal,
+                             @PathVariable("id") Integer id,
+                             @PathVariable("username") String username) {
+        if (bindingResult.hasErrors()) {
+            return "post/post/post_form";
+        }
+        SiteMember siteMember=this.memberService.getUser(username);
+        Post post = this.postService.getPostByCountByMemberAndMember(siteMember,id);
+        if (!post.getAuthor().getUsername().equals(principal.getName())) {
+            return "redirect:/post/access_denied";
+        }
+        this.postService.modify(post, postForm.getTitle(), postForm.getContent(), postForm.isPremium(), postForm.isPublished());
+        return String.format("redirect:/b/%s/%s", username, id);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/{username}/{id}/delete")
+    public String postDelete(
+            Principal principal,
+            @PathVariable("id") Integer id,
+            @PathVariable("username") String username
+    ) {
+        SiteMember siteMember=this.memberService.getUser(username);
+        Post post = this.postService.getPostByCountByMemberAndMember(siteMember,id);
+        if (!post.getAuthor().getUsername().equals(principal.getName())) {
+            return "redirect:/post/access_denied";
+        }
+        this.postService.delete(post);
+        return String.format("redirect:/b/%s", username);
+
     }
 
 }

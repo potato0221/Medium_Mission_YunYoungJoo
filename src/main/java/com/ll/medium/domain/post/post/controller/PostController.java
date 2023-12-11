@@ -12,13 +12,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 
@@ -133,7 +131,7 @@ public class PostController {
     ) {
         Post post = this.postService.getPost(id);
         if (!post.getAuthor().getUsername().equals(principal.getName())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없습니다.");
+            return "redirect:/post/access_denied";
         }
         postForm.setTitle(post.getTitle());
         postForm.setContent(post.getContent());
@@ -152,7 +150,7 @@ public class PostController {
         }
         Post post = this.postService.getPost(id);
         if (!post.getAuthor().getUsername().equals(principal.getName())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
+            return "redirect:/post/access_denied";
         }
         this.postService.modify(post, postForm.getTitle(), postForm.getContent(), postForm.isPremium(), postForm.isPublished());
         return String.format("redirect:/post/detail/%s", id);
@@ -166,7 +164,7 @@ public class PostController {
     ) {
         Post post = this.postService.getPost(id);
         if (!post.getAuthor().getUsername().equals(principal.getName())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제 권한이 없습니다.");
+            return "redirect:/post/access_denied";
         }
         this.postService.delete(post);
         return "redirect:/";
