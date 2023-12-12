@@ -55,17 +55,6 @@ public class Rq {
         return member;
     }
 
-
-    public boolean isAdmin() {
-        if (!isLogined()) {
-            return false;
-        }
-
-        return user.getAuthorities()
-                .stream()
-                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
-    }
-
     public boolean isPremium() {
         if (!isLogined()) {
             return false;
@@ -74,6 +63,5 @@ public class Rq {
                 .stream()
                 .anyMatch(a -> a.getAuthority().equals("ROLE_PREMIUM"));
     }
-
 
 }

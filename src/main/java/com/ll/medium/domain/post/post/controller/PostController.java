@@ -38,6 +38,7 @@ public class PostController {
         return "post/post/post_list";
     }
 
+
     @GetMapping("/myList")
     public String myList(
             Model model,

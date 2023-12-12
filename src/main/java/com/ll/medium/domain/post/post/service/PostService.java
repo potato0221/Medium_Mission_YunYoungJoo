@@ -26,10 +26,6 @@ public class PostService {
     private final PostRepository postRepository;
     private final Rq rq;
 
-    public List<Post> getList() {
-        return this.postRepository.findAll();
-    }
-
     public Page<Post> getList(int page) {
         Long authorId = null;
         if (rq.isLogined()) {
@@ -42,7 +38,8 @@ public class PostService {
         return this.postRepository.findPublishedPostsByAuthorOrPublic(authorId, pageable);
     }
 
-    public Page<Post> getRecent30(int page) {
+
+    public Page<Post> getRecent30() {
         Long authorId = null;
         if (rq.isLogined()) {
             SiteMember siteMember = rq.getMember();
@@ -68,10 +65,6 @@ public class PostService {
         return this.postRepository.findByAuthor(pageable, siteMember);
     }
 
-    public Post getPostById(Integer id) {
-        return postRepository.findById(id).orElse(null);
-    }
-
 
     public Post getPost(Integer id) {
         Optional<Post> post = this.postRepository.findById(id);
@@ -94,12 +87,6 @@ public class PostService {
         post.setCountByMember(count);
         post.setViewCount(viewCount);
         this.postRepository.save(post);
-    }
-
-
-    public boolean canModify(SiteMember member, Post post) {
-        if (member == null) return false;
-        return post.getAuthor().equals(member);
     }
 
     @Transactional

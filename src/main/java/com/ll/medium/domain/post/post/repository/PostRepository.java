@@ -8,18 +8,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.List;
-
 public interface PostRepository extends JpaRepository<Post, Integer> {
 
-    Post findByTitle(String title);
-
-    Post findByTitleAndContent(String title, String content);
-
-    List<Post> findByTitleLike(String title);
-
     Page<Post> findAll(Pageable pageable);
-
 
     Page<Post> findByAuthor(Pageable pageable, SiteMember siteMember);
 
