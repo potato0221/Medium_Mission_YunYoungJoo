@@ -1,4 +1,4 @@
-package com.ll.medium.domain.comment.comment.dto;
+package com.ll.medium.domain.post.comment.dto;
 
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;

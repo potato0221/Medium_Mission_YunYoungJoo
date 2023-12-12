@@ -1,9 +1,9 @@
-package com.ll.medium.domain.comment.comment.controller;
+package com.ll.medium.domain.post.comment.controller;
 
 
-import com.ll.medium.domain.comment.comment.dto.CommentForm;
-import com.ll.medium.domain.comment.comment.entity.Comment;
-import com.ll.medium.domain.comment.comment.service.CommentService;
+import com.ll.medium.domain.post.comment.dto.CommentForm;
+import com.ll.medium.domain.post.comment.entity.Comment;
+import com.ll.medium.domain.post.comment.service.CommentService;
 import com.ll.medium.domain.member.member.entity.SiteMember;
 import com.ll.medium.domain.member.member.service.MemberService;
 import com.ll.medium.domain.post.post.entity.Post;

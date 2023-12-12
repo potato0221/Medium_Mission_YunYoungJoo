@@ -1,7 +1,7 @@
-package com.ll.medium.domain.comment.comment.service;
+package com.ll.medium.domain.post.comment.service;
 
-import com.ll.medium.domain.comment.comment.entity.Comment;
-import com.ll.medium.domain.comment.comment.repository.CommentRepository;
+import com.ll.medium.domain.post.comment.entity.Comment;
+import com.ll.medium.domain.post.comment.repository.CommentRepository;
 import com.ll.medium.domain.member.member.entity.SiteMember;
 import com.ll.medium.domain.post.post.entity.Post;
 import com.ll.medium.global.exception.DataNotFoundException;

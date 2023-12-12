@@ -1,7 +1,7 @@
 package com.ll.medium.domain.post.post.entity;
 
 
-import com.ll.medium.domain.comment.comment.entity.Comment;
+import com.ll.medium.domain.post.comment.entity.Comment;
 import com.ll.medium.domain.member.member.entity.SiteMember;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
