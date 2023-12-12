@@ -53,13 +53,13 @@ public class BlogCommentController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/{username}/{id}/modify/{id2}")
+    @GetMapping("/{username}/{postId}/modify/{commentId}")
     public String commentModify(CommentForm commentForm,
                                 @PathVariable("username") String username,
-                                @PathVariable("id") Integer id,
-                                @PathVariable("id2") Integer id2,
+                                @PathVariable("postId") Integer postId,
+                                @PathVariable("commentId") Integer commentId,
                                 Principal principal) {
-        Comment comment = this.commentService.getComment(id2);
+        Comment comment = this.commentService.getComment(commentId);
 
         if (!comment.getAuthor().getUsername().equals(principal.getName())) {
             return "redirect:/post/access_denied";
@@ -70,67 +70,67 @@ public class BlogCommentController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @PostMapping("/{username}/{id}/modify/{id2}")
+    @PostMapping("/{username}/{postId}/modify/{commentId}")
     public String commentModify(
             @Valid CommentForm commentForm,
             @PathVariable("username") String username,
             BindingResult bindingResult,
-            @PathVariable("id") Integer id,
-            @PathVariable("id2") Integer id2,
+            @PathVariable("postId") Integer postId,
+            @PathVariable("commentId") Integer commentId,
             Principal principal) {
 
         if (bindingResult.hasErrors()) {
             return "comment/comment/comment_form";
         }
 
-        Comment comment = this.commentService.getComment(id2);
+        Comment comment = this.commentService.getComment(commentId);
 
         if (!comment.getAuthor().getUsername().equals(principal.getName())) {
             return "redirect:/post/access_denied";
         }
         this.commentService.modify(comment, commentForm.getContent());
-        return String.format("redirect:/b/%s/%s", username, id);
+        return String.format("redirect:/b/%s/%s", username, postId);
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/{username}/{id}/delete/{id2}") //username/postNum/delete/commentNum
+    @GetMapping("/{username}/{postId}/delete/{commentId}") //username/postNum/delete/commentNum
     public String commentDelete(Principal principal,
                                 @PathVariable("username") String username,
-                                @PathVariable("id") Integer id,
-                                @PathVariable("id2") Integer id2) {
+                                @PathVariable("postId") Integer postId,
+                                @PathVariable("commentId") Integer commentId) {
 
-        Comment comment = this.commentService.getComment(id2);
+        Comment comment = this.commentService.getComment(commentId);
 
         if (!comment.getAuthor().getUsername().equals(principal.getName())) {
             return "redirect:/post/access_denied";
         }
         this.commentService.delete(comment);
-        return String.format("redirect:/b/%s/%s", username, id);
+        return String.format("redirect:/b/%s/%s", username, postId);
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("{username}/{id}/like/{id2}")
+    @GetMapping("{username}/{postId}/like/{commentId}")
     public String commentVote(Principal principal,
                               @PathVariable("username") String username,
-                              @PathVariable("id") Integer id,
-                              @PathVariable("id2") Integer id2) {
+                              @PathVariable("postId") Integer postId,
+                              @PathVariable("commentId") Integer commentId) {
         SiteMember siteMember=this.memberService.getUser(principal.getName());
-        Comment comment = this.commentService.getComment(id2);
+        Comment comment = this.commentService.getComment(commentId);
         this.commentService.vote(comment, siteMember);
-        return String.format("redirect:/b/%s/%s", username, id);
+        return String.format("redirect:/b/%s/%s", username, postId);
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/{username}/{id}/cancelLike/{id2}")
+    @GetMapping("/{username}/{postId}/cancelLike/{commentId}")
     public String deleteCommentVote(Principal principal,
                                     @PathVariable("username") String username,
-                                    @PathVariable("id") Integer id,
-                                    @PathVariable("id2") Integer id2) {
+                                    @PathVariable("postId") Integer postId,
+                                    @PathVariable("commentId") Integer commentId) {
 
         SiteMember siteMember2=this.memberService.getUser(principal.getName());
-        Comment comment = this.commentService.getComment(id2);
+        Comment comment = this.commentService.getComment(commentId);
         this.commentService.deleteVote(comment, siteMember2);
-        return String.format("redirect:/b/%s/%s", username, id);
+        return String.format("redirect:/b/%s/%s", username, postId);
     }
 
 

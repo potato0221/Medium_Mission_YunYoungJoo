@@ -8,25 +8,27 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Medium</title>
 
+    <!-- 제이쿼리 불러오기 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <!--daisyui-->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.0.8/dist/full.min.css" rel="stylesheet" type="text/css"/>
+
+    <!--테일윈드-->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- toastr 불러오기 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+    <link href="https://jhs512.github.io/toastr/toastr.css" rel="stylesheet">
+
     <!-- 폰트어썸 불러오기 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
     <link rel="stylesheet" href="/resource/global.css">
 
-
 </head>
+
 <body>
-<!-- 제이쿼리 불러오기 -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-
-<!-- toastr 불러오기 -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
-<link href="https://jhs512.github.io/toastr/toastr.css" rel="stylesheet">
-
-
-<link href="https://cdn.jsdelivr.net/npm/daisyui@4.0.8/dist/full.min.css" rel="stylesheet" type="text/css"/>
-<script src="https://cdn.tailwindcss.com"></script>
-
 <div class="navbar bg-base-100">
     <div class="navbar-start">
         <div class="dropdown">
@@ -49,10 +51,10 @@
         </div>
     </div>
     <div class="navbar-center">
-        <a href="/" class="btn btn-ghost text-xl">Medium</a>
+        <a href="/" class="btn btn-ghost text-lg">Medium</a>
     </div>
     <div class="navbar-end">
-        <a th:if="${@rq.isLogined}" th:href="@{'/b/' + ${@rq.member.username}}" class="btn btn-ghost text-xl">
+        <a th:if="${@rq.isLogined}" th:href="@{'/b/' + ${@rq.member.username}}" class="btn btn-ghost text-lg">
             <span th:text="${@rq.member.username}"></span>
         </a>
     </div>
