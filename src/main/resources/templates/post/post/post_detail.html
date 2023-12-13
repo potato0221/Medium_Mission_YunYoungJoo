@@ -39,15 +39,17 @@
                             </a>
                         </div>
                     </div>
-                    <div>
+                    <div class="flex justify-colum">
                         <a th:href="@{|/post/modify/${post.id}|}" class="btn btn-outline btn-sm mr-3"
                            sec:authorize="isAuthenticated()"
                            th:if="${post.author != null and #authentication.getPrincipal().getUsername() == post.author.username}"
                            th:text="수정"></a>
-                        <a href="javascript:void(0);" th:data-uri="@{|/post/delete/${post.id}|}"
-                           class="delete btn btn-outline btn-sm" sec:authorize="isAuthenticated()"
-                           th:if="${post.author != null and #authentication.getPrincipal().getUsername() == post.author.username}"
-                           th:text="삭제"></a>
+                        <form th:if="${@postService.canDelete(@rq.member, post)}"
+                              th:action="@{/post/delete/{id}(id=${post.id})}" method="post">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button type="submit" class="btn btn-outline btn-sm mr-3"
+                                    onclick="return confirm('정말로 삭제하시겠습니까?');">삭제</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -125,14 +127,14 @@
 </div>
 
 <script layout:fragment="script" type='text/javascript'>
-    const delete_elements = document.getElementsByClassName("delete");
-    Array.from(delete_elements).forEach(function (element) {
-        element.addEventListener('click', function () {
-            if (confirm("정말로 삭제하시겠습니까?")) {
-                location.href = this.dataset.uri;
-            }
-        });
-    });
+    // const delete_elements = document.getElementsByClassName("delete");
+    // Array.from(delete_elements).forEach(function (element) {
+    //     element.addEventListener('click', function () {
+    //         if (confirm("정말로 삭제하시겠습니까?")) {
+    //             location.href = this.dataset.uri;
+    //         }
+    //     });
+    // });
 
     const like_elements = document.getElementsByClassName("like");
     Array.from(like_elements).forEach(function (element) {

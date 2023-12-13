@@ -175,18 +175,17 @@ public class PostController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public String postDelete(
-            Principal principal,
             @PathVariable("id") Integer id
     ) {
         Post post = this.postService.getPost(id);
-        if (!post.getAuthor().getUsername().equals(principal.getName())) {
+        if (!postService.canDelete(rq.getMember(),post)) {
             return "redirect:/post/access_denied";
         }
         this.postService.delete(post);
-        return "redirect:/";
 
+        return rq.redirect("/", "%s번 게시물이 삭제되었습니다.".formatted(id));
     }
 
     @PreAuthorize("isAuthenticated()")

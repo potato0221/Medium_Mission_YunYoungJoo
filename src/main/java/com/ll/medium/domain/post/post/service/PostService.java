@@ -109,6 +109,12 @@ public class PostService {
         this.postRepository.delete(post);
     }
 
+    public boolean canDelete(SiteMember siteMember,Post post){
+        if(siteMember==null) return false;
+        return post.getAuthor().equals(siteMember);
+    }
+
+
 
     public Post getPostByCountByMemberAndMember(SiteMember siteMember, Integer id) {
         return postRepository.findByCountByMemberAndMember(siteMember, id);

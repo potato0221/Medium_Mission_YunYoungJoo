@@ -25,10 +25,28 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
     <link rel="stylesheet" href="/resource/global.css">
+    <script src="/resource/global.js"></script>
 
 </head>
 
 <body>
+<script>
+    const queryParams = getQueryParams();
+
+    if (queryParams.msg) {
+        toastNotice(queryParams.msg);
+    }
+
+    $(window).bind("pageshow", function (event) {
+        const historyBackMsg = localStorage.getItem('historyBackMsg');
+
+        if (historyBackMsg) {
+            toastWarning(historyBackMsg);
+            localStorage.removeItem('historyBackMsg');
+        }
+    });
+</script>
+
 <div class="navbar bg-base-100">
     <div class="navbar-start">
         <div class="dropdown">

@@ -156,7 +156,7 @@ public class BlogController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/{username}/{id}/delete")
+    @DeleteMapping("/{username}/{id}/delete")
     public String postDelete(
             Principal principal,
             @PathVariable("id") Integer id,
@@ -168,7 +168,7 @@ public class BlogController {
             return "redirect:/post/access_denied";
         }
         this.postService.delete(post);
-        return String.format("redirect:/b/%s", username);
+        return rq.redirect("/b/%s".formatted(username), "%s님의 %s번 게시물이 삭제되었습니다.".formatted(username,id));
 
     }
 

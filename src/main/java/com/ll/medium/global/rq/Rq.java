@@ -2,6 +2,7 @@ package com.ll.medium.global.rq;
 
 import com.ll.medium.domain.member.member.entity.SiteMember;
 import com.ll.medium.domain.member.member.service.MemberService;
+import com.ll.medium.global.rsData.RsData;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -13,6 +14,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
+
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.Date;
 
 @RequestScope
 @Component
@@ -63,5 +68,28 @@ public class Rq {
                 .stream()
                 .anyMatch(a -> a.getAuthority().equals("ROLE_PREMIUM"));
     }
+
+
+    public String redirect(String path, RsData<?> rs) {
+        return redirect(path, rs.getMsg());
+    }
+
+    public String redirect(String path, String msg) {
+        if (msg == null)
+            return "redirect:" + path;
+
+        boolean containsTtl = msg.contains(";ttl=");
+
+        if (containsTtl) {
+            msg = msg.split(";ttl=", 2)[0];
+        }
+
+        msg = URLEncoder.encode(msg, StandardCharsets.UTF_8);
+        msg += ";ttl=" + (new Date().getTime() + 1000 * 2);
+
+        return "redirect:" + path + "?msg=" + msg;
+    }
+
+
 
 }

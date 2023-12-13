@@ -41,17 +41,18 @@
                             </a>
                         </div>
                     </div>
-                    <div>
+                    <div class="flex justify-colum">
                         <a th:href="@{|/b/${post.author.username}/${post.countByMember}/modify|}"
                            class="btn btn-outline btn-sm mr-3"
                            sec:authorize="isAuthenticated()"
                            th:if="${post.author != null and #authentication.getPrincipal().getUsername() == post.author.username}"
                            th:text="수정"></a>
-                        <a href="javascript:void(0);"
-                           th:data-uri="@{|/b/${post.author.username}/${post.countByMember}/delete|}"
-                           class="delete btn btn-outline btn-sm" sec:authorize="isAuthenticated()"
-                           th:if="${post.author != null and #authentication.getPrincipal().getUsername() == post.author.username}"
-                           th:text="삭제"></a>
+                        <form th:if="${@postService.canDelete(@rq.member, post)}"
+                              th:action="@{/b/{username}/{id}/delete(username=${post.author.username}, id=${post.countByMember})}" method="post">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button type="submit" class="btn btn-outline btn-sm mr-3"
+                                    onclick="return confirm('정말로 삭제하시겠습니까?');">삭제</button>
+                        </form>
                     </div>
                 </div>
             </div>
