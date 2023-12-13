@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Formula;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -39,6 +40,9 @@ public class Post {
 
     @ManyToMany
     Set<SiteMember> voter;
+
+    @Formula("(select count(*) from post_voter pv where pv.post_id = id)")
+    private int voteCount;
 
 
     private boolean isPremium;

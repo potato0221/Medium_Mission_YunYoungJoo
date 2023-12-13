@@ -8,8 +8,8 @@
             <div th:each="post : ${paging}" class="card w-96 bg-base-100 shadow-xl w-full">
                 <div class="card-body">
                     <div>
-                        <span th:if="${post.isPremium}" class="text-yellow-500"><i class="fa-solid fa-m"></i></span>
                         <span th:if="${post.isPublished()}" class="text-red-600"><i class="fas fa-lock"></i> </span>
+                        <span th:if="${post.isPremium}" class="text-yellow-500"><i class="fa-solid fa-m"></i></span>
                         <span th:unless="${post.isPremium and not @rq.isPremium() or post.isPublished() and (@rq.getMember()!=post.getAuthor())}"
                               class="text-info-content">
                         <div class="flex justify-between">
@@ -22,7 +22,11 @@
 
                     </div>
 
-                    <div class="card-actions justify-end">
+                    <div class="card-actions justify-between">
+                        <div class="flex justify-colum mt-3">
+                            <i class="fa-solid fa-heart mt-1"></i>
+                            <p class="text-gray-500 text-right ml-2" th:text="${post.voteCount}"></p>
+                        </div>
                         <a th:unless="${post.isPublished() and (@rq.getMember()!=post.getAuthor()) or (post.isPremium() and not @rq.isPremium())}"
                            th:href="@{|/b/${post.author.username}/${post.countByMember}|}" class="btn btn-primary">글
                             보기</a>

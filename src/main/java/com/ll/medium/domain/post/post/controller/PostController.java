@@ -20,6 +20,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RequestMapping("/post")
 @RequiredArgsConstructor
@@ -33,18 +37,29 @@ public class PostController {
     @GetMapping("/list")
     public String list(Model model,
                        @RequestParam(value = "page", defaultValue = "0") int page,
-                       @RequestParam(value = "kwTypes", required = false) String kwTypes,
+                       @RequestParam(value = "kwTypes", defaultValue = "title,content") List<String> kwTypes,
                        @RequestParam(value = "kw", required = false) String kw,
                        @RequestParam(value = "sort", defaultValue = "desc") String sort) {
 
         Page<Post> paging;
-        if (kwTypes != null && kw != null) {
-            paging = this.postService.search(kwTypes, kw, sort, PageRequest.of(page, 10));
+        if (kwTypes != null && !kwTypes.isEmpty() && kw != null) {
+            paging = this.postService.search(kwTypes, kw, sort, PageRequest.of(page, 9));
         } else {
             paging = this.postService.getList(page);
         }
+
+        Map<String, Boolean> kwTypesMap = new HashMap<>();
+        if (kwTypes != null) {
+            kwTypesMap = kwTypes
+                    .stream()
+                    .collect(Collectors.toMap(
+                            kwType -> kwType,
+                            kwType -> true
+                    ));
+        }
+
         model.addAttribute("kw", kw);
-        model.addAttribute("kwTypes", kwTypes);
+        model.addAttribute("kwTypes", kwTypesMap);
         model.addAttribute("paging", paging);
         model.addAttribute("sort", sort);
         return "post/post/post_list";
