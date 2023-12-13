@@ -16,7 +16,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Page<Post> search(String kwTypes, String kw, Pageable pageable) {
+    public Page<Post> search(String kwTypes, String kw, String sort, Pageable pageable) {
         QPost post = QPost.post;
         BooleanBuilder builder = new BooleanBuilder();
 
@@ -34,6 +34,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         QueryResults<Post> results = jpaQueryFactory
                 .selectFrom(post)
                 .where(builder)
+                .orderBy(sort.equals("asc") ? post.id.asc() : post.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetchResults();

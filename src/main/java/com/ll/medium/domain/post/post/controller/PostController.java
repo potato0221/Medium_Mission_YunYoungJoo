@@ -34,17 +34,19 @@ public class PostController {
     public String list(Model model,
                        @RequestParam(value = "page", defaultValue = "0") int page,
                        @RequestParam(value="kwTypes", required=false) String kwTypes,
-                       @RequestParam(value = "kw", required = false) String kw) {
+                       @RequestParam(value = "kw", required = false) String kw,
+                       @RequestParam(value = "sort", defaultValue = "desc") String sort) {
 
         Page<Post> paging;
         if (kwTypes != null && kw != null) {
-            paging = this.postService.search(kwTypes, kw, PageRequest.of(page, 10));
+            paging = this.postService.search(kwTypes, kw, sort, PageRequest.of(page, 10));
         } else {
             paging = this.postService.getList(page);
         }
         model.addAttribute("kw",kw);
         model.addAttribute("kwTypes",kwTypes);
         model.addAttribute("paging", paging);
+        model.addAttribute("sort",sort);
         return "post/post/post_list";
     }
 
