@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,9 +32,18 @@ public class PostController {
 
     @GetMapping("/list")
     public String list(Model model,
-                       @RequestParam(value = "page", defaultValue = "0") int page) {
+                       @RequestParam(value = "page", defaultValue = "0") int page,
+                       @RequestParam(value="kwTypes", required=false) String kwTypes,
+                       @RequestParam(value = "kw", required = false) String kw) {
 
-        Page<Post> paging = this.postService.getList(page);
+        Page<Post> paging;
+        if (kwTypes != null && kw != null) {
+            paging = this.postService.search(kwTypes, kw, PageRequest.of(page, 10));
+        } else {
+            paging = this.postService.getList(page);
+        }
+        model.addAttribute("kw",kw);
+        model.addAttribute("kwTypes",kwTypes);
         model.addAttribute("paging", paging);
         return "post/post/post_list";
     }

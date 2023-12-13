@@ -26,6 +26,10 @@ public class PostService {
     private final PostRepository postRepository;
     private final Rq rq;
 
+    public Page<Post> search(String kwTypes, String kw, Pageable pageable) {
+        return postRepository.search(kwTypes, kw, pageable);
+    }
+
     public Page<Post> getList(int page) {
         Long authorId = null;
         if (rq.isLogined()) {
