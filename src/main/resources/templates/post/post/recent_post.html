@@ -4,11 +4,6 @@
         <div class="mt-2 flex gap-2">
             <a th:href="@{/post/create}" class="btn btn-outline mr-3 mb-2">글 등록</a>
         </div>
-        <div class="flex justify-colum pt-3">
-        <input type="search" id="search_kw" class="form-control input input-bordered  input-sm mr-3 mt-1"
-               th:value="${kw}">
-        <button class="btn btn-active btn-sm mt-1" type="button" id="btn_search">찾기</button>
-        </div>
     </div>
     <div class="grid grid-cols-3 gap-6">
         <div th:each="post, loop : ${paging}"
@@ -31,30 +26,7 @@
                th:text="${#temporals.format(post.createDate, 'yyyy-MM-dd HH:mm')}"></p>
         </div>
     </div>
-
-    <div class="mt-2 flex gap-2">
-        <a th:href="@{/post/create}" class="btn btn-outline mr-3 mb-2">글 등록</a>
-    </div>
 </div>
 
-<script>
-    // 요소들을 가져옵니다.
-    const links = document.querySelectorAll('.menu a');
-    const dropdownSummary = document.getElementById('dropdownSummary');
 
-    // 각 링크에 대해 클릭 이벤트를 추가합니다.
-    links.forEach((link, index) => {
-        link.addEventListener('click', function(event) {
-            event.preventDefault(); // 링크의 기본 동작을 중지합니다.
-
-            // 클릭된 링크의 텍스트를 dropdownSummary에 설정합니다.
-            dropdownSummary.textContent = link.textContent;
-        });
-    });
-
-    function changeSummary(text) {
-        document.getElementById('dropdownSummary').textContent = text;
-    }
-
-</script>
 </html>
