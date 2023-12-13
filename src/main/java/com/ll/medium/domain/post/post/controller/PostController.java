@@ -65,7 +65,7 @@ public class PostController {
         SiteMember siteMember = this.memberService.getUser(principal.getName());
         Page<Post> paging = this.postService.getListByUsername(page, siteMember);
         model.addAttribute("paging", paging);
-        return "post/post/post_list";
+        return "post/post/post_myList";
     }
 
 
