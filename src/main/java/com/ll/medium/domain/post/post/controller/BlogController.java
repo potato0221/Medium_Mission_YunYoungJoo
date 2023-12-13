@@ -61,7 +61,7 @@ public class BlogController {
             if (!rq.isPremium()) {
                 return "redirect:/post/access_denied";
             }
-        } else if (post.isPublished()) {
+        } else if (post.isNotPublished()) {
             if (rq.getMember() != post.getAuthor()) {
                 return "redirect:/post/access_denied";
             }
@@ -131,7 +131,7 @@ public class BlogController {
         postForm.setTitle(post.getTitle());
         postForm.setContent(post.getContent());
         postForm.setPremium(post.isPremium());
-        postForm.setPublished(post.isPublished());
+        postForm.setNotPublished(post.isNotPublished());
         return "post/post/post_form";
 
     }
@@ -151,7 +151,7 @@ public class BlogController {
         if (!post.getAuthor().getUsername().equals(principal.getName())) {
             return "redirect:/post/access_denied";
         }
-        this.postService.modify(post, postForm.getTitle(), postForm.getContent(), postForm.isPremium(), postForm.isPublished());
+        this.postService.modify(post, postForm.getTitle(), postForm.getContent(), postForm.isPremium(), postForm.isNotPublished());
         return String.format("redirect:/b/%s/%s", username, id);
     }
 
@@ -189,7 +189,7 @@ public class BlogController {
             return "post/post/post_form";
         }
 
-        this.postService.create(postForm.getTitle(), postForm.getContent(), rq.getMember(), postForm.isPremium(), postForm.isPublished(), member.getCount(), 0);
+        this.postService.create(postForm.getTitle(), postForm.getContent(), rq.getMember(), postForm.isPremium(), postForm.isNotPublished(), member.getCount(), 0);
         return "redirect:/b/%s".formatted(rq.getMember().getUsername());
     }
 

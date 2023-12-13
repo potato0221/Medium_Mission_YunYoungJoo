@@ -81,7 +81,7 @@ public class PostController {
             if (!rq.isPremium()) {
                 return "redirect:/post/access_denied";
             }
-        } else if (post.isPublished()) {
+        } else if (post.isNotPublished()) {
             if (rq.getMember() != post.getAuthor()) {
                 return "redirect:/post/access_denied";
             }
@@ -136,7 +136,7 @@ public class PostController {
             return "post/post/post_form";
         }
 
-        this.postService.create(postForm.getTitle(), postForm.getContent(), rq.getMember(), postForm.isPremium(), postForm.isPublished(), member.getCount(), 0);
+        this.postService.create(postForm.getTitle(), postForm.getContent(), rq.getMember(), postForm.isPremium(), postForm.isNotPublished(), member.getCount(), 0);
         return "redirect:/post/list";
     }
 
@@ -154,7 +154,7 @@ public class PostController {
         postForm.setTitle(post.getTitle());
         postForm.setContent(post.getContent());
         postForm.setPremium(post.isPremium());
-        postForm.setPublished(post.isPublished());
+        postForm.setNotPublished(post.isNotPublished());
         return "post/post/post_form";
 
     }
@@ -170,7 +170,7 @@ public class PostController {
         if (!post.getAuthor().getUsername().equals(principal.getName())) {
             return "redirect:/post/access_denied";
         }
-        this.postService.modify(post, postForm.getTitle(), postForm.getContent(), postForm.isPremium(), postForm.isPublished());
+        this.postService.modify(post, postForm.getTitle(), postForm.getContent(), postForm.isPremium(), postForm.isNotPublished());
         return String.format("redirect:/post/detail/%s", id);
     }
 
@@ -180,7 +180,7 @@ public class PostController {
             @PathVariable("id") Integer id
     ) {
         Post post = this.postService.getPost(id);
-        if (!postService.canDelete(rq.getMember(),post)) {
+        if (!postService.canDelete(rq.getMember(), post)) {
             return "redirect:/post/access_denied";
         }
         this.postService.delete(post);

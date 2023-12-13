@@ -18,6 +18,6 @@ public class PostForm {
     private String content;
 
     private boolean isPremium;
-    private boolean isPublished;
+    private boolean isNotPublished;
 
 }

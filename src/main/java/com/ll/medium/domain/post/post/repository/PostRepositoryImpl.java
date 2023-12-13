@@ -38,8 +38,8 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
 
         }
 
-        // post.isPublished가 false인 경우만 검색 대상에 포함
-        builder.and(post.isPublished.isFalse());
+        // post.isNotPublished가 false인 경우만 검색 대상에 포함
+        builder.and(post.isNotPublished.isFalse());
 
         JPAQuery<Post> query = jpaQueryFactory
                 .selectFrom(post)

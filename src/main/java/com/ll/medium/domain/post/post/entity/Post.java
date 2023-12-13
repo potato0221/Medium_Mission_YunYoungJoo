@@ -46,7 +46,7 @@ public class Post {
 
 
     private boolean isPremium;
-    private boolean isPublished;
+    private boolean isNotPublished;
     private Integer countByMember;
     private Integer viewCount;
 

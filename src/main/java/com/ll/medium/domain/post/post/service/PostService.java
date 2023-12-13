@@ -80,26 +80,26 @@ public class PostService {
     }
 
     @Transactional
-    public void create(String title, String content, SiteMember member, boolean isPremium, boolean isPublished, Integer count, Integer viewCount) {
+    public void create(String title, String content, SiteMember member, boolean isPremium, boolean isNotPublished, Integer count, Integer viewCount) {
         Post post = new Post();
         post.setTitle(title);
         post.setContent(content);
         post.setCreateDate(LocalDateTime.now());
         post.setAuthor(member);
         post.setPremium(isPremium);
-        post.setPublished(isPublished);
+        post.setNotPublished(isNotPublished);
         post.setCountByMember(count);
         post.setViewCount(viewCount);
         this.postRepository.save(post);
     }
 
     @Transactional
-    public void modify(Post post, String title, String content, boolean isPremium, boolean isPublished) {
+    public void modify(Post post, String title, String content, boolean isPremium, boolean isNotPublished) {
         post.setTitle(title);
         post.setContent(content);
         post.setModifyDate(LocalDateTime.now());
         post.setPremium(isPremium);
-        post.setPublished(isPublished);
+        post.setNotPublished(isNotPublished);
         this.postRepository.save(post);
 
     }
