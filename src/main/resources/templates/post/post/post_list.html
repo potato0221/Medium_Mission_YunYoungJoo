@@ -17,13 +17,18 @@
                 <div class="flex justify-colum mr-3 mt-1">
                     <div class="form-check form-check-inline mr-3">
                         <input class="form-check-input" type="checkbox" id="title" name="kwTypes" value="title"
-                               th:checked="${kwTypes['title']}">
+                               th:checked="${#strings.contains(kwTypes, 'title')}">
                         <label class="form-check-label" for="title">제목</label>
                     </div>
-                    <div class="form-check form-check-inline">
+                    <div class="form-check form-check-inline mr-3">
                         <input class="form-check-input" type="checkbox" id="content" name="kwTypes" value="content"
-                               th:checked="${kwTypes['content']}">
+                               th:checked="${#strings.contains(kwTypes, 'content')}">
                         <label class="form-check-label" for="content">내용</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="author" name="kwTypes" value="author"
+                               th:checked="${#strings.contains(kwTypes, 'author')}">
+                        <label class="form-check-label" for="author">작성자</label>
                     </div>
                 </div>
                 <input type="search" name="kw" id="search_kw" class="form-control input input-bordered input-sm mr-3"

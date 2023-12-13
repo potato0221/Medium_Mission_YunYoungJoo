@@ -24,13 +24,18 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         BooleanBuilder builder = new BooleanBuilder();
 
         for (String kwType : kwTypes) {
-            if (kwType.equals("title")) {
-                builder.or(post.title.contains(kw));
+            if (kwType.contains("title")) {
+                builder.or(post.title.containsIgnoreCase(kw));
             }
 
-            if (kwType.equals("content")) {
-                builder.or(post.content.contains(kw));
+            if (kwType.contains("content")) {
+                builder.or(post.content.containsIgnoreCase(kw));
             }
+
+            if (kwType.contains("author")) {
+                builder.or(post.author.username.containsIgnoreCase(kw));
+            }
+
         }
 
         // post.isPublished가 false인 경우만 검색 대상에 포함

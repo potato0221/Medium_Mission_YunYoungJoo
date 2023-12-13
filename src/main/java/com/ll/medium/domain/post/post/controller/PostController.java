@@ -20,10 +20,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @RequestMapping("/post")
 @RequiredArgsConstructor
@@ -38,7 +35,7 @@ public class PostController {
     public String list(Model model,
                        @RequestParam(value = "page", defaultValue = "0") int page,
                        @RequestParam(value = "kwTypes", defaultValue = "title,content") List<String> kwTypes,
-                       @RequestParam(value = "kw", required = false) String kw,
+                       @RequestParam(value = "kw", defaultValue = "") String kw,
                        @RequestParam(value = "sort", defaultValue = "desc") String sort) {
 
         Page<Post> paging;
@@ -48,18 +45,11 @@ public class PostController {
             paging = this.postService.getList(page);
         }
 
-        Map<String, Boolean> kwTypesMap = new HashMap<>();
-        if (kwTypes != null) {
-            kwTypesMap = kwTypes
-                    .stream()
-                    .collect(Collectors.toMap(
-                            kwType -> kwType,
-                            kwType -> true
-                    ));
-        }
+
+        String kwTypesParam = String.join(",", kwTypes); // 배열을 문자열로 변환
 
         model.addAttribute("kw", kw);
-        model.addAttribute("kwTypes", kwTypesMap);
+        model.addAttribute("kwTypes", kwTypesParam); // kwTypes를 문자열로 변환한 값을 추가
         model.addAttribute("paging", paging);
         model.addAttribute("sort", sort);
         return "post/post/post_list";
