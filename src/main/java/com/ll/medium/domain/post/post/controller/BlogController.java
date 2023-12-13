@@ -168,8 +168,29 @@ public class BlogController {
             return "redirect:/post/access_denied";
         }
         this.postService.delete(post);
-        return rq.redirect("/b/%s".formatted(username), "%s님의 %s번 게시물이 삭제되었습니다.".formatted(username,id));
+        return rq.redirect("/b/%s".formatted(username), "게시물이 삭제되었습니다.");
 
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/create")
+    public String postCreate(PostForm postForm) {
+        return "post/post/post_form";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/create")
+    public String postCreate(@Valid PostForm postForm,
+                             BindingResult bindingResult) {
+        SiteMember member = rq.getMember();
+        member.setCount(member.getCount() + 1);
+        this.memberService.save(member);
+        if (bindingResult.hasErrors()) {
+            return "post/post/post_form";
+        }
+
+        this.postService.create(postForm.getTitle(), postForm.getContent(), rq.getMember(), postForm.isPremium(), postForm.isPublished(), member.getCount(), 0);
+        return "redirect:/b/%s".formatted(rq.getMember().getUsername());
     }
 
 }

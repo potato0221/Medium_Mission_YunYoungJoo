@@ -185,7 +185,7 @@ public class PostController {
         }
         this.postService.delete(post);
 
-        return rq.redirect("/", "%s번 게시물이 삭제되었습니다.".formatted(id));
+        return rq.redirect("/", "게시물이 삭제되었습니다.");
     }
 
     @PreAuthorize("isAuthenticated()")
