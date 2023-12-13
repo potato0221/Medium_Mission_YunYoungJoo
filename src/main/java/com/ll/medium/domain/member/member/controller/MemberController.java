@@ -48,7 +48,7 @@ public class MemberController {
             bindingResult.reject("signupFailed", e.getMessage());
             return "member/member/signup_form";
         }
-        return "redirect:/";
+        return "redirect:/member/login";
     }
 
     @PreAuthorize("isAnonymous()")
