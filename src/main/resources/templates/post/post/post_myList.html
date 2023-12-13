@@ -13,6 +13,7 @@
                     <span th:if="${post.isNotPublished()}" class="text-red-600"><i class="fas fa-lock"></i> </span>
                     <span th:unless="${post.isPremium and not @rq.isPremium()}" class="text-blue-700">
                     <a th:href="@{|/post/detail/${post.id}|}" th:text="${post.title}"></a>
+                        <span th:text="'(' + ${post.getCommentCount()} + ')'" class="text-orange-400"></span>
                 </span>
                     <span th:if="${post.isPremium and not @rq.isPremium()}" class="text-red-500">멤버십 회원만 열람 가능한 글입니다.</span>
                 </h3>

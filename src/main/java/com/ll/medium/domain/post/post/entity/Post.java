@@ -59,4 +59,8 @@ public class Post {
         this.createDate = now;
     }
 
+    public int getCommentCount() {
+        return this.commentList.size();
+    }
+
 }
