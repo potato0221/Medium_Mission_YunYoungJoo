@@ -1,11 +1,11 @@
 package com.ll.medium.domain.post.comment.controller;
 
 
+import com.ll.medium.domain.member.member.entity.SiteMember;
+import com.ll.medium.domain.member.member.service.MemberService;
 import com.ll.medium.domain.post.comment.dto.CommentForm;
 import com.ll.medium.domain.post.comment.entity.Comment;
 import com.ll.medium.domain.post.comment.service.CommentService;
-import com.ll.medium.domain.member.member.entity.SiteMember;
-import com.ll.medium.domain.member.member.service.MemberService;
 import com.ll.medium.domain.post.post.entity.Post;
 import com.ll.medium.domain.post.post.service.PostService;
 import jakarta.validation.Valid;
@@ -114,7 +114,7 @@ public class BlogCommentController {
                               @PathVariable("username") String username,
                               @PathVariable("postId") Integer postId,
                               @PathVariable("commentId") Integer commentId) {
-        SiteMember siteMember=this.memberService.getUser(principal.getName());
+        SiteMember siteMember = this.memberService.getUser(principal.getName());
         Comment comment = this.commentService.getComment(commentId);
         this.commentService.vote(comment, siteMember);
         return String.format("redirect:/b/%s/%s", username, postId);
@@ -127,7 +127,7 @@ public class BlogCommentController {
                                     @PathVariable("postId") Integer postId,
                                     @PathVariable("commentId") Integer commentId) {
 
-        SiteMember siteMember2=this.memberService.getUser(principal.getName());
+        SiteMember siteMember2 = this.memberService.getUser(principal.getName());
         Comment comment = this.commentService.getComment(commentId);
         this.commentService.deleteVote(comment, siteMember2);
         return String.format("redirect:/b/%s/%s", username, postId);

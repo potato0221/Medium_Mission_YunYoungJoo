@@ -1,8 +1,8 @@
 package com.ll.medium.domain.post.comment.service;
 
+import com.ll.medium.domain.member.member.entity.SiteMember;
 import com.ll.medium.domain.post.comment.entity.Comment;
 import com.ll.medium.domain.post.comment.repository.CommentRepository;
-import com.ll.medium.domain.member.member.entity.SiteMember;
 import com.ll.medium.domain.post.post.entity.Post;
 import com.ll.medium.global.exception.DataNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
 
     @Transactional
-    public void create(Post post, String content, SiteMember author){
+    public void create(Post post, String content, SiteMember author) {
 
         Comment comment = new Comment();
         comment.setContent(content);
@@ -31,29 +31,33 @@ public class CommentService {
     }
 
     public Comment getComment(Integer id) {
-        Optional<Comment> comment=this.commentRepository.findById(id);
-        if(comment.isPresent()){
+        Optional<Comment> comment = this.commentRepository.findById(id);
+        if (comment.isPresent()) {
             return comment.get();
-        }else {
+        } else {
             throw new DataNotFoundException("comment not found");
         }
 
     }
+
     @Transactional
-    public void modify(Comment comment, String content){
+    public void modify(Comment comment, String content) {
         comment.setContent(content);
         comment.setModifyDate(LocalDateTime.now());
         this.commentRepository.save(comment);
     }
+
     @Transactional
-    public void delete(Comment comment){
+    public void delete(Comment comment) {
         this.commentRepository.delete(comment);
     }
+
     @Transactional
-    public void vote(Comment comment, SiteMember siteMember){
+    public void vote(Comment comment, SiteMember siteMember) {
         comment.getVoter().add(siteMember);
         this.commentRepository.save(comment);
     }
+
     @Transactional
     public void deleteVote(Comment comment, SiteMember siteMember) {
         comment.getVoter().remove(siteMember);

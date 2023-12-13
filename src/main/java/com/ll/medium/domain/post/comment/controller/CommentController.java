@@ -1,11 +1,11 @@
 package com.ll.medium.domain.post.comment.controller;
 
 
+import com.ll.medium.domain.member.member.entity.SiteMember;
+import com.ll.medium.domain.member.member.service.MemberService;
 import com.ll.medium.domain.post.comment.dto.CommentForm;
 import com.ll.medium.domain.post.comment.entity.Comment;
 import com.ll.medium.domain.post.comment.service.CommentService;
-import com.ll.medium.domain.member.member.entity.SiteMember;
-import com.ll.medium.domain.member.member.service.MemberService;
 import com.ll.medium.domain.post.post.entity.Post;
 import com.ll.medium.domain.post.post.service.PostService;
 import jakarta.validation.Valid;
@@ -39,16 +39,16 @@ public class CommentController {
                                 @Valid CommentForm commentForm,
                                 BindingResult bindingResult,
                                 Principal principal
-    ){
-        Post post=this.postService.getPost(id);
-        SiteMember siteMember=this.memberService.getUser(principal.getName());
+    ) {
+        Post post = this.postService.getPost(id);
+        SiteMember siteMember = this.memberService.getUser(principal.getName());
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("post", post);
             return "post/post/post_detail";
         }
 
-        this.commentService.create(post,commentForm.getContent(),siteMember);
+        this.commentService.create(post, commentForm.getContent(), siteMember);
         return String.format("redirect:/post/detail/%s", id);
     }
 
@@ -56,11 +56,11 @@ public class CommentController {
     @GetMapping("/modify/{id}")
     public String commentModify(CommentForm commentForm,
                                 @PathVariable("id") Integer id,
-                                Principal principal){
+                                Principal principal) {
 
-        Comment comment=this.commentService.getComment(id);
-        if(!comment.getAuthor().getUsername().equals(principal.getName())){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"수정 권한이 없습니다.");
+        Comment comment = this.commentService.getComment(id);
+        if (!comment.getAuthor().getUsername().equals(principal.getName())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없습니다.");
         }
         commentForm.setContent(comment.getContent());
         return "comment/comment/comment_form";
@@ -72,40 +72,40 @@ public class CommentController {
             @Valid CommentForm commentForm,
             BindingResult bindingResult,
             @PathVariable("id") Integer id,
-            Principal principal){
+            Principal principal) {
 
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             return "comment/comment/comment_form";
         }
-        Comment comment=this.commentService.getComment(id);
+        Comment comment = this.commentService.getComment(id);
 
-        if(!comment.getAuthor().getUsername().equals(principal.getName())){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"수정 권한이 없습니다.");
+        if (!comment.getAuthor().getUsername().equals(principal.getName())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없습니다.");
         }
 
         this.commentService.modify(comment, commentForm.getContent());
-        return String.format("redirect:/post/detail/%s",comment.getPost().getId());
+        return String.format("redirect:/post/detail/%s", comment.getPost().getId());
     }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/delete/{id}")
     public String commentDelete(Principal principal,
-                                @PathVariable("id") Integer id){
-        Comment comment=this.commentService.getComment(id);
-        if(!comment.getAuthor().getUsername().equals(principal.getName())){
+                                @PathVariable("id") Integer id) {
+        Comment comment = this.commentService.getComment(id);
+        if (!comment.getAuthor().getUsername().equals(principal.getName())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제 권한이 없습니다.");
         }
         this.commentService.delete(comment);
-        return String.format("redirect:/post/detail/%s",comment.getPost().getId());
+        return String.format("redirect:/post/detail/%s", comment.getPost().getId());
     }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}/like")
     public String commentVote(Principal principal,
-                             @PathVariable("id") Integer id){
-        Comment comment=this.commentService.getComment(id);
-        SiteMember siteMember=this.memberService.getUser(principal.getName());
-        this.commentService.vote(comment,siteMember);
+                              @PathVariable("id") Integer id) {
+        Comment comment = this.commentService.getComment(id);
+        SiteMember siteMember = this.memberService.getUser(principal.getName());
+        this.commentService.vote(comment, siteMember);
         return String.format("redirect:/post/detail/%s", comment.getPost().getId());
     }
 

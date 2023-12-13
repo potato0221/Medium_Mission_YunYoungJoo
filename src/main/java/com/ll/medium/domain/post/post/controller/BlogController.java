@@ -96,7 +96,7 @@ public class BlogController {
     public String postVote(@PathVariable("id") Integer id,
                            @PathVariable("username") String username) {
         SiteMember siteMember = this.memberService.getUser(username);
-        SiteMember siteMember2=rq.getMember();
+        SiteMember siteMember2 = rq.getMember();
         Post post = this.postService.getPostByCountByMemberAndMember(siteMember, id);
 
         this.postService.vote(post, siteMember2);
@@ -108,8 +108,8 @@ public class BlogController {
     public String deletePostVote(@PathVariable("id") Integer id,
                                  @PathVariable("username") String username) {
         SiteMember siteMember = this.memberService.getUser(username);
-        SiteMember siteMember2=rq.getMember();
-        Post post = this.postService.getPostByCountByMemberAndMember(siteMember,id);
+        SiteMember siteMember2 = rq.getMember();
+        Post post = this.postService.getPostByCountByMemberAndMember(siteMember, id);
         this.postService.deleteVote(post, siteMember2);
         return String.format("redirect:/b/%s/%s", username, id);
     }
@@ -123,8 +123,8 @@ public class BlogController {
             @PathVariable("username") String username
     ) {
 
-        SiteMember siteMember=this.memberService.getUser(username);
-        Post post = this.postService.getPostByCountByMemberAndMember(siteMember,id);
+        SiteMember siteMember = this.memberService.getUser(username);
+        Post post = this.postService.getPostByCountByMemberAndMember(siteMember, id);
         if (!post.getAuthor().getUsername().equals(principal.getName())) {
             return "redirect:/post/access_denied";
         }
@@ -146,8 +146,8 @@ public class BlogController {
         if (bindingResult.hasErrors()) {
             return "post/post/post_form";
         }
-        SiteMember siteMember=this.memberService.getUser(username);
-        Post post = this.postService.getPostByCountByMemberAndMember(siteMember,id);
+        SiteMember siteMember = this.memberService.getUser(username);
+        Post post = this.postService.getPostByCountByMemberAndMember(siteMember, id);
         if (!post.getAuthor().getUsername().equals(principal.getName())) {
             return "redirect:/post/access_denied";
         }
@@ -162,8 +162,8 @@ public class BlogController {
             @PathVariable("id") Integer id,
             @PathVariable("username") String username
     ) {
-        SiteMember siteMember=this.memberService.getUser(username);
-        Post post = this.postService.getPostByCountByMemberAndMember(siteMember,id);
+        SiteMember siteMember = this.memberService.getUser(username);
+        Post post = this.postService.getPostByCountByMemberAndMember(siteMember, id);
         if (!post.getAuthor().getUsername().equals(principal.getName())) {
             return "redirect:/post/access_denied";
         }

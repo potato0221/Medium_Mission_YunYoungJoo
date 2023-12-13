@@ -33,7 +33,7 @@ public class PostController {
     @GetMapping("/list")
     public String list(Model model,
                        @RequestParam(value = "page", defaultValue = "0") int page,
-                       @RequestParam(value="kwTypes", required=false) String kwTypes,
+                       @RequestParam(value = "kwTypes", required = false) String kwTypes,
                        @RequestParam(value = "kw", required = false) String kw,
                        @RequestParam(value = "sort", defaultValue = "desc") String sort) {
 
@@ -43,10 +43,10 @@ public class PostController {
         } else {
             paging = this.postService.getList(page);
         }
-        model.addAttribute("kw",kw);
-        model.addAttribute("kwTypes",kwTypes);
+        model.addAttribute("kw", kw);
+        model.addAttribute("kwTypes", kwTypes);
         model.addAttribute("paging", paging);
-        model.addAttribute("sort",sort);
+        model.addAttribute("sort", sort);
         return "post/post/post_list";
     }
 

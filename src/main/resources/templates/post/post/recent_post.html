@@ -5,7 +5,7 @@
             <a th:href="@{/post/create}" class="btn btn-outline mr-3 mb-2">글 등록</a>
         </div>
     </div>
-    <div class="grid grid-cols-3 gap-6">
+    <div class="grid grid-cols-3 gap-6 mb-3">
         <div th:each="post, loop : ${paging}"
              class="p-6 bg-white shadow-md rounded-lg border border-gray-200 hover:shadow-xl">
             <div class="flex items-center justify-between mb-4">
@@ -15,7 +15,8 @@
                     <span th:unless="${post.isPremium and not @rq.isPremium()}" class="text-blue-700">
                     <a th:href="@{|/post/detail/${post.id}|}" th:text="${post.title}"></a>
                 </span>
-                    <span th:if="${post.isPremium and not @rq.isPremium()}" class="text-red-500">멤버십 회원만 열람 가능한 글입니다.</span>
+                    <span th:if="${post.isPremium and not @rq.isPremium()}"
+                          class="text-red-500">멤버십 회원만 열람 가능한 글입니다.</span>
                 </h3>
             </div>
             <p class="text-gray-700 mb-4">

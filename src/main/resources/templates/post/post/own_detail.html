@@ -42,11 +42,13 @@
                         </div>
                     </div>
                     <div>
-                        <a th:href="@{|/b/${post.author.username}/${post.countByMember}/modify|}" class="btn btn-outline btn-sm mr-3"
+                        <a th:href="@{|/b/${post.author.username}/${post.countByMember}/modify|}"
+                           class="btn btn-outline btn-sm mr-3"
                            sec:authorize="isAuthenticated()"
                            th:if="${post.author != null and #authentication.getPrincipal().getUsername() == post.author.username}"
                            th:text="수정"></a>
-                        <a href="javascript:void(0);" th:data-uri="@{|/b/${post.author.username}/${post.countByMember}/delete|}"
+                        <a href="javascript:void(0);"
+                           th:data-uri="@{|/b/${post.author.username}/${post.countByMember}/delete|}"
                            class="delete btn btn-outline btn-sm" sec:authorize="isAuthenticated()"
                            th:if="${post.author != null and #authentication.getPrincipal().getUsername() == post.author.username}"
                            th:text="삭제"></a>
@@ -99,11 +101,13 @@
                                 </div>
                             </div>
                             <div>
-                                <a th:href="@{|/b/comment/${post.author.username}/${post.countByMember}/modify/${comment.id}|}" class="btn btn-outline btn-sm mr-3"
+                                <a th:href="@{|/b/comment/${post.author.username}/${post.countByMember}/modify/${comment.id}|}"
+                                   class="btn btn-outline btn-sm mr-3"
                                    sec:authorize="isAuthenticated()"
                                    th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.username}"
                                    th:text="수정"></a>
-                                <a href="javascript:void(0);" th:data-uri="@{|/b/comment/${post.author.username}/${post.countByMember}/delete/${comment.id}|}"
+                                <a href="javascript:void(0);"
+                                   th:data-uri="@{|/b/comment/${post.author.username}/${post.countByMember}/delete/${comment.id}|}"
                                    class="delete btn btn-outline btn-sm" sec:authorize="isAuthenticated()"
                                    th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.username}"
                                    th:text="삭제"></a>
@@ -117,7 +121,8 @@
 
     <div class="mt-3 mx-3">
 
-        <form th:action="@{|/b/comment/${post.author.username}/${post.countByMember}/create|}" th:object="${commentForm}" method="post">
+        <form th:action="@{|/b/comment/${post.author.username}/${post.countByMember}/create|}"
+              th:object="${commentForm}" method="post">
             <textarea class=" textarea textarea-bordered w-full" rows="3" id="content" name="content"></textarea>
             <div class="mt-3 flex justify-end">
                 <input type="submit" value="댓글 등록" class="btn btn-outline btn-primary mr-3">
@@ -125,7 +130,6 @@
         </form>
     </div>
 </div>
-
 
 
 </div>

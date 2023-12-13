@@ -14,13 +14,15 @@
                     <option value="title" th:selected="${kwTypes == 'title'}">제목</option>
                     <option value="content" th:selected="${kwTypes == 'content'}">내용</option>
                 </select>
-                <input type="search" name="kw" id="search_kw" class="form-control input input-bordered input-sm mr-3" th:value="${kw}">
+                <input type="search" name="kw" id="search_kw" class="form-control input input-bordered input-sm mr-3"
+                       th:value="${kw}">
                 <button class="btn btn-active btn-sm" type="submit" id="btn_search">찾기</button>
             </form>
         </div>
     </div>
     <div class="grid grid-cols-3 gap-6">
-        <div th:each="post, loop : ${paging}" class="p-6 bg-white shadow-md rounded-lg border border-gray-200 hover:shadow-xl">
+        <div th:each="post, loop : ${paging}"
+             class="p-6 bg-white shadow-md rounded-lg border border-gray-200 hover:shadow-xl">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-lg font-semibold">
                     <span th:if="${post.isPremium}" class="text-yellow-500"><i class="fa-solid fa-m"></i> . </span>
@@ -28,20 +30,23 @@
                     <span th:unless="${post.isPremium and not @rq.isPremium()}" class="text-blue-700">
                     <a th:href="@{|/post/detail/${post.id}|}" th:text="${post.title}"></a>
                 </span>
-                    <span th:if="${post.isPremium and not @rq.isPremium()}" class="text-red-500">멤버십 회원만 열람 가능한 글입니다.</span>
+                    <span th:if="${post.isPremium and not @rq.isPremium()}"
+                          class="text-red-500">멤버십 회원만 열람 가능한 글입니다.</span>
                 </h3>
             </div>
             <p class="text-gray-700 mb-4">
                 <a th:href="@{|/b/${post.author.username}|}" th:text="${post.author.username}"></a>
             </p>
             <p class="text-gray-500 text-right" th:text="'조회수: ' + ${post.viewCount}"></p>
-            <p class="text-gray-500 text-sm flex justify-end" th:text="${#temporals.format(post.createDate, 'yyyy-MM-dd HH:mm')}"></p>
+            <p class="text-gray-500 text-sm flex justify-end"
+               th:text="${#temporals.format(post.createDate, 'yyyy-MM-dd HH:mm')}"></p>
         </div>
     </div>
     <!-- 페이징처리 시작 -->
     <div class="join w-full flex justify-center mt-3">
         <a class="join-item btn" th:classappend="${paging.number < 5} ? 'disabled' : ''"
-           th:if="${paging.number >= 5}" th:href="@{|/post/list?page=${(paging.number-5) > 0 ? (paging.number-5) : 0}&kw=${kw}&kwTypes=${kwTypes}&sort=${sort}|}">
+           th:if="${paging.number >= 5}"
+           th:href="@{|/post/list?page=${(paging.number-5) > 0 ? (paging.number-5) : 0}&kw=${kw}&kwTypes=${kwTypes}&sort=${sort}|}">
             <span>이전</span>
         </a>
 
