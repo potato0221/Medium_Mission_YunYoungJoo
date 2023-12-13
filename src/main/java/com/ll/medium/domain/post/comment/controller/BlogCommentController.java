@@ -8,16 +8,14 @@ import com.ll.medium.domain.post.comment.entity.Comment;
 import com.ll.medium.domain.post.comment.service.CommentService;
 import com.ll.medium.domain.post.post.entity.Post;
 import com.ll.medium.domain.post.post.service.PostService;
+import com.ll.medium.global.rq.Rq;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
@@ -29,6 +27,7 @@ public class BlogCommentController {
     private final PostService postService;
     private final CommentService commentService;
     private final MemberService memberService;
+    private final Rq rq;
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/{username}/{id}/create")
@@ -93,19 +92,19 @@ public class BlogCommentController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/{username}/{postId}/delete/{commentId}") //username/postNum/delete/commentNum
-    public String commentDelete(Principal principal,
+    @DeleteMapping("/{username}/{postId}/delete/{commentId}") //username/postNum/delete/commentNum
+    public String commentDelete(
                                 @PathVariable("username") String username,
                                 @PathVariable("postId") Integer postId,
                                 @PathVariable("commentId") Integer commentId) {
 
         Comment comment = this.commentService.getComment(commentId);
 
-        if (!comment.getAuthor().getUsername().equals(principal.getName())) {
+        if (!commentService.canDelete(rq.getMember(),comment)) {
             return "redirect:/post/access_denied";
         }
         this.commentService.delete(comment);
-        return String.format("redirect:/b/%s/%s", username, postId);
+        return rq.redirect("/b/%s/%s".formatted(username,postId), "댓글이 삭제 되었습니다.");
     }
 
     @PreAuthorize("isAuthenticated()")

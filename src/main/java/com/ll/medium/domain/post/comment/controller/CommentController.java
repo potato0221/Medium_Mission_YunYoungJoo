@@ -8,18 +8,14 @@ import com.ll.medium.domain.post.comment.entity.Comment;
 import com.ll.medium.domain.post.comment.service.CommentService;
 import com.ll.medium.domain.post.post.entity.Post;
 import com.ll.medium.domain.post.post.service.PostService;
+import com.ll.medium.global.rq.Rq;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
@@ -31,6 +27,7 @@ public class CommentController {
     private final PostService postService;
     private final CommentService commentService;
     private final MemberService memberService;
+    private final Rq rq;
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/create/{id}")
@@ -60,7 +57,7 @@ public class CommentController {
 
         Comment comment = this.commentService.getComment(id);
         if (!comment.getAuthor().getUsername().equals(principal.getName())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없습니다.");
+            return "redirect:/post/access_denied";
         }
         commentForm.setContent(comment.getContent());
         return "comment/comment/comment_form";
@@ -80,7 +77,7 @@ public class CommentController {
         Comment comment = this.commentService.getComment(id);
 
         if (!comment.getAuthor().getUsername().equals(principal.getName())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없습니다.");
+            return "redirect:/post/access_denied";
         }
 
         this.commentService.modify(comment, commentForm.getContent());
@@ -88,15 +85,15 @@ public class CommentController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/delete/{id}")
-    public String commentDelete(Principal principal,
+    @DeleteMapping("/delete/{id}")
+    public String commentDelete(
                                 @PathVariable("id") Integer id) {
         Comment comment = this.commentService.getComment(id);
-        if (!comment.getAuthor().getUsername().equals(principal.getName())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제 권한이 없습니다.");
+        if (!commentService.canDelete(rq.getMember(),comment)) {
+            return "redirect:/post/access_denied";
         }
         this.commentService.delete(comment);
-        return String.format("redirect:/post/detail/%s", comment.getPost().getId());
+        return rq.redirect("/post/detail/%s".formatted(comment.getPost().getId()), "댓글이 삭제 되었습니다.");
     }
 
     @PreAuthorize("isAuthenticated()")
