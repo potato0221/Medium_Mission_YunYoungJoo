@@ -6,9 +6,9 @@ import com.ll.medium.domain.post.post.dto.PostForm;
 import com.ll.medium.domain.post.post.entity.Post;
 import com.ll.medium.domain.post.post.service.PostService;
 import com.ll.medium.global.rq.Rq;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,6 +19,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.HashSet;
+import java.util.Set;
 
 @RequestMapping("/b")
 @RequiredArgsConstructor
@@ -67,25 +69,17 @@ public class BlogController {
             }
         }
 
-        String postId = String.valueOf(id);
-        Cookie[] cookies = request.getCookies();
-        boolean viewed = false;
+        HttpSession session = request.getSession();
+        Set<Integer> viewedPosts = (Set<Integer>) session.getAttribute("viewedPosts");
 
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("viewedPosts") && cookie.getValue().contains(postId)) {
-                    viewed = true;
-                    break;
-                }
-            }
+        if (viewedPosts == null) {
+            viewedPosts = new HashSet<>();
+            session.setAttribute("viewedPosts", viewedPosts);
         }
-        if (!viewed) {
-            postService.incrementPostViewCount(post);
 
-            // 중복 조회 방지를 위해 쿠키에 게시물 ID 저장
-            Cookie cookie = new Cookie("viewedPosts", postId);
-            cookie.setMaxAge(1 * 60 * 60); // 쿠키 유지 시간 1시간
-            response.addCookie(cookie);
+        if (!viewedPosts.contains(id)) {
+            postService.incrementPostViewCount(post);
+            viewedPosts.add(id);
         }
 
         return "post/post/own_detail";
