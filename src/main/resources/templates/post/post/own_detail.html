@@ -30,15 +30,21 @@
                 <div class="my-3 flex justify-between">
                     <div>
                         <div>
-                            <a href="javascript:void(0);" class="like btn btn-sm btn-ghost"
-                               th:data-uri="@{|/b/${post.author.username}/${post.countByMember}/like|}">
-                                <i class="fa-regular fa-heart fa-xl"></i>
-                                <span class="badge rounded-pill bg-error" th:text="${#lists.size(post.voter)}"></span>
-                            </a>
-                            <a href="javascript:void(0);" class="deleteLike btn btn-sm btn-ghost"
-                               th:data-uri="@{|/b/${post.author.username}/${post.countByMember}/cancelLike|}">
-                                <i class="fa-solid fa-heart-crack fa-xl"></i>
-                            </a>
+                            <form method="post" class="like btn btn-sm btn-ghost"
+                                  th:action="@{|/b/${post.author.username}/${post.countByMember}/like|}">
+                                <button type="submit" onclick="return confirm('추천 하시겠습니까?');">
+                                    <i class="fa-regular fa-heart fa-xl"></i>
+                                    <span class="badge rounded-pill bg-error"
+                                          th:text="${#lists.size(post.voter)}"></span>
+                                </button>
+                            </form>
+                            <form method="post" class="deleteLike btn btn-sm btn-ghost"
+                                  th:action="@{|/b/${post.author.username}/${post.countByMember}/cancelLike|}">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <button type="submit" onclick="return confirm('추천을 취소 하시겠습니까?');">
+                                    <i class="fa-solid fa-heart-crack fa-xl"></i>
+                                </button>
+                            </form>
                         </div>
                     </div>
                     <div class="flex justify-colum">
@@ -48,7 +54,7 @@
                            th:if="${post.author != null and #authentication.getPrincipal().getUsername() == post.author.username}"
                            th:text="수정"></a>
                         <form th:if="${@postService.canDelete(@rq.member, post)}"
-                              th:action="@{/b/{username}/{id}/delete(username=${post.author.username}, id=${post.countByMember})}" method="post">
+                              th:action="@{|/b/${post.author.username}/${post.countByMember}/delete|}" method="post">
                             <input type="hidden" name="_method" value="DELETE">
                             <button type="submit" class="btn btn-outline btn-sm mr-3"
                                     onclick="return confirm('정말로 삭제하시겠습니까?');">삭제</button>
@@ -89,16 +95,21 @@
                         <div class="my-3 flex justify-between">
                             <div>
                                 <div>
-                                    <a href="javascript:void(0);" class="like btn btn-sm btn-ghost"
-                                       th:data-uri="@{|/b/comment/${post.author.username}/${post.countByMember}/like/${comment.id}|}">
-                                        <i class="fa-regular fa-heart fa-xl"></i>
-                                        <span class="badge rounded-pill bg-error"
-                                              th:text="${#lists.size(comment.voter)}"></span>
-                                    </a>
-                                    <a href="javascript:void(0);" class="deleteLike btn btn-sm btn-ghost"
-                                       th:data-uri="@{|/b/comment/${post.author.username}/${post.countByMember}/cancelLike/${comment.id}|}">
-                                        <i class="fa-solid fa-heart-crack fa-xl"></i>
-                                    </a>
+                                    <form method="post" class="like btn btn-sm btn-ghost"
+                                          th:action="@{|/b/comment/${post.author.username}/${post.countByMember}/like/${comment.id}|}">
+                                        <button type="submit" onclick="return confirm('댓글을 추천 하시겠습니까?');">
+                                            <i class="fa-regular fa-heart fa-xl"></i>
+                                            <span class="badge rounded-pill bg-error"
+                                                  th:text="${#lists.size(comment.voter)}"></span>
+                                        </button>
+                                    </form>
+                                    <form method="post" class="deleteLike btn btn-sm btn-ghost"
+                                          th:action="@{|/b/comment/${post.author.username}/${post.countByMember}/cancelLike/${comment.id}|}">
+                                        <input type="hidden" name="_method" value="DELETE">
+                                        <button type="submit" onclick="return confirm('댓글 추천을 취소 하시겠습니까?');">
+                                            <i class="fa-solid fa-heart-crack fa-xl"></i>
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
                             <div class="flex justify-colum">
@@ -108,8 +119,7 @@
                                    th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.username}"
                                    th:text="수정"></a>
                                 <form th:if="${@commentService.canDelete(@rq.member, comment)}"
-                                      th:action="@{/b/comment/{username}/{postId}/delete/{commentId}
-                                      (username=${post.author.username}, postId=${post.countByMember}, commentId=${comment.id})}" method="post">
+                                      th:action="@{|/b/comment/${post.author.username}/${post.countByMember}/delete/${comment.id}|}" method="post">
                                     <input type="hidden" name="_method" value="DELETE">
                                     <button type="submit" class="btn btn-outline btn-sm mr-3"
                                             onclick="return confirm('정말로 삭제하시겠습니까?');">삭제</button>
@@ -133,40 +143,5 @@
         </form>
     </div>
 </div>
-
-
-</div>
-<script layout:fragment="script" type='text/javascript'>
-    const delete_elements = document.getElementsByClassName("delete");
-    Array.from(delete_elements).forEach(function (element) {
-        element.addEventListener('click', function () {
-            if (confirm("정말로 삭제하시겠습니까?")) {
-                location.href = this.dataset.uri;
-            }
-        });
-    });
-
-    const like_elements = document.getElementsByClassName("like");
-    Array.from(like_elements).forEach(function (element) {
-        element.addEventListener('click', function () {
-            if (confirm("추천 하시겠습니까?")) {
-                location.href = this.dataset.uri;
-            }
-            ;
-        });
-    });
-
-    const deleteLike_elements = document.getElementsByClassName("deleteLike");
-    Array.from(deleteLike_elements).forEach(function (element) {
-        element.addEventListener('click', function () {
-            if (confirm("추천을 취소 하시겠습니까?")) {
-                location.href = this.dataset.uri;
-            }
-            ;
-        });
-    });
-
-
-</script>
 
 </html>

@@ -189,21 +189,21 @@ public class PostController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/{id}/like")
+    @PostMapping("/{id}/like")
     public String postVote(Principal principal, @PathVariable("id") Integer id) {
         Post post = this.postService.getPost(id);
         SiteMember siteMember = this.memberService.getUser(principal.getName());
         this.postService.vote(post, siteMember);
-        return String.format("redirect:/post/detail/%s", id);
+        return rq.redirect("/post/detail/%s".formatted(id), "추천 되었습니다.");
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/{id}/cancelLike")
+    @DeleteMapping("/{id}/cancelLike")
     public String deletePostVote(Principal principal, @PathVariable("id") Integer id) {
         Post post = this.postService.getPost(id);
         SiteMember siteMember = this.memberService.getUser(principal.getName());
         this.postService.deleteVote(post, siteMember);
-        return String.format("redirect:/post/detail/%s", id);
+        return rq.redirect("/post/detail/%s".formatted(id), "추천이 취소 되었습니다.");
     }
 
 }

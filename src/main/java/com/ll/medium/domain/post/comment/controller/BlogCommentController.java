@@ -108,7 +108,7 @@ public class BlogCommentController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("{username}/{postId}/like/{commentId}")
+    @PostMapping("{username}/{postId}/like/{commentId}")
     public String commentVote(Principal principal,
                               @PathVariable("username") String username,
                               @PathVariable("postId") Integer postId,
@@ -116,11 +116,11 @@ public class BlogCommentController {
         SiteMember siteMember = this.memberService.getUser(principal.getName());
         Comment comment = this.commentService.getComment(commentId);
         this.commentService.vote(comment, siteMember);
-        return String.format("redirect:/b/%s/%s", username, postId);
+        return rq.redirect("/b/%s/%s".formatted(username,postId), "댓글이 추천 되었습니다.");
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/{username}/{postId}/cancelLike/{commentId}")
+    @DeleteMapping("/{username}/{postId}/cancelLike/{commentId}")
     public String deleteCommentVote(Principal principal,
                                     @PathVariable("username") String username,
                                     @PathVariable("postId") Integer postId,
@@ -129,7 +129,7 @@ public class BlogCommentController {
         SiteMember siteMember2 = this.memberService.getUser(principal.getName());
         Comment comment = this.commentService.getComment(commentId);
         this.commentService.deleteVote(comment, siteMember2);
-        return String.format("redirect:/b/%s/%s", username, postId);
+        return rq.redirect("/b/%s/%s".formatted(username,postId), "댓글 추천이 취소 되었습니다.");
     }
 
 

@@ -97,22 +97,22 @@ public class CommentController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/{id}/like")
+    @PostMapping("/{id}/like")
     public String commentVote(Principal principal,
                               @PathVariable("id") Integer id) {
         Comment comment = this.commentService.getComment(id);
         SiteMember siteMember = this.memberService.getUser(principal.getName());
         this.commentService.vote(comment, siteMember);
-        return String.format("redirect:/post/detail/%s", comment.getPost().getId());
+        return rq.redirect("/post/detail/%s".formatted(comment.getPost().getId()), "댓글이 추천 되었습니다.");
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/{id}/cancelLike")
+    @DeleteMapping("/{id}/cancelLike")
     public String deleteCommentVote(Principal principal, @PathVariable("id") Integer id) {
         Comment comment = this.commentService.getComment(id);
         SiteMember siteMember = this.memberService.getUser(principal.getName());
         this.commentService.deleteVote(comment, siteMember);
-        return String.format("redirect:/post/detail/%s", comment.getPost().getId());
+        return rq.redirect("/post/detail/%s".formatted(comment.getPost().getId()), "댓글 추천이 취소 되었습니다.");
     }
 
 

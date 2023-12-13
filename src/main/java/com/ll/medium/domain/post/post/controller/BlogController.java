@@ -92,7 +92,7 @@ public class BlogController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/{username}/{id}/like")
+    @PostMapping("/{username}/{id}/like")
     public String postVote(@PathVariable("id") Integer id,
                            @PathVariable("username") String username) {
         SiteMember siteMember = this.memberService.getUser(username);
@@ -100,18 +100,18 @@ public class BlogController {
         Post post = this.postService.getPostByCountByMemberAndMember(siteMember, id);
 
         this.postService.vote(post, siteMember2);
-        return String.format("redirect:/b/%s/%s", username, id);
+        return rq.redirect("/b/%s/%s".formatted(username, id), "추천 되었습니다.");
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/{username}/{id}/cancelLike")
+    @DeleteMapping("/{username}/{id}/cancelLike")
     public String deletePostVote(@PathVariable("id") Integer id,
                                  @PathVariable("username") String username) {
         SiteMember siteMember = this.memberService.getUser(username);
         SiteMember siteMember2 = rq.getMember();
         Post post = this.postService.getPostByCountByMemberAndMember(siteMember, id);
         this.postService.deleteVote(post, siteMember2);
-        return String.format("redirect:/b/%s/%s", username, id);
+        return rq.redirect("/b/%s/%s".formatted(username, id), "추천이 취소 되었습니다.");
     }
 
     @PreAuthorize("isAuthenticated()")
