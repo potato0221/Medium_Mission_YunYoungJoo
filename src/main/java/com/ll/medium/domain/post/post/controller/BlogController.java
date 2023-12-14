@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.util.HashSet;
@@ -51,7 +52,8 @@ public class BlogController {
                          @PathVariable("id") Integer id,
                          @PathVariable("username") String username,
                          HttpServletRequest request,
-                         HttpServletResponse response) {
+                         HttpServletResponse response,
+                         RedirectAttributes redirectAttributes) {
         SiteMember siteMember = this.memberService.getUser(username);
 
         Post post = this.postService.getPostByCountByMemberAndMember(siteMember, id);
@@ -61,10 +63,12 @@ public class BlogController {
 
         if (post.isPremium()) {
             if (!rq.isPremium()) {
+                redirectAttributes.addAttribute("accessError", "접근 불가 페이지 입니다.");
                 return "redirect:/post/access_denied";
             }
         } else if (post.isNotPublished()) {
             if (rq.getMember() != post.getAuthor()) {
+                redirectAttributes.addAttribute("accessError", "접근 불가 페이지 입니다.");
                 return "redirect:/post/access_denied";
             }
         }
@@ -114,12 +118,14 @@ public class BlogController {
             PostForm postForm,
             @PathVariable("id") Integer id,
             Principal principal,
-            @PathVariable("username") String username
+            @PathVariable("username") String username,
+            RedirectAttributes redirectAttributes
     ) {
 
         SiteMember siteMember = this.memberService.getUser(username);
         Post post = this.postService.getPostByCountByMemberAndMember(siteMember, id);
         if (!post.getAuthor().getUsername().equals(principal.getName())) {
+            redirectAttributes.addAttribute("accessError", "접근 불가 페이지 입니다.");
             return "redirect:/post/access_denied";
         }
         postForm.setTitle(post.getTitle());
@@ -136,17 +142,19 @@ public class BlogController {
                              BindingResult bindingResult,
                              Principal principal,
                              @PathVariable("id") Integer id,
-                             @PathVariable("username") String username) {
+                             @PathVariable("username") String username,
+                             RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             return "post/post/post_form";
         }
         SiteMember siteMember = this.memberService.getUser(username);
         Post post = this.postService.getPostByCountByMemberAndMember(siteMember, id);
         if (!post.getAuthor().getUsername().equals(principal.getName())) {
+            redirectAttributes.addAttribute("accessError", "접근 불가 페이지 입니다.");
             return "redirect:/post/access_denied";
         }
         this.postService.modify(post, postForm.getTitle(), postForm.getContent(), postForm.isPremium(), postForm.isNotPublished());
-        return String.format("redirect:/b/%s/%s", username, id);
+        return rq.redirect("/b/%s/%s".formatted(username, id), "게시물이 수정 되었습니다.");
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -154,15 +162,17 @@ public class BlogController {
     public String postDelete(
             Principal principal,
             @PathVariable("id") Integer id,
-            @PathVariable("username") String username
+            @PathVariable("username") String username,
+            RedirectAttributes redirectAttributes
     ) {
         SiteMember siteMember = this.memberService.getUser(username);
         Post post = this.postService.getPostByCountByMemberAndMember(siteMember, id);
         if (!post.getAuthor().getUsername().equals(principal.getName())) {
+            redirectAttributes.addAttribute("accessError", "접근 불가 페이지 입니다.");
             return "redirect:/post/access_denied";
         }
         this.postService.delete(post);
-        return rq.redirect("/b/%s".formatted(username), "게시물이 삭제되었습니다.");
+        return rq.redirect("/b/%s".formatted(username), "게시물이 삭제 되었습니다.");
 
     }
 
@@ -183,8 +193,16 @@ public class BlogController {
             return "post/post/post_form";
         }
 
-        this.postService.create(postForm.getTitle(), postForm.getContent(), rq.getMember(), postForm.isPremium(), postForm.isNotPublished(), member.getCount(), 0);
-        return "redirect:/b/%s".formatted(rq.getMember().getUsername());
+        this.postService.create(
+                postForm.getTitle(),
+                postForm.getContent(),
+                rq.getMember(),
+                postForm.isPremium(),
+                postForm.isNotPublished(),
+                member.getCount(),
+                0);
+
+        return rq.redirect("/b/%s".formatted(rq.getMember().getUsername()), "게시물이 등록 되었습니다.");
     }
 
 }

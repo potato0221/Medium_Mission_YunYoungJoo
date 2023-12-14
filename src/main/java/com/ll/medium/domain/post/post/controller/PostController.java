@@ -18,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.util.HashSet;
@@ -75,16 +76,19 @@ public class PostController {
     public String detail(Model model,
                          @PathVariable("id") Integer id,
                          HttpServletRequest request,
-                         HttpServletResponse response) {
+                         HttpServletResponse response,
+                         RedirectAttributes redirectAttributes) {
         Post post = this.postService.getPost(id);
         model.addAttribute("post", post);
 
         if (post.isPremium()) {
             if (!rq.isPremium()) {
+                redirectAttributes.addAttribute("accessError", "접근 불가 페이지 입니다.");
                 return "redirect:/post/access_denied";
             }
         } else if (post.isNotPublished()) {
             if (rq.getMember() != post.getAuthor()) {
+                redirectAttributes.addAttribute("accessError", "접근 불가 페이지 입니다.");
                 return "redirect:/post/access_denied";
             }
         }
@@ -128,8 +132,16 @@ public class PostController {
             return "post/post/post_form";
         }
 
-        this.postService.create(postForm.getTitle(), postForm.getContent(), rq.getMember(), postForm.isPremium(), postForm.isNotPublished(), member.getCount(), 0);
-        return "redirect:/post/list";
+        this.postService.create(
+                postForm.getTitle(),
+                postForm.getContent(),
+                rq.getMember(),
+                postForm.isPremium(),
+                postForm.isNotPublished(),
+                member.getCount(),
+                0);
+
+        return rq.redirect("/post/list","게시물이 등록 되었습니다.");
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -137,10 +149,12 @@ public class PostController {
     public String postModify(
             PostForm postForm,
             @PathVariable("id") Integer id,
-            Principal principal
+            Principal principal,
+            RedirectAttributes redirectAttributes
     ) {
         Post post = this.postService.getPost(id);
         if (!post.getAuthor().getUsername().equals(principal.getName())) {
+            redirectAttributes.addAttribute("accessError", "접근 불가 페이지 입니다.");
             return "redirect:/post/access_denied";
         }
         postForm.setTitle(post.getTitle());
@@ -153,31 +167,37 @@ public class PostController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/modify/{id}")
-    public String postModify(@Valid PostForm postForm, BindingResult bindingResult,
-                             Principal principal, @PathVariable("id") Integer id) {
+    public String postModify(@Valid PostForm postForm,
+                             BindingResult bindingResult,
+                             Principal principal,
+                             @PathVariable("id") Integer id,
+                             RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             return "post/post/post_form";
         }
         Post post = this.postService.getPost(id);
         if (!post.getAuthor().getUsername().equals(principal.getName())) {
+            redirectAttributes.addAttribute("accessError", "접근 불가 페이지 입니다.");
             return "redirect:/post/access_denied";
         }
         this.postService.modify(post, postForm.getTitle(), postForm.getContent(), postForm.isPremium(), postForm.isNotPublished());
-        return String.format("redirect:/post/detail/%s", id);
+        return rq.redirect("/post/detail/%s".formatted(id), "게시물이 수정 되었습니다.");
     }
 
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/delete/{id}")
     public String postDelete(
-            @PathVariable("id") Integer id
+            @PathVariable("id") Integer id,
+            RedirectAttributes redirectAttributes
     ) {
         Post post = this.postService.getPost(id);
         if (!postService.canDelete(rq.getMember(), post)) {
+            redirectAttributes.addAttribute("accessError", "접근 불가 페이지 입니다.");
             return "redirect:/post/access_denied";
         }
         this.postService.delete(post);
 
-        return rq.redirect("/", "게시물이 삭제되었습니다.");
+        return rq.redirect("/", "게시물이 삭제 되었습니다.");
     }
 
     @PreAuthorize("isAuthenticated()")

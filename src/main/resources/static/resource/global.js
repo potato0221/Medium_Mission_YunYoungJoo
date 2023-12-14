@@ -35,6 +35,13 @@ function toastNotice(msg) {
 
     toastr["success"](_msg, "성공");
 }
+function toastError(msg) {
+    const [_msg, ttl] = parseMsg(msg);
+
+    if (ttl && parseInt(ttl) < new Date().getTime()) return;
+
+    toastr["error"](_msg, "접근 불가");
+}
 
 function getQueryParams() {
     const params = new URLSearchParams(window.location.search);

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 
@@ -48,7 +49,7 @@ public class BlogCommentController {
         }
 
         this.commentService.create(post, commentForm.getContent(), siteMember2);
-        return String.format("redirect:/b/%s/%s", username, id);
+        return rq.redirect("/b/%s/%s".formatted(username,id), "댓글이 작성 되었습니다.");
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -57,10 +58,12 @@ public class BlogCommentController {
                                 @PathVariable("username") String username,
                                 @PathVariable("postId") Integer postId,
                                 @PathVariable("commentId") Integer commentId,
-                                Principal principal) {
+                                Principal principal,
+                                RedirectAttributes redirectAttributes) {
         Comment comment = this.commentService.getComment(commentId);
 
         if (!comment.getAuthor().getUsername().equals(principal.getName())) {
+            redirectAttributes.addAttribute("accessError", "접근 불가 페이지 입니다.");
             return "redirect:/post/access_denied";
         }
 
@@ -76,7 +79,8 @@ public class BlogCommentController {
             BindingResult bindingResult,
             @PathVariable("postId") Integer postId,
             @PathVariable("commentId") Integer commentId,
-            Principal principal) {
+            Principal principal,
+            RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
             return "comment/comment/comment_form";
@@ -85,10 +89,11 @@ public class BlogCommentController {
         Comment comment = this.commentService.getComment(commentId);
 
         if (!comment.getAuthor().getUsername().equals(principal.getName())) {
+            redirectAttributes.addAttribute("accessError", "접근 불가 페이지 입니다.");
             return "redirect:/post/access_denied";
         }
         this.commentService.modify(comment, commentForm.getContent());
-        return String.format("redirect:/b/%s/%s", username, postId);
+        return rq.redirect("/b/%s/%s".formatted(username,postId), "댓글이 수정 되었습니다.");
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -96,11 +101,13 @@ public class BlogCommentController {
     public String commentDelete(
                                 @PathVariable("username") String username,
                                 @PathVariable("postId") Integer postId,
-                                @PathVariable("commentId") Integer commentId) {
+                                @PathVariable("commentId") Integer commentId,
+                                RedirectAttributes redirectAttributes) {
 
         Comment comment = this.commentService.getComment(commentId);
 
         if (!commentService.canDelete(rq.getMember(),comment)) {
+            redirectAttributes.addAttribute("accessError", "접근 불가 페이지 입니다.");
             return "redirect:/post/access_denied";
         }
         this.commentService.delete(comment);
