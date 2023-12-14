@@ -2,6 +2,7 @@ package com.ll.medium.domain.member.member.controller;
 
 import com.ll.medium.domain.member.member.dto.MemberCreateForm;
 import com.ll.medium.domain.member.member.service.MemberService;
+import com.ll.medium.global.rq.Rq;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class MemberController {
 
     private final MemberService memberService;
+    private final Rq rq;
 
     @PreAuthorize("isAnonymous()")
     @GetMapping("/join")
@@ -48,7 +50,7 @@ public class MemberController {
             bindingResult.reject("signupFailed", e.getMessage());
             return "member/member/signup_form";
         }
-        return "redirect:/member/login";
+        return rq.redirect("/member/login", "회원가입이 완료 되었습니다.");
     }
 
     @PreAuthorize("isAnonymous()")
@@ -56,6 +58,5 @@ public class MemberController {
     public String login() {
         return "member/member/login_form";
     }
-
 
 }

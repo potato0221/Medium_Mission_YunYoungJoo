@@ -11,7 +11,7 @@ import lombok.Setter;
 public class MemberCreateForm {
 
     @Size(min = 3, max = 25)
-    @NotEmpty(message = "사용자 ID를 입력 해 주세요.")
+    @NotEmpty(message = "아이디를 입력 해 주세요.")
     private String username;
 
     @NotEmpty(message = "비밀번호를 입력 해 주세요.")
