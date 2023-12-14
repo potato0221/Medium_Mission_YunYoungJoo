@@ -52,8 +52,8 @@ public class CommentService {
         this.commentRepository.delete(comment);
     }
 
-    public boolean canDelete(SiteMember siteMember, Comment comment){
-        if(siteMember==null) return false;
+    public boolean canDelete(SiteMember siteMember, Comment comment) {
+        if (siteMember == null) return false;
         return comment.getAuthor().equals(siteMember);
     }
 

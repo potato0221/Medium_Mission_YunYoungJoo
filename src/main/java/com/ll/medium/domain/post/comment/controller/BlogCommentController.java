@@ -49,7 +49,7 @@ public class BlogCommentController {
         }
 
         this.commentService.create(post, commentForm.getContent(), siteMember2);
-        return rq.redirect("/b/%s/%s".formatted(username,id), "댓글이 작성 되었습니다.");
+        return rq.redirect("/b/%s/%s".formatted(username, id), "댓글이 작성 되었습니다.");
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -93,25 +93,25 @@ public class BlogCommentController {
             return "redirect:/post/access_denied";
         }
         this.commentService.modify(comment, commentForm.getContent());
-        return rq.redirect("/b/%s/%s".formatted(username,postId), "댓글이 수정 되었습니다.");
+        return rq.redirect("/b/%s/%s".formatted(username, postId), "댓글이 수정 되었습니다.");
     }
 
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/{username}/{postId}/delete/{commentId}") //username/postNum/delete/commentNum
     public String commentDelete(
-                                @PathVariable("username") String username,
-                                @PathVariable("postId") Integer postId,
-                                @PathVariable("commentId") Integer commentId,
-                                RedirectAttributes redirectAttributes) {
+            @PathVariable("username") String username,
+            @PathVariable("postId") Integer postId,
+            @PathVariable("commentId") Integer commentId,
+            RedirectAttributes redirectAttributes) {
 
         Comment comment = this.commentService.getComment(commentId);
 
-        if (!commentService.canDelete(rq.getMember(),comment)) {
+        if (!commentService.canDelete(rq.getMember(), comment)) {
             redirectAttributes.addAttribute("accessError", "접근 불가 페이지 입니다.");
             return "redirect:/post/access_denied";
         }
         this.commentService.delete(comment);
-        return rq.redirect("/b/%s/%s".formatted(username,postId), "댓글이 삭제 되었습니다.");
+        return rq.redirect("/b/%s/%s".formatted(username, postId), "댓글이 삭제 되었습니다.");
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -123,7 +123,7 @@ public class BlogCommentController {
         SiteMember siteMember = this.memberService.getUser(principal.getName());
         Comment comment = this.commentService.getComment(commentId);
         this.commentService.vote(comment, siteMember);
-        return rq.redirect("/b/%s/%s".formatted(username,postId), "댓글이 추천 되었습니다.");
+        return rq.redirect("/b/%s/%s".formatted(username, postId), "댓글이 추천 되었습니다.");
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -136,7 +136,7 @@ public class BlogCommentController {
         SiteMember siteMember2 = this.memberService.getUser(principal.getName());
         Comment comment = this.commentService.getComment(commentId);
         this.commentService.deleteVote(comment, siteMember2);
-        return rq.redirect("/b/%s/%s".formatted(username,postId), "댓글 추천이 취소 되었습니다.");
+        return rq.redirect("/b/%s/%s".formatted(username, postId), "댓글 추천이 취소 되었습니다.");
     }
 
 

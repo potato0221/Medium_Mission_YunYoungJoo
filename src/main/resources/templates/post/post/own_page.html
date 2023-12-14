@@ -19,7 +19,8 @@
                         <div class="flex justify-between">
                             <div class="flex justify-colum">
                                 <h2 class="card-title mr-1" th:text="${post.title}"></h2>
-                                <span th:text="'(' + ${post.getCommentCount()} + ')'" class="text-orange-400 mt-0.5"></span>
+                                <span th:text="'(' + ${post.getCommentCount()} + ')'"
+                                      class="text-orange-400 mt-0.5"></span>
                             </div>
                             <div class="badge badge-ghost" th:text="${'조회수 : ' + post.viewCount}"></div>
                         </div>

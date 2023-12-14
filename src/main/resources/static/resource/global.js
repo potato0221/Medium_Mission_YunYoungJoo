@@ -35,6 +35,7 @@ function toastNotice(msg) {
 
     toastr["success"](_msg, "성공");
 }
+
 function toastError(msg) {
     const [_msg, ttl] = parseMsg(msg);
 

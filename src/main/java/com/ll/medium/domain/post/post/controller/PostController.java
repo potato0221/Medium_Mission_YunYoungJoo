@@ -141,7 +141,7 @@ public class PostController {
                 member.getCount(),
                 0);
 
-        return rq.redirect("/post/list","게시물이 등록 되었습니다.");
+        return rq.redirect("/post/list", "게시물이 등록 되었습니다.");
     }
 
     @PreAuthorize("isAuthenticated()")

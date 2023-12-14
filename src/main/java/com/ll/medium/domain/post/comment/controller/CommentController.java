@@ -92,10 +92,10 @@ public class CommentController {
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/delete/{id}")
     public String commentDelete(
-                                @PathVariable("id") Integer id,
-                                RedirectAttributes redirectAttributes) {
+            @PathVariable("id") Integer id,
+            RedirectAttributes redirectAttributes) {
         Comment comment = this.commentService.getComment(id);
-        if (!commentService.canDelete(rq.getMember(),comment)) {
+        if (!commentService.canDelete(rq.getMember(), comment)) {
             redirectAttributes.addAttribute("accessError", "접근 불가 페이지 입니다.");
             return "redirect:/post/access_denied";
         }

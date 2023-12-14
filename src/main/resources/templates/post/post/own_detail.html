@@ -57,7 +57,8 @@
                               th:action="@{|/b/${post.author.username}/${post.countByMember}/delete|}" method="post">
                             <input type="hidden" name="_method" value="DELETE">
                             <button type="submit" class="btn btn-outline btn-sm mr-3"
-                                    onclick="return confirm('정말로 삭제하시겠습니까?');">삭제</button>
+                                    onclick="return confirm('정말로 삭제하시겠습니까?');">삭제
+                            </button>
                         </form>
                     </div>
                 </div>
@@ -119,10 +120,12 @@
                                    th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.username}"
                                    th:text="수정"></a>
                                 <form th:if="${@commentService.canDelete(@rq.member, comment)}"
-                                      th:action="@{|/b/comment/${post.author.username}/${post.countByMember}/delete/${comment.id}|}" method="post">
+                                      th:action="@{|/b/comment/${post.author.username}/${post.countByMember}/delete/${comment.id}|}"
+                                      method="post">
                                     <input type="hidden" name="_method" value="DELETE">
                                     <button type="submit" class="btn btn-outline btn-sm mr-3"
-                                            onclick="return confirm('정말로 삭제하시겠습니까?');">삭제</button>
+                                            onclick="return confirm('정말로 삭제하시겠습니까?');">삭제
+                                    </button>
                                 </form>
                             </div>
                         </div>
