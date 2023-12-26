@@ -20,22 +20,21 @@ public class MemberService {
 
 
     @Transactional
-    public SiteMember create(String username, String email, String password, Integer count) {
+    public SiteMember create(String username, String email, String password) {
         SiteMember user = new SiteMember();
         user.setUsername(username);
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(password));
-        user.setCount(count);
+        user.setCount(0);
         user.setPaid(false);
         this.memberRepository.save(user);
         return user;
     }
 
     @Transactional
-    public SiteMember alreadyPaid(SiteMember siteMember){
+    public void alreadyPaid(SiteMember siteMember){
         siteMember.setPaid(true);
         this.memberRepository.save(siteMember);
-        return siteMember;
     }
 
 

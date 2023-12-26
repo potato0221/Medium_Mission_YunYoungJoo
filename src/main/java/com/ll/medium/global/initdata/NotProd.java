@@ -23,8 +23,18 @@ public class NotProd {
             if (memberService.count() > 0) return;
             SiteMember siteMember1 = new SiteMember();
             SiteMember siteMember2 = new SiteMember();
-            siteMember1 = memberService.create("user1", "www1@email.com", "1234", 0);
-            siteMember2 = memberService.create("paid1", "www2@email.com", "1234", 0);
+            SiteMember siteMember3 = new SiteMember();
+            siteMember1 = memberService.create("user1", "www1@email.com", "1234");
+            siteMember2 = memberService.create("paid1", "paid1@email.com", "1234");
+            siteMember3 = memberService.create("paid2", "paid2@email.com", "1234");
+
+            for(int i=3;i<=100;i++){
+                SiteMember siteMember=new SiteMember();
+                siteMember=memberService.create("paid"+i,"paid"+i+"@email.com","1234");
+                memberService.alreadyPaid(siteMember);
+            }
+
+
 
             for (int i = 1; i <= 60; i++) {
                 Post post = new Post();
@@ -36,15 +46,13 @@ public class NotProd {
                         siteMember1
                         , false,
                         false,
-                        siteMember1.getCount(),
-                        0
+                        siteMember1.getCount()
                 );
 
 
             }
 
-            Integer count2 = 0;
-            for (int i = 1; i <= 20; i++) {
+            for (int i = 1; i <= 50; i++) {
                 Post post = new Post();
                 siteMember2.setCount(siteMember2.getCount() + 1);
                 memberService.save(siteMember2);
@@ -54,8 +62,20 @@ public class NotProd {
                         siteMember2
                         , true,
                         false,
-                        siteMember2.getCount(),
-                        0
+                        siteMember2.getCount()
+                );
+            }
+            for (int i = 51; i <= 100; i++) {
+                Post post = new Post();
+                siteMember3.setCount(siteMember3.getCount() + 1);
+                memberService.save(siteMember3);
+                postService.create(
+                        "유료 글 " + i,
+                        "유료 글 내용" + i,
+                        siteMember2
+                        , true,
+                        false,
+                        siteMember3.getCount()
                 );
             }
 

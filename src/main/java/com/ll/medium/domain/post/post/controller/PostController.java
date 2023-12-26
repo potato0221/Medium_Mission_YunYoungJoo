@@ -138,8 +138,7 @@ public class PostController {
                 rq.getMember(),
                 postForm.isPaid(),
                 postForm.isNotPublished(),
-                member.getCount(),
-                0);
+                member.getCount());
 
         return rq.redirect("/post/list", "게시물이 등록 되었습니다.");
     }

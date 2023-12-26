@@ -80,7 +80,7 @@ public class PostService {
     }
 
     @Transactional
-    public void create(String title, String content, SiteMember member, boolean isPaid, boolean isNotPublished, Integer count, Integer viewCount) {
+    public void create(String title, String content, SiteMember member, boolean isPaid, boolean isNotPublished, Integer count) {
         Post post = new Post();
         post.setTitle(title);
         post.setContent(content);
@@ -89,7 +89,7 @@ public class PostService {
         post.setPaid(isPaid);
         post.setNotPublished(isNotPublished);
         post.setCountByMember(count);
-        post.setViewCount(viewCount);
+        post.setViewCount(0);
         this.postRepository.save(post);
     }
 

@@ -199,8 +199,7 @@ public class BlogController {
                 rq.getMember(),
                 postForm.isPaid(),
                 postForm.isNotPublished(),
-                member.getCount(),
-                0);
+                member.getCount());
 
         return rq.redirect("/b/%s".formatted(rq.getMember().getUsername()), "게시물이 등록 되었습니다.");
     }
