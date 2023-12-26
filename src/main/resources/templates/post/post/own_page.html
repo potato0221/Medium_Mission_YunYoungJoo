@@ -1,0 +1,75 @@
+<html layout:decorate="~{global/layout}">
+<div layout:fragment="content" class="mx-2 overflow-x-auto w-full">
+
+    <div class="container mx-auto p-4">
+        <div class="flex justify-between">
+            <h2 class="text-2xl font-bold mb-4">Posts by <span th:text="${username}"></span></h2>
+            <a th:if="${#authentication.name} == ${username}" th:href="@{/b/create}" class="btn btn-outline mr-3 mb-2">글
+                등록</a>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+            <!-- 각각의 카드 -->
+            <div th:each="post : ${paging}" class="card w-96 bg-base-100 shadow-xl w-full">
+                <div class="card-body">
+                    <div>
+                        <span th:if="${post.isNotPublished()}" class="text-red-600"><i class="fas fa-lock"></i> </span>
+                        <span th:if="${post.isPremium}" class="text-yellow-500"><i class="fa-solid fa-m"></i></span>
+                        <span th:unless="${post.isPremium and not @rq.isPremium() or post.isNotPublished() and (@rq.getMember()!=post.getAuthor())}"
+                              class="text-info-content">
+                        <div class="flex justify-between">
+                            <div class="flex justify-colum">
+                                <h2 class="card-title mr-1" th:text="${post.title}"></h2>
+                                <span th:text="'(' + ${post.getCommentCount()} + ')'"
+                                      class="text-orange-400 mt-0.5"></span>
+                            </div>
+                            <div class="badge badge-ghost" th:text="${'조회수 : ' + post.viewCount}"></div>
+                        </div>
+                        </span>
+                        <span th:if="${post.isPremium and not @rq.isPremium()}">멤버십 회원만 열람 가능 한 글 입니다.</span>
+                        <span th:if="${post.isNotPublished() and (@rq.getMember()!=post.getAuthor())}">비공개 게시물 입니다.</span>
+
+                    </div>
+
+                    <div class="card-actions justify-between">
+                        <div class="flex justify-colum mt-3">
+                            <i class="fa-solid fa-heart mt-1"></i>
+                            <p class="text-gray-500 text-right ml-2" th:text="${post.voteCount}"></p>
+                        </div>
+                        <a th:unless="${post.isNotPublished() and (@rq.getMember()!=post.getAuthor()) or (post.isPremium() and not @rq.isPremium())}"
+                           th:href="@{|/b/${post.author.username}/${post.countByMember}|}" class="btn btn-primary">글
+                            보기</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 페이징처리 시작 -->
+    <div class="join w-full flex justify-center my-2">
+        <a class="join-item btn" th:classappend="${paging.number < 5} ? 'disabled' : ''"
+           th:if="${paging.number >= 5}" th:href="@{|?page=${(paging.number/5 > 0) ? (paging.number-5) : 0}|}">
+            <span>이전</span>
+        </a>
+
+        <span th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"
+              th:if="${page >= (paging.number/5)*5 and page < ((paging.number/5)+1)*5}">
+            <a th:if="${page == paging.number}"
+               th:class="${'join-item btn btn-active'}"
+               th:text="${page + 1}"></a>
+            <a th:unless="${page == paging.number}"
+               th:class="${'join-item btn'}"
+               th:text="${page + 1}" th:href="@{|?page=${page}|}"></a>
+        </span>
+
+        <a class="join-item btn"
+           th:classappend="${paging.number + 5 >= paging.totalPages} ? 'disabled' : ''"
+           th:if="${paging.totalPages > 5 and (paging.number / 5 < (paging.totalPages - 1) / 5)}"
+           th:href="@{|?page=${(paging.number / 5 + 1) * 5}|}">
+            <span>다음</span>
+        </a>
+    </div>
+    <!-- 페이징처리 끝 -->
+
+
+</div>
+</html>

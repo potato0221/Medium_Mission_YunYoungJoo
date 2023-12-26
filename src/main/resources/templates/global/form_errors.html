@@ -1,0 +1,6 @@
+<div th:fragment="formErrorsFragment" th:if="${#fields.hasAnyErrors()}">
+    <script th:each="err : ${#fields.allErrors()}" th:inline="javascript">
+        toastr.warning([[${err}]], '', toastr.options.timeOut = 1000);
+    </script>
+</div>
+

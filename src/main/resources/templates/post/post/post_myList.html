@@ -1,0 +1,57 @@
+<html layout:decorate="~{global/layout}">
+<div layout:fragment="content" class="mx-2 overflow-x-auto">
+    <div class="input-group flex flex-row my-2 flex justify-between">
+        <div class="mt-2 flex gap-2">
+            <a th:href="@{/post/create}" class="btn btn-outline mr-3 mb-2">글 등록</a>
+        </div>
+    </div>
+    <div class="grid grid-cols-3 gap-6">
+        <div th:each="post, loop : ${paging}"
+             class="p-6 bg-white shadow-md rounded-lg border border-gray-200 hover:shadow-xl">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold">
+                    <span th:if="${post.isPremium}" class="text-yellow-500"><i class="fa-solid fa-m"></i> . </span>
+                    <span th:if="${post.isNotPublished()}" class="text-red-600"><i class="fas fa-lock"></i> </span>
+                    <span th:unless="${post.isPremium and not @rq.isPremium()}" class="text-blue-700">
+                    <a th:href="@{|/post/detail/${post.id}|}" th:text="${post.title}"></a>
+                        <span th:text="'(' + ${post.getCommentCount()} + ')'" class="text-orange-400"></span>
+                </span>
+                    <span th:if="${post.isPremium and not @rq.isPremium()}"
+                          class="text-red-500">멤버십 회원만 열람 가능한 글입니다.</span>
+                </h3>
+            </div>
+            <p class="text-gray-700 mb-4">
+                <a th:href="@{|/b/${post.author.username}|}" th:text="${post.author.username}"></a>
+            </p>
+            <p class="text-gray-500 text-right" th:text="'조회수: ' + ${post.viewCount}"></p>
+            <p class="text-gray-500 text-sm flex justify-end"
+               th:text="${#temporals.format(post.createDate, 'yyyy-MM-dd HH:mm')}"></p>
+        </div>
+    </div>
+    <!-- 페이징처리 시작 -->
+    <div class="join w-full flex justify-center mt-3">
+        <a class="join-item btn" th:classappend="${paging.number < 5} ? 'disabled' : ''"
+           th:if="${paging.number >= 5}" th:href="@{|?page=${(paging.number/5 > 0) ? (paging.number-5) : 0}|}">
+            <span>이전</span>
+        </a>
+
+        <span th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"
+              th:if="${page >= (paging.number/5)*5 and page < ((paging.number/5)+1)*5}">
+        <a th:if="${page == paging.number}"
+           th:class="${'join-item btn btn-active'}"
+           th:text="${page + 1}"></a>
+        <a th:unless="${page == paging.number}"
+           th:class="${'join-item btn'}"
+           th:text="${page + 1}" th:href="@{|?page=${page}|}"></a>
+    </span>
+
+        <a class="join-item btn"
+           th:classappend="${paging.number + 5 >= paging.totalPages} ? 'disabled' : ''"
+           th:if="${paging.totalPages > 5 and (paging.number / 5 < (paging.totalPages - 1) / 5)}"
+           th:href="@{|?page=${(paging.number / 5 + 1) * 5}|}">
+            <span>다음</span>
+        </a>
+    </div>
+    <!-- 페이징처리 끝 -->
+</div>
+</html>

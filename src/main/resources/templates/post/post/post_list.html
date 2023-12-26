@@ -1,0 +1,96 @@
+<html layout:decorate="~{global/layout}">
+<div layout:fragment="content" class="mx-2 overflow-x-auto">
+    <div class="input-group flex flex-row my-2 flex justify-between">
+        <div class="mt-2 flex gap-2">
+            <a th:href="@{/post/create}" class="btn btn-outline mr-3 mb-2">글 등록</a>
+        </div>
+        <div class="flex pt-4">
+            <form method="get" action="/post/list" class="flex">
+                <select name="sort" id="sort" class="form-control input input-bordered input-sm mr-3">
+                    <option value="desc" th:selected="${sort == 'desc'}">최신 순</option>
+                    <option value="asc" th:selected="${sort == 'asc'}">오래된 순</option>
+                    <option value="voteCountDesc" th:selected="${sort == 'voteCountDesc'}">추천 많은 순</option>
+                    <option value="voteCountAsc" th:selected="${sort == 'voteCountAsc'}">추천 낮은 순</option>
+                    <option value="viewCountDesc" th:selected="${sort == 'viewCountDesc'}">조회수 높은 순</option>
+                    <option value="viewCountAsc" th:selected="${sort == 'viewCountAsc'}">조회수 낮은 순</option>
+                </select>
+                <div class="flex justify-colum mr-3 mt-1">
+                    <div class="form-check form-check-inline mr-3">
+                        <input class="form-check-input" type="checkbox" id="title" name="kwTypes" value="title"
+                               th:checked="${#strings.contains(kwTypes, 'title')}">
+                        <label class="form-check-label" for="title">제목</label>
+                    </div>
+                    <div class="form-check form-check-inline mr-3">
+                        <input class="form-check-input" type="checkbox" id="content" name="kwTypes" value="content"
+                               th:checked="${#strings.contains(kwTypes, 'content')}">
+                        <label class="form-check-label" for="content">내용</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="author" name="kwTypes" value="author"
+                               th:checked="${#strings.contains(kwTypes, 'author')}">
+                        <label class="form-check-label" for="author">작성자</label>
+                    </div>
+                </div>
+                <input type="search" name="kw" id="search_kw" class="form-control input input-bordered input-sm mr-3"
+                       th:value="${kw}">
+                <button class="btn btn-active btn-sm" type="submit" id="btn_search">찾기</button>
+            </form>
+        </div>
+    </div>
+    <div class="grid grid-cols-3 gap-6">
+        <div th:each="post, loop : ${paging}"
+             class="p-6 bg-white shadow-md rounded-lg border border-gray-200 hover:shadow-xl">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold">
+                    <span th:if="${post.isPremium}" class="text-yellow-500"><i class="fa-solid fa-m"></i> . </span>
+                    <span th:if="${post.isNotPublished()}" class="text-red-600"><i class="fas fa-lock"></i> </span>
+                    <span th:unless="${post.isPremium and not @rq.isPremium()}" class="text-blue-700">
+                    <a th:href="@{|/post/detail/${post.id}|}" th:text="${post.title}"></a>
+                        <span th:text="'(' + ${post.getCommentCount()} + ')'" class="text-orange-400"></span>
+                </span>
+                    <span th:if="${post.isPremium and not @rq.isPremium()}"
+                          class="text-red-500">멤버십 회원만 열람 가능한 글입니다.</span>
+                </h3>
+            </div>
+            <p class="text-gray-700 mb-4">
+                <a th:href="@{|/b/${post.author.username}|}" th:text="${post.author.username}"></a>
+            </p>
+            <div class="flex justify-between">
+                <div class="flex justify-colum">
+                    <i class="fa-solid fa-heart mt-1"></i>
+                    <p class="text-gray-500 text-right ml-2" th:text="${post.voteCount}"></p>
+                </div>
+                <p class="text-gray-500 text-right" th:text="'조회수: ' + ${post.viewCount}"></p>
+            </div>
+            <p class="text-gray-500 text-sm flex justify-end"
+               th:text="${#temporals.format(post.createDate, 'yyyy-MM-dd HH:mm')}"></p>
+        </div>
+    </div>
+    <!-- 페이징처리 시작 -->
+    <div class="join w-full flex justify-center mt-3">
+        <a class="join-item btn" th:classappend="${paging.number < 5} ? 'disabled' : ''"
+           th:if="${paging.number >= 5}"
+           th:href="@{|/post/list?page=${(paging.number-5) > 0 ? (paging.number-5) : 0}&kw=${kw}&kwTypes=${kwTypes}&sort=${sort}|}">
+            <span>이전</span>
+        </a>
+
+        <span th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"
+              th:if="${page >= (paging.number/5)*5 and page < ((paging.number/5)+1)*5}">
+<a th:if="${page == paging.number}"
+   th:class="${'join-item btn btn-active'}"
+   th:text="${page + 1}"></a>
+<a th:unless="${page == paging.number}"
+   th:class="${'join-item btn'}"
+   th:text="${page + 1}" th:href="@{|/post/list?page=${page}&kw=${kw}&kwTypes=${kwTypes}&sort=${sort}|}"></a>
+</span>
+
+        <a class="join-item btn"
+           th:classappend="${paging.number + 5 >= paging.totalPages} ? 'disabled' : ''"
+           th:if="${paging.totalPages > 5 and (paging.number / 5 < (paging.totalPages - 1) / 5)}"
+           th:href="@{|/post/list?page=${(paging.number / 5 + 1) * 5}&kw=${kw}&kwTypes=${kwTypes}&sort=${sort}|}">
+            <span>다음</span>
+        </a>
+    </div>
+    <!-- 페이징처리 끝 -->
+</div>
+</html>

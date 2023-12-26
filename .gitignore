@@ -40,3 +40,5 @@ out/
 application-secret.yml
 medium_dev.mv.db
 medium_dev.trace.db
+
+/src/main/generated/
