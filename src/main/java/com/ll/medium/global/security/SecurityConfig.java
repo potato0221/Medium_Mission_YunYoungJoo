@@ -26,8 +26,8 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(
                         authorizeHttpRequests -> authorizeHttpRequests
-                                .requestMatchers("/premium/**")
-                                .hasRole("PREMIUM")
+                                .requestMatchers("/paid/**")
+                                .hasRole("PAID")
                                 .anyRequest()
                                 .permitAll()
                 )

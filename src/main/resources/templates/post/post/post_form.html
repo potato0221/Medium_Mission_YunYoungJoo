@@ -5,15 +5,15 @@
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
         <div th:replace="~{global/form_errors :: formErrorsFragment}"></div>
 
-        <div th:if="${@rq.premium}" class="form-check w-10">
-            <label class="cursor-pointer label" for="isPremium">Premium
-                <input type="checkbox" class="checkbox checkbox-info ml-3" id="isPremium" th:field="*{premium}"
+        <div th:if="${@rq.paid}" class="form-check w-10">
+            <label class="cursor-pointer label" for="isPaid">유료글
+                <input type="checkbox" class="checkbox checkbox-info ml-3" id="isPaid" th:field="*{paid}"
                        value="true"/>
             </label>
         </div>
 
         <div class="form-check w-10 flex items-center">
-            <label class="cursor-pointer label" for="isNotPublished">Private
+            <label class="cursor-pointer label" for="isNotPublished">비공개
                 <input type="checkbox" class="checkbox checkbox-error ml-6" id="isNotPublished"
                        th:field="*{notPublished}"
                        value="true"/>

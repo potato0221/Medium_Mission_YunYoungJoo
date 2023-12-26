@@ -24,7 +24,7 @@ public class NotProd {
             SiteMember siteMember1 = new SiteMember();
             SiteMember siteMember2 = new SiteMember();
             siteMember1 = memberService.create("user1", "www1@email.com", "1234", 0);
-            siteMember2 = memberService.create("premium1", "www2@email.com", "1234", 0);
+            siteMember2 = memberService.create("paid1", "www2@email.com", "1234", 0);
 
             for (int i = 1; i <= 60; i++) {
                 Post post = new Post();

@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public enum MemberRole {
     ADMIN("ROLE_ADMIN"),
-    PREMIUM("ROLE_PREMIUM"),
+    PAID("ROLE_PAID"),
     USER("ROLE_USER");
 
     private final String roleName;

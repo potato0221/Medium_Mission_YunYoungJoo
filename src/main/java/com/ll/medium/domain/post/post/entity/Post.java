@@ -45,7 +45,7 @@ public class Post {
     private int voteCount;
 
 
-    private boolean isPremium;
+    private boolean isPaid;
     private boolean isNotPublished;
     private Integer countByMember;
     private Integer viewCount;

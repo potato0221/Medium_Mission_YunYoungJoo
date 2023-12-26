@@ -26,9 +26,18 @@ public class MemberService {
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(password));
         user.setCount(count);
+        user.setPaid(false);
         this.memberRepository.save(user);
         return user;
     }
+
+    @Transactional
+    public SiteMember alreadyPaid(SiteMember siteMember){
+        siteMember.setPaid(true);
+        this.memberRepository.save(siteMember);
+        return siteMember;
+    }
+
 
     public SiteMember getUser(String username) {
         Optional<SiteMember> siteUser = this.memberRepository.findByUsername(username);

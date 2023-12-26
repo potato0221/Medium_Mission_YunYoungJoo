@@ -10,13 +10,13 @@
              class="p-6 bg-white shadow-md rounded-lg border border-gray-200 hover:shadow-xl">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-lg font-semibold">
-                    <span th:if="${post.isPremium}" class="text-yellow-500"><i class="fa-solid fa-m"></i> . </span>
+                    <span th:if="${post.isPaid}" class="text-yellow-500"><i class="fa-solid fa-m"></i> . </span>
                     <span th:if="${post.isNotPublished()}" class="text-red-600"><i class="fas fa-lock"></i> </span>
-                    <span th:unless="${post.isPremium and not @rq.isPremium()}" class="text-blue-700">
+                    <span th:unless="${post.isPaid and not @rq.isPaid()}" class="text-blue-700">
                     <a th:href="@{|/post/detail/${post.id}|}" th:text="${post.title}"></a>
                         <span th:text="'(' + ${post.getCommentCount()} + ')'" class="text-orange-400"></span>
                 </span>
-                    <span th:if="${post.isPremium and not @rq.isPremium()}"
+                    <span th:if="${post.isPaid and not @rq.isPaid()}"
                           class="text-red-500">멤버십 회원만 열람 가능한 글입니다.</span>
                 </h3>
             </div>

@@ -20,6 +20,7 @@ public class SiteMember {
     @Column(unique = true)
     private String email;
 
-
     private Integer count;
+
+    private boolean isPaid;
 }

@@ -17,7 +17,7 @@ public class PostForm {
     @NotEmpty(message = "내용을 입력 해 주세요.")
     private String content;
 
-    private boolean isPremium;
+    private boolean isPaid;
     private boolean isNotPublished;
 
 }

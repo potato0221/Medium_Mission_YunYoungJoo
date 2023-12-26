@@ -37,15 +37,15 @@ public class MemberSecurityService implements UserDetailsService {
         } else {
             authorities.add(new SimpleGrantedAuthority(MemberRole.USER.getRoleName()));
         }
-        if (paymentService.checkPaymentStatusFromPaymentSystem(username)) {
-            authorities.add(new SimpleGrantedAuthority(MemberRole.PREMIUM.getRoleName()));
+        if (paymentService.checkPaymentStatusFromPaymentSystem(siteMember)) {
+            authorities.add(new SimpleGrantedAuthority(MemberRole.PAID.getRoleName()));
         }
 
         return new User(siteMember.getUsername(), siteMember.getPassword(), authorities);
     }
 
     // 결제 도입 시 사용
-    public void addPremiumRole(SiteMember siteMember) {
+    public void addPaidRole(SiteMember siteMember) {
 
     }
 }

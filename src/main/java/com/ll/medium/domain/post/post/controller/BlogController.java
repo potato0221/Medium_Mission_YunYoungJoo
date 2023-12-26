@@ -61,8 +61,8 @@ public class BlogController {
         model.addAttribute("username", username);
         model.addAttribute("post", post);
 
-        if (post.isPremium()) {
-            if (!rq.isPremium()) {
+        if (post.isPaid()) {
+            if (!rq.isPaid()) {
                 redirectAttributes.addAttribute("accessError", "접근 불가 페이지 입니다.");
                 return "redirect:/post/access_denied";
             }
@@ -130,7 +130,7 @@ public class BlogController {
         }
         postForm.setTitle(post.getTitle());
         postForm.setContent(post.getContent());
-        postForm.setPremium(post.isPremium());
+        postForm.setPaid(post.isPaid());
         postForm.setNotPublished(post.isNotPublished());
         return "post/post/post_form";
 
@@ -153,7 +153,7 @@ public class BlogController {
             redirectAttributes.addAttribute("accessError", "접근 불가 페이지 입니다.");
             return "redirect:/post/access_denied";
         }
-        this.postService.modify(post, postForm.getTitle(), postForm.getContent(), postForm.isPremium(), postForm.isNotPublished());
+        this.postService.modify(post, postForm.getTitle(), postForm.getContent(), postForm.isPaid(), postForm.isNotPublished());
         return rq.redirect("/b/%s/%s".formatted(username, id), "게시물이 수정 되었습니다.");
     }
 
@@ -197,7 +197,7 @@ public class BlogController {
                 postForm.getTitle(),
                 postForm.getContent(),
                 rq.getMember(),
-                postForm.isPremium(),
+                postForm.isPaid(),
                 postForm.isNotPublished(),
                 member.getCount(),
                 0);
