@@ -81,12 +81,7 @@ public class PostController {
         Post post = this.postService.getPost(id);
         model.addAttribute("post", post);
 
-        if (post.isPaid()) {
-            if (!rq.isPaid()) {
-                redirectAttributes.addAttribute("accessError", "접근 불가 페이지 입니다.");
-                return "redirect:/post/access_denied";
-            }
-        } else if (post.isNotPublished()) {
+        if (post.isNotPublished()) {
             if (rq.getMember() != post.getAuthor()) {
                 redirectAttributes.addAttribute("accessError", "접근 불가 페이지 입니다.");
                 return "redirect:/post/access_denied";

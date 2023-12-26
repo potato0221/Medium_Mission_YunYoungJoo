@@ -27,6 +27,8 @@ public class NotProd {
             siteMember1 = memberService.create("user1", "www1@email.com", "1234");
             siteMember2 = memberService.create("paid1", "paid1@email.com", "1234");
             siteMember3 = memberService.create("paid2", "paid2@email.com", "1234");
+            memberService.alreadyPaid(siteMember2);
+            memberService.alreadyPaid(siteMember3);
 
             for(int i=3;i<=100;i++){
                 SiteMember siteMember=new SiteMember();
@@ -72,7 +74,7 @@ public class NotProd {
                 postService.create(
                         "유료 글 " + i,
                         "유료 글 내용" + i,
-                        siteMember2
+                        siteMember3
                         , true,
                         false,
                         siteMember3.getCount()

@@ -12,12 +12,8 @@
                 <h3 class="text-lg font-semibold">
                     <span th:if="${post.isPaid}" class="text-yellow-500"><i class="fa-solid fa-m"></i> . </span>
                     <span th:if="${post.isNotPublished()}" class="text-red-600"><i class="fas fa-lock"></i> </span>
-                    <span th:unless="${post.isPaid and not @rq.isPaid()}" class="text-blue-700">
-                    <a th:href="@{|/post/detail/${post.id}|}" th:text="${post.title}"></a>
+                    <a th:href="@{|/post/detail/${post.id}|}" th:text="${post.title}" class="text-blue-700"></a>
                         <span th:text="'(' + ${post.getCommentCount()} + ')'" class="text-orange-400"></span>
-                </span>
-                    <span th:if="${post.isPaid and not @rq.isPaid()}"
-                          class="text-red-500">멤버십 회원만 열람 가능한 글입니다.</span>
                 </h3>
             </div>
             <p class="text-gray-700 mb-4">

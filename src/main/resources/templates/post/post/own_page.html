@@ -14,8 +14,6 @@
                     <div>
                         <span th:if="${post.isNotPublished()}" class="text-red-600"><i class="fas fa-lock"></i> </span>
                         <span th:if="${post.isPaid}" class="text-yellow-500"><i class="fa-solid fa-m"></i></span>
-                        <span th:unless="${post.isPaid and not @rq.isPaid() or post.isNotPublished() and (@rq.getMember()!=post.getAuthor())}"
-                              class="text-info-content">
                         <div class="flex justify-between">
                             <div class="flex justify-colum">
                                 <h2 class="card-title mr-1" th:text="${post.title}"></h2>
@@ -25,7 +23,6 @@
                             <div class="badge badge-ghost" th:text="${'조회수 : ' + post.viewCount}"></div>
                         </div>
                         </span>
-                        <span th:if="${post.isPaid and not @rq.isPaid()}">멤버십 회원만 열람 가능 한 글 입니다.</span>
                         <span th:if="${post.isNotPublished() and (@rq.getMember()!=post.getAuthor())}">비공개 게시물 입니다.</span>
 
                     </div>
@@ -35,7 +32,7 @@
                             <i class="fa-solid fa-heart mt-1"></i>
                             <p class="text-gray-500 text-right ml-2" th:text="${post.voteCount}"></p>
                         </div>
-                        <a th:unless="${post.isNotPublished() and (@rq.getMember()!=post.getAuthor()) or (post.isPaid() and not @rq.isPaid())}"
+                        <a th:unless="${post.isNotPublished() and (@rq.getMember()!=post.getAuthor())}"
                            th:href="@{|/b/${post.author.username}/${post.countByMember}|}" class="btn btn-primary">글
                             보기</a>
                     </div>
