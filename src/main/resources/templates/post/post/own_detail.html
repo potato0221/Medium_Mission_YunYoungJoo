@@ -36,7 +36,7 @@
                         <div>
                             <div>
                                 <form method="post" class="like btn btn-sm btn-ghost"
-                                      th:if="${@postService.canLike(@rq.member, post)}"
+                                      th:if="${@postService.canLike(@rq.member, post) or !@rq.isLogined()}"
                                       th:action="@{|/b/${post.author.username}/${post.countByMember}/like|}">
                                     <button type="submit" onclick="return confirm('추천 하시겠습니까?');">
                                         <i class="fa-regular fa-heart fa-xl"></i>
@@ -110,7 +110,7 @@
                             <div>
                                 <div>
                                     <form method="post" class="like btn btn-sm btn-ghost"
-                                          th:if="${@commentService.canLike(@rq.member, comment)}"
+                                          th:if="${@commentService.canLike(@rq.member, comment) or !@rq.isLogined()}"
                                           th:action="@{|/b/comment/${post.author.username}/${post.countByMember}/like/${comment.id}|}">
                                         <button type="submit" onclick="return confirm('댓글을 추천 하시겠습니까?');">
                                             <i class="fa-regular fa-heart fa-xl"></i>
