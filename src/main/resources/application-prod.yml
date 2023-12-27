@@ -23,6 +23,6 @@ logging:
 custom:
   tempDirPath: /gen/temp
   site:
-    baseUrl: "https://www.s-code.io"
+    baseUrl: "https://medium.kys.blue"
   genFile:
     dirPath: /gen

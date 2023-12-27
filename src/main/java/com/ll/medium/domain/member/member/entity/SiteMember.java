@@ -1,8 +1,8 @@
 package com.ll.medium.domain.member.member.entity;
 
+import com.ll.medium.global.jpa.BaseEntity;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -10,13 +10,16 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@Getter
-@Setter
+import static lombok.AccessLevel.PROTECTED;
+
 @Entity
-public class SiteMember {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@Builder
+@AllArgsConstructor(access = PROTECTED)
+@NoArgsConstructor(access = PROTECTED)
+@Setter
+@Getter
+@ToString(callSuper = true)
+public class SiteMember extends BaseEntity {
 
     @Column(unique = true)
     private String username;

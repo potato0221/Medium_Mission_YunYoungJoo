@@ -1,4 +1,4 @@
-package com.ll.medium.domain.member.security.service;
+package com.ll.medium.global.security;
 
 import com.ll.medium.domain.member.member.entity.SiteMember;
 import com.ll.medium.domain.member.member.repository.MemberRepository;

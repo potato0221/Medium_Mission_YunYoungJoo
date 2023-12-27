@@ -1,7 +1,7 @@
 package com.ll.medium.global.payment.handler;
 
 import com.ll.medium.domain.member.member.entity.SiteMember;
-import com.ll.medium.domain.member.security.service.MemberSecurityService;
+import com.ll.medium.global.security.MemberSecurityService;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

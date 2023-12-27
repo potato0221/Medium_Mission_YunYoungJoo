@@ -8,12 +8,14 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.annotation.Order;
 
 @Profile("!prod")
 @Configuration
 public class NotProd {
 
     @Bean
+    @Order(3)
     public ApplicationRunner initNotProd(
             MemberService memberService,
             PostService postService
@@ -21,18 +23,14 @@ public class NotProd {
         return args -> {
 
             if (memberService.count() > 0) return;
-            SiteMember siteMember1 = new SiteMember();
-            SiteMember siteMember2 = new SiteMember();
-            SiteMember siteMember3 = new SiteMember();
-            siteMember1 = memberService.create("user1", "www1@email.com", "1234","유저1").getData();
-            siteMember2 = memberService.create("paid1", "paid1@email.com", "1234","유료회원1").getData();
-            siteMember3 = memberService.create("paid2", "paid2@email.com", "1234","유료회원2").getData();
+            SiteMember siteMember1= memberService.create("user1", "www1@email.com", "1234","유저1").getData();
+            SiteMember siteMember2 = memberService.create("paid1", "paid1@email.com", "1234","유료회원1").getData();
+            SiteMember siteMember3 = memberService.create("paid2", "paid2@email.com", "1234","유료회원2").getData();
             memberService.alreadyPaid(siteMember2);
             memberService.alreadyPaid(siteMember3);
 
             for(int i=3;i<=100;i++){
-                SiteMember siteMember=new SiteMember();
-                siteMember=memberService.create("paid"+i,"paid"+i+"@email.com","1234","유료회원"+i).getData();
+                SiteMember siteMember=memberService.create("paid"+i,"paid"+i+"@email.com","1234","유료회원"+i).getData();
                 memberService.alreadyPaid(siteMember);
             }
 
