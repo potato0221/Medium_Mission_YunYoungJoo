@@ -43,6 +43,7 @@ public class BlogController {
 
 
         model.addAttribute("username", username);
+        model.addAttribute("nickname", siteMember.getNickname());
         model.addAttribute("paging", paging);
         return "post/post/own_page";
     }

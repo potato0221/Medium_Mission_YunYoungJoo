@@ -21,7 +21,7 @@
                 </h3>
             </div>
             <p class="text-gray-700 mb-4">
-                <a th:href="@{|/b/${post.author.username}|}" th:text="${post.author.username}"></a>
+                <a th:href="@{|/b/${post.author.username}|}" th:text="${post.author.nickname}"></a>
             </p>
             <p class="text-gray-500 text-right" th:text="'조회수: ' + ${post.viewCount}"></p>
             <p class="text-gray-500 text-sm flex justify-end"

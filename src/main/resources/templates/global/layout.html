@@ -76,7 +76,7 @@
     </div>
     <div class="navbar-end">
         <a th:if="${@rq.isLogined}" th:href="@{'/b/' + ${@rq.member.username}}" class="btn btn-ghost text-lg">
-            <span th:text="${@rq.member.username}"></span>
+            <span th:text="${@rq.member.nickname} + '님'"></span>
         </a>
     </div>
 </div>

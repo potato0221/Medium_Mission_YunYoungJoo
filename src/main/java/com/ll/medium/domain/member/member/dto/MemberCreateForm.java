@@ -24,4 +24,8 @@ public class MemberCreateForm {
     @Email
     private String email;
 
+    @NotEmpty
+    private String nickname;
+
+
 }

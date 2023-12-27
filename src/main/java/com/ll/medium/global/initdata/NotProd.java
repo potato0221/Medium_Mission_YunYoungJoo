@@ -24,15 +24,15 @@ public class NotProd {
             SiteMember siteMember1 = new SiteMember();
             SiteMember siteMember2 = new SiteMember();
             SiteMember siteMember3 = new SiteMember();
-            siteMember1 = memberService.create("user1", "www1@email.com", "1234");
-            siteMember2 = memberService.create("paid1", "paid1@email.com", "1234");
-            siteMember3 = memberService.create("paid2", "paid2@email.com", "1234");
+            siteMember1 = memberService.create("user1", "www1@email.com", "1234","유저1").getData();
+            siteMember2 = memberService.create("paid1", "paid1@email.com", "1234","유료회원1").getData();
+            siteMember3 = memberService.create("paid2", "paid2@email.com", "1234","유료회원2").getData();
             memberService.alreadyPaid(siteMember2);
             memberService.alreadyPaid(siteMember3);
 
             for(int i=3;i<=100;i++){
                 SiteMember siteMember=new SiteMember();
-                siteMember=memberService.create("paid"+i,"paid"+i+"@email.com","1234");
+                siteMember=memberService.create("paid"+i,"paid"+i+"@email.com","1234","유료회원"+i).getData();
                 memberService.alreadyPaid(siteMember);
             }
 
