@@ -28,8 +28,7 @@ public class BaseEntity {
     private Long id;
     @CreatedDate
     private LocalDateTime createDate;
-    @LastModifiedDate
-    private LocalDateTime modifyDate;
+
 
     public String getModelName() {
         return Ut.str.lcfirst(this.getClass().getSimpleName());

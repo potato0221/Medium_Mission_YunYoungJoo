@@ -2,26 +2,27 @@ package com.ll.medium.domain.post.comment.entity;
 
 import com.ll.medium.domain.member.member.entity.SiteMember;
 import com.ll.medium.domain.post.post.entity.Post;
+import com.ll.medium.global.jpa.BaseEntity;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.Set;
 
-@Getter
-@Setter
-@Entity
-public class Comment {
+import static lombok.AccessLevel.PROTECTED;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+@Entity
+@Builder
+@AllArgsConstructor(access = PROTECTED)
+@NoArgsConstructor(access = PROTECTED)
+@Setter
+@Getter
+@ToString(callSuper = true)
+public class Comment extends BaseEntity {
 
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    private LocalDateTime createDate;
     private LocalDateTime modifyDate;
 
     @ManyToOne

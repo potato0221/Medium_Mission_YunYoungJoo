@@ -22,11 +22,11 @@ public class CommentService {
     @Transactional
     public void create(Post post, String content, SiteMember author) {
 
-        Comment comment = new Comment();
-        comment.setContent(content);
-        comment.setCreateDate(LocalDateTime.now());
-        comment.setPost(post);
-        comment.setAuthor(author);
+        Comment comment = Comment.builder()
+                .content(content)
+                .post(post)
+                .author(author)
+                .build();
         this.commentRepository.save(comment);
     }
 
