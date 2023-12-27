@@ -63,7 +63,7 @@ public class BlogCommentController {
         Comment comment = this.commentService.getComment(commentId);
 
         if (!comment.getAuthor().getUsername().equals(principal.getName())) {
-            redirectAttributes.addAttribute("accessError", "접근 불가 페이지 입니다.");
+            redirectAttributes.addAttribute("accessError", "수정 권한이 없는 댓글 입니다.");
             return "redirect:/post/access_denied";
         }
 
@@ -89,7 +89,7 @@ public class BlogCommentController {
         Comment comment = this.commentService.getComment(commentId);
 
         if (!comment.getAuthor().getUsername().equals(principal.getName())) {
-            redirectAttributes.addAttribute("accessError", "접근 불가 페이지 입니다.");
+            redirectAttributes.addAttribute("accessError", "수정 권한이 없는 댓글 입니다.");
             return "redirect:/post/access_denied";
         }
         this.commentService.modify(comment, commentForm.getContent());
@@ -107,7 +107,7 @@ public class BlogCommentController {
         Comment comment = this.commentService.getComment(commentId);
 
         if (!commentService.canDelete(rq.getMember(), comment)) {
-            redirectAttributes.addAttribute("accessError", "접근 불가 페이지 입니다.");
+            redirectAttributes.addAttribute("accessError", "삭제 권한이 없는 댓글 입니다.");
             return "redirect:/post/access_denied";
         }
         this.commentService.delete(comment);

@@ -63,7 +63,7 @@ public class BlogController {
 
         if (post.isNotPublished()) {
             if (rq.getMember() != post.getAuthor()) {
-                redirectAttributes.addAttribute("accessError", "접근 불가 페이지 입니다.");
+                redirectAttributes.addAttribute("accessError", "접근 권한이 없는 글 입니다.");
                 return "redirect:/post/access_denied";
             }
         }
@@ -120,7 +120,7 @@ public class BlogController {
         SiteMember siteMember = this.memberService.getUser(username);
         Post post = this.postService.getPostByCountByMemberAndMember(siteMember, id);
         if (!post.getAuthor().getUsername().equals(principal.getName())) {
-            redirectAttributes.addAttribute("accessError", "접근 불가 페이지 입니다.");
+            redirectAttributes.addAttribute("accessError", "수정 권한이 없는 글 입니다.");
             return "redirect:/post/access_denied";
         }
         postForm.setTitle(post.getTitle());
@@ -145,7 +145,7 @@ public class BlogController {
         SiteMember siteMember = this.memberService.getUser(username);
         Post post = this.postService.getPostByCountByMemberAndMember(siteMember, id);
         if (!post.getAuthor().getUsername().equals(principal.getName())) {
-            redirectAttributes.addAttribute("accessError", "접근 불가 페이지 입니다.");
+            redirectAttributes.addAttribute("accessError", "수정 권한이 없는 글 입니다.");
             return "redirect:/post/access_denied";
         }
         this.postService.modify(post, postForm.getTitle(), postForm.getContent(), postForm.isPaid(), postForm.isNotPublished());
@@ -163,7 +163,7 @@ public class BlogController {
         SiteMember siteMember = this.memberService.getUser(username);
         Post post = this.postService.getPostByCountByMemberAndMember(siteMember, id);
         if (!post.getAuthor().getUsername().equals(principal.getName())) {
-            redirectAttributes.addAttribute("accessError", "접근 불가 페이지 입니다.");
+            redirectAttributes.addAttribute("accessError", "삭제 권한이 없는 글 입니다.");
             return "redirect:/post/access_denied";
         }
         this.postService.delete(post);
