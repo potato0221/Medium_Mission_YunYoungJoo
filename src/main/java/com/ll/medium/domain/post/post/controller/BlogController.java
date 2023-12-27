@@ -58,8 +58,6 @@ public class BlogController {
         SiteMember siteMember = this.memberService.getUser(username);
 
         Post post = this.postService.getPostByCountByMemberAndMember(siteMember, id);
-
-        model.addAttribute("username", username);
         model.addAttribute("post", post);
 
         if (post.isNotPublished()) {

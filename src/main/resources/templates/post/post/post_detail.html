@@ -118,7 +118,6 @@
                                     </form>
                                     <form method="post" class="deleteLike btn btn-sm btn-ghost"
                                           th:if="${@commentService.canCancelLike(@rq.member, comment)}"
-
                                           th:action="@{|/comment/${comment.id}/cancelLike|}">
                                         <input type="hidden" name="_method" value="DELETE">
                                         <button type="submit" onclick="return confirm('댓글 추천을 취소 하시겠습니까?');">
