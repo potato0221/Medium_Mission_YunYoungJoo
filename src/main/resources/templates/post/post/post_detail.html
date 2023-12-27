@@ -36,18 +36,20 @@
                         <div>
                             <div>
                                 <form method="post" class="like btn btn-sm btn-ghost"
+                                      th:if="${@postService.canLike(@rq.member, post)}"
                                       th:action="@{|/post/${post.id}/like|}">
                                     <button type="submit" onclick="return confirm('추천 하시겠습니까?');">
                                         <i class="fa-regular fa-heart fa-xl"></i>
-                                        <span class="badge rounded-pill bg-error"
-                                              th:text="${#lists.size(post.voter)}"></span>
+                                        <span class="ml-2" th:text="${#lists.size(post.voter)}"></span>
                                     </button>
                                 </form>
                                 <form method="post" class="deleteLike btn btn-sm btn-ghost"
+                                      th:if="${@postService.canCancelLike(@rq.member, post)}"
                                       th:action="@{|/post/${post.id}/cancelLike|}">
                                     <input type="hidden" name="_method" value="DELETE">
                                     <button type="submit" onclick="return confirm('추천을 취소 하시겠습니까?');">
-                                        <i class="fa-solid fa-heart-crack fa-xl"></i>
+                                        <i class="fa-solid fa-heart fa-xl text-red-500"></i>
+                                        <span class="ml-2" th:text="${#lists.size(post.voter)}"></span>
                                     </button>
                                 </form>
                             </div>
@@ -102,18 +104,21 @@
                             <div>
                                 <div>
                                     <form method="post" class="like btn btn-sm btn-ghost"
+                                          th:if="${@commentService.canLike(@rq.member, comment)}"
                                           th:action="@{|/comment/${comment.id}/like|}">
                                         <button type="submit" onclick="return confirm('댓글을 추천 하시겠습니까?');">
                                             <i class="fa-regular fa-heart fa-xl"></i>
-                                            <span class="badge rounded-pill bg-error"
-                                                  th:text="${#lists.size(comment.voter)}"></span>
+                                            <span class="ml-2" th:text="${#lists.size(comment.voter)}"></span>
                                         </button>
                                     </form>
                                     <form method="post" class="deleteLike btn btn-sm btn-ghost"
+                                          th:if="${@commentService.canCancelLike(@rq.member, comment)}"
+
                                           th:action="@{|/comment/${comment.id}/cancelLike|}">
                                         <input type="hidden" name="_method" value="DELETE">
                                         <button type="submit" onclick="return confirm('댓글 추천을 취소 하시겠습니까?');">
-                                            <i class="fa-solid fa-heart-crack fa-xl"></i>
+                                            <i class="fa-solid fa-heart fa-xl text-red-500"></i>
+                                            <span class="ml-2" th:text="${#lists.size(comment.voter)}"></span>
                                         </button>
                                     </form>
                                 </div>

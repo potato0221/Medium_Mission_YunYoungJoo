@@ -137,4 +137,18 @@ public class PostService {
         this.postRepository.save(post);
     }
 
+    public boolean canLike(SiteMember member, Post post) {
+        if (member == null) {
+            return false;
+        }
+        return !post.getVoter().contains(member);
+    }
+
+    public boolean canCancelLike(SiteMember member, Post post) {
+        if (member == null) {
+            return false;
+        }
+        return post.getVoter().contains(member);
+    }
+
 }

@@ -70,4 +70,18 @@ public class CommentService {
         this.commentRepository.save(comment);
     }
 
+    public boolean canLike(SiteMember member, Comment comment) {
+        if (member == null) {
+            return false;
+        }
+        return !comment.getVoter().contains(member);
+    }
+
+    public boolean canCancelLike(SiteMember member, Comment comment) {
+        if (member == null) {
+            return false;
+        }
+        return comment.getVoter().contains(member);
+    }
+
 }
