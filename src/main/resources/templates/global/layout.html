@@ -76,7 +76,7 @@
     </div>
     <div class="navbar-end">
         <a th:if="${@rq.isLogined}" th:href="@{'/b/' + ${@rq.member.username}}" class="btn btn-ghost text-lg">
-            <img class="w-10 h-10 rounded-full" th:src="${@rq.profileImgUrl}">
+            <img th:classappend="${@rq.isPaid} ? 'mask mask-hexagon' : 'rounded-full'" class="w-10 h-10" th:src="${@rq.profileImgUrl}">
             <span th:text="${@rq.member.nickname}"></span>
         </a>
     </div>

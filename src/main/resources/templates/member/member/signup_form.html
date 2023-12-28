@@ -5,7 +5,7 @@
             <h2 class="bg-blue-800 text-white px-4 py-3 mb-2">회원가입</h2>
         </div>
     </div>
-    <form th:action="@{/member/join}" th:object="${memberCreateForm}" method="post" class="mx-2">
+    <form th:action="@{/member/join}" th:object="${memberCreateForm}" method="post" enctype="multipart/form-data" class="mx-2">
         <div th:replace="~{global/form_errors :: formErrorsFragment}"></div>
         <div class="mb-3">
             <label for="username" class="form-label">아이디</label>
@@ -27,6 +27,11 @@
             <label for="username" class="form-label">닉네임</label>
             <input type="text" th:field="*{nickname}" class="form-control input input-bordered w-full mt-2">
         </div>
+        <div class="mb-3">
+            <label>프로필 이미지</label>
+            <input type="file" name="profileImg" class="file-input file-input-bordered" accept="image/jpeg, image/png, image/gif">
+        </div>
+
         <div class="mt-2 flex gap-2 flex justify-end">
             <input type="submit" value="회원가입" class="btn btn-outline btn-primary mr-3">
         </div>

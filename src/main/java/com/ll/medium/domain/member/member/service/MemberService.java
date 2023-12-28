@@ -1,8 +1,8 @@
 package com.ll.medium.domain.member.member.service;
 
+import com.ll.medium.domain.base.genFile.entity.GenFile;
 import com.ll.medium.domain.base.genFile.service.GenFileService;
 import com.ll.medium.domain.member.member.entity.SiteMember;
-import com.ll.medium.domain.base.genFile.entity.GenFile;
 import com.ll.medium.domain.member.member.repository.MemberRepository;
 import com.ll.medium.global.app.AppConfig;
 import com.ll.medium.global.exception.DataNotFoundException;
@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 
@@ -26,8 +27,15 @@ public class MemberService {
 
     @Transactional
     public RsData<SiteMember> join(String username, String email, String password, String nickname) {
-        return join(username, email, password, nickname, null);
+        return join(username, email, password, nickname, "");
     }
+
+    @Transactional
+    public RsData<SiteMember> join(String username, String email, String password, String nickname, MultipartFile profileImg) {
+        String profileImgFilePath = Ut.file.toFile(profileImg, AppConfig.getTempDirPath());
+        return join(username, email, password, nickname, profileImgFilePath);
+    }
+
 
     @Transactional
     public RsData<SiteMember> join(String username, String email, String password, String nickname, String profileImgFilePath) {
@@ -98,7 +106,13 @@ public class MemberService {
     public String getProfileImgUrl(SiteMember member) {
         return Optional.ofNullable(member)
                 .flatMap(this::findProfileImgUrl)
-                .orElse("https://placehold.co/30x30?text=User");
+                .orElseGet(() -> {
+                    if (member != null && member.isPaid()) {
+                        return "https://placehold.co/30x30/FFE400/CC3D3D?text=M";
+                    } else {
+                        return "https://placehold.co/30x30/EAEAEA/BDBDBD?text=U";
+                    }
+                });
     }
 
     private Optional<String> findProfileImgUrl(SiteMember member) {
