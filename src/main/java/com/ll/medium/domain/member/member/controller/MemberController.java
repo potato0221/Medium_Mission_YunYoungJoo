@@ -21,15 +21,16 @@ public class MemberController {
     private final MemberService memberService;
     private final Rq rq;
 
-    @PreAuthorize("isAnonymous()")
     @GetMapping("/join")
     public String signup(MemberCreateForm memberCreateForm) {
+        if(rq.isLogined()) return rq.redirectIfAccessError("/", "이미 회원가입 되어있습니다.");
         return "member/member/signup_form";
     }
 
     @PreAuthorize("isAnonymous()")
     @PostMapping("/join")
     public String signup(@Valid MemberCreateForm memberCreateForm, BindingResult bindingResult) {
+
         if (bindingResult.hasErrors()) {
             return "member/member/signup_form";
         }
@@ -53,9 +54,9 @@ public class MemberController {
         return rq.redirect("/member/login", "회원가입이 완료 되었습니다.");
     }
 
-    @PreAuthorize("isAnonymous()")
     @GetMapping("/login")
     public String login() {
+        if(rq.isLogined()) return rq.redirectIfAccessError("/", "이미 로그인 되어있습니다.");
         return "member/member/login_form";
     }
 
