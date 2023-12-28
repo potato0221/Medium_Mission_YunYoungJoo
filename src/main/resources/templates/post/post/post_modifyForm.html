@@ -28,19 +28,19 @@
         </div>
         <div class="mb-3 px-2">
             <label for="content" class="form-label">내용</label>
-            <script>
-                var editor;
-                console.log('[[${postForm.content}]]');
+            <script th:inline="javascript">
+                /*<![CDATA[*/
+                var content = /*[[${postForm.content}]]*/ 'default content';
                 $(document).ready(function () {
                     editor = new toastui.Editor({
                         el: document.querySelector('#editor'),
                         height: '400px',
                         initialEditType: 'markdown',
                         previewStyle: 'vertical',
-                        initialValue: '[[${postForm.content}]]'
-                        // TODO 두줄 이상 입력 시 수정 페이지 안뜨는 오류 수정 해야됨
+                        initialValue: content
                     });
                 });
+                /*]]>*/
             </script>
             <div id="editor" class="textarea textarea-bordered textarea-md w-full mt-2"></div>
             <!-- 이 textarea는 실제로 서버로 제출될 내용을 담게 됩니다 -->
