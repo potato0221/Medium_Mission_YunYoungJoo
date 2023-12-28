@@ -62,7 +62,8 @@
                                th:if="${post.author != null and #authentication.getPrincipal().getUsername() == post.author.username}">
                             </a>
                             <form th:if="${@postService.canDelete(@rq.member, post)}"
-                                  th:action="@{|/b/${post.author.username}/${post.countByMember}/delete|}" method="post" >
+                                  th:action="@{|/b/${post.author.username}/${post.countByMember}/delete|}"
+                                  method="post">
                                 <input type="hidden" name="_method" value="DELETE">
                                 <button type="submit" class="btn btn-outline btn-sm mr-3"
                                         onclick="return confirm('정말로 삭제하시겠습니까?');">삭제
@@ -153,7 +154,8 @@
 
     <div class="mt-3 mx-3">
 
-        <form th:unless="${post.isPaid() and not @rq.isPaid()}" th:action="@{|/b/comment/${post.author.username}/${post.countByMember}/create|}"
+        <form th:unless="${post.isPaid() and not @rq.isPaid()}"
+              th:action="@{|/b/comment/${post.author.username}/${post.countByMember}/create|}"
               th:object="${commentForm}" method="post">
             <textarea class=" textarea textarea-bordered w-full" rows="3" id="content" name="content"></textarea>
             <div class="mt-3 flex justify-end">

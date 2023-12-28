@@ -23,7 +23,7 @@ public class MemberController {
 
     @GetMapping("/join")
     public String signup(MemberCreateForm memberCreateForm) {
-        if(rq.isLogined()) return rq.redirectIfAccessError("/", "이미 회원가입 되어있습니다.");
+        if (rq.isLogined()) return rq.redirectIfAccessError("/", "이미 회원가입 되어있습니다.");
         return "member/member/signup_form";
     }
 
@@ -41,7 +41,7 @@ public class MemberController {
         }
         try {
             memberService.create(memberCreateForm.getUsername(),
-                    memberCreateForm.getEmail(), memberCreateForm.getPassword1(),memberCreateForm.getNickname());
+                    memberCreateForm.getEmail(), memberCreateForm.getPassword1(), memberCreateForm.getNickname());
         } catch (DataIntegrityViolationException e) {
             e.printStackTrace();
             bindingResult.reject("signupFailed", "이미 등록된 사용자입니다.");
@@ -56,7 +56,7 @@ public class MemberController {
 
     @GetMapping("/login")
     public String login() {
-        if(rq.isLogined()) return rq.redirectIfAccessError("/", "이미 로그인 되어있습니다.");
+        if (rq.isLogined()) return rq.redirectIfAccessError("/", "이미 로그인 되어있습니다.");
         return "member/member/login_form";
     }
 
