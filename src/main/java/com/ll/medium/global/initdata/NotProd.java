@@ -23,14 +23,14 @@ public class NotProd {
         return args -> {
 
             if (memberService.count() > 0) return;
-            SiteMember siteMember1 = memberService.create("user1", "www1@email.com", "1234", "유저1").getData();
-            SiteMember siteMember2 = memberService.create("paid1", "paid1@email.com", "1234", "유료회원1").getData();
-            SiteMember siteMember3 = memberService.create("paid2", "paid2@email.com", "1234", "유료회원2").getData();
+            SiteMember siteMember1 = memberService.join("user1", "www1@email.com", "1234", "유저1").getData();
+            SiteMember siteMember2 = memberService.join("paid1", "paid1@email.com", "1234", "유료회원1").getData();
+            SiteMember siteMember3 = memberService.join("paid2", "paid2@email.com", "1234", "유료회원2").getData();
             memberService.alreadyPaid(siteMember2);
             memberService.alreadyPaid(siteMember3);
 
             for (int i = 3; i <= 100; i++) {
-                SiteMember siteMember = memberService.create("paid" + i, "paid" + i + "@email.com", "1234", "유료회원" + i).getData();
+                SiteMember siteMember = memberService.join("paid" + i, "paid" + i + "@email.com", "1234", "유료회원" + i).getData();
                 memberService.alreadyPaid(siteMember);
             }
 

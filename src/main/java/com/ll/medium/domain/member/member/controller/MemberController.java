@@ -40,7 +40,7 @@ public class MemberController {
             return "member/member/signup_form";
         }
         try {
-            memberService.create(memberCreateForm.getUsername(),
+            memberService.join(memberCreateForm.getUsername(),
                     memberCreateForm.getEmail(), memberCreateForm.getPassword1(), memberCreateForm.getNickname());
         } catch (DataIntegrityViolationException e) {
             e.printStackTrace();

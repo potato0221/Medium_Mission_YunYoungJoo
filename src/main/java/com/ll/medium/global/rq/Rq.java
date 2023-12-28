@@ -106,5 +106,8 @@ public class Rq {
         return "redirect:" + path + "?accessError=" + msg;
     }
 
+    public String getProfileImgUrl() {
+        return memberService.getProfileImgUrl(getMember());
+    }
 
 }

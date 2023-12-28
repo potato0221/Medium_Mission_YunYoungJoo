@@ -2,6 +2,7 @@ package com.ll.medium.domain.member.member.service;
 
 import com.ll.medium.domain.base.genFile.service.GenFileService;
 import com.ll.medium.domain.member.member.entity.SiteMember;
+import com.ll.medium.domain.base.genFile.entity.GenFile;
 import com.ll.medium.domain.member.member.repository.MemberRepository;
 import com.ll.medium.global.app.AppConfig;
 import com.ll.medium.global.exception.DataNotFoundException;
@@ -24,12 +25,12 @@ public class MemberService {
     private final GenFileService genFileService;
 
     @Transactional
-    public RsData<SiteMember> create(String username, String email, String password, String nickname) {
-        return create(username, email, password, nickname, null);
+    public RsData<SiteMember> join(String username, String email, String password, String nickname) {
+        return join(username, email, password, nickname, null);
     }
 
     @Transactional
-    public RsData<SiteMember> create(String username, String email, String password, String nickname, String profileImgFilePath) {
+    public RsData<SiteMember> join(String username, String email, String password, String nickname, String profileImgFilePath) {
         SiteMember user = SiteMember.builder()
                 .username(username)
                 .email(email)
@@ -91,6 +92,19 @@ public class MemberService {
 
         String filePath = Ut.str.hasLength(profileImgUrl) ? Ut.file.downloadFileByHttp(profileImgUrl, AppConfig.getTempDirPath()) : "";
 
-        return create(username, username + "@email.com", "", nickname, filePath);
+        return join(username, username + "@email.com", "", nickname, filePath);
+    }
+
+    public String getProfileImgUrl(SiteMember member) {
+        return Optional.ofNullable(member)
+                .flatMap(this::findProfileImgUrl)
+                .orElse("https://placehold.co/30x30?text=User");
+    }
+
+    private Optional<String> findProfileImgUrl(SiteMember member) {
+        return genFileService.findBy(
+                        member.getModelName(), member.getId(), "common", "profileImg", 1
+                )
+                .map(GenFile::getUrl);
     }
 }
