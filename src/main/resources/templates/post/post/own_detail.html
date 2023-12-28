@@ -8,13 +8,13 @@
         <div class="card w-96 bg-base-100 border border-base-300 mt-3 w-full px-2">
             <div class="card-body">
                 <div th:if="${post.isPaid() and not @rq.isPaid()}">
-                <span class="text-red-500 text-lg">
-                    이 글은 유료멤버십전용 입니다.
-                </span>
+                <span class="text-red-500 text-lg">이 글은 유료멤버십전용 입니다.</span>
                 </div>
                 <div th:unless="${post.isPaid() and not @rq.isPaid()}">
-                    <div class="card-text whitespace-pre-line" th:text="${post.content}">
-                    </div>
+                    <!-- Toast UI Viewer 컨테이너 -->
+                    <div id="viewer"></div>
+
+                    <!-- 게시글 정보 -->
                     <div class="flex justify-end mb-2">
                         <div th:if="${post.modifyDate != null}"
                              class="flex justify-end badge badge-ghost dark:text-gray-300 p-2 text-start">
@@ -75,6 +75,18 @@
             </div>
         </div>
     </div>
+
+    <script th:inline="javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            var postContent = [[${post.content}]];
+            const viewer = new toastui.Editor.factory({
+                el: document.querySelector('#viewer'),
+                viewer: true,
+                height: '400px',
+                initialValue: postContent
+            });
+        });
+    </script>
 
     <!--댓글-->
     <h5 class="bg-blue-800 text-white px-4 py-3 my-2" th:text="|${#lists.size(post.commentList)}개의 답변이 있습니다.|"></h5>

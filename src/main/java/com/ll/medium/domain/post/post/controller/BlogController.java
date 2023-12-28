@@ -121,7 +121,7 @@ public class BlogController {
         postForm.setContent(post.getContent());
         postForm.setPaid(post.isPaid());
         postForm.setNotPublished(post.isNotPublished());
-        return "post/post/post_form";
+        return "post/post/post_modifyForm";
 
     }
 

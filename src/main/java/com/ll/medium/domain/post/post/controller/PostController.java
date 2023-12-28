@@ -150,7 +150,7 @@ public class PostController {
         postForm.setContent(post.getContent());
         postForm.setPaid(post.isPaid());
         postForm.setNotPublished(post.isNotPublished());
-        return "post/post/post_form";
+        return "post/post/post_modifyForm";
 
     }
 
@@ -161,7 +161,7 @@ public class PostController {
                              Principal principal,
                              @PathVariable("id") Integer id) {
         if (bindingResult.hasErrors()) {
-            return "post/post/post_form";
+            return "post/post/post_modifyForm";
         }
         Post post = this.postService.getPost(id);
         if (!post.getAuthor().getUsername().equals(principal.getName())) {

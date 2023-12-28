@@ -30,12 +30,15 @@
             <label for="content" class="form-label">내용</label>
             <script>
                 var editor;
+                console.log('[[${postForm.content}]]');
                 $(document).ready(function () {
                     editor = new toastui.Editor({
                         el: document.querySelector('#editor'),
                         height: '400px',
                         initialEditType: 'markdown',
-                        previewStyle: 'vertical'
+                        previewStyle: 'vertical',
+                        initialValue: '[[${postForm.content}]]'
+                        // TODO 두줄 이상 입력 시 수정 페이지 안뜨는 오류 수정 해야됨
                     });
                 });
             </script>
