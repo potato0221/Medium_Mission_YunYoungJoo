@@ -18,7 +18,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.util.HashSet;
@@ -76,15 +75,13 @@ public class PostController {
     public String detail(Model model,
                          @PathVariable("id") Integer id,
                          HttpServletRequest request,
-                         HttpServletResponse response,
-                         RedirectAttributes redirectAttributes) {
+                         HttpServletResponse response) {
         Post post = this.postService.getPost(id);
         model.addAttribute("post", post);
 
         if (post.isNotPublished()) {
             if (rq.getMember() != post.getAuthor()) {
-                redirectAttributes.addAttribute("accessError", "접근 권한이 없는 글 입니다.");
-                return "redirect:/post/access_denied";
+                return rq.redirectIfAccessError("/post/access_denied", "접근 권한이 없는 글 입니다.");
             }
         }
 
@@ -143,13 +140,11 @@ public class PostController {
     public String postModify(
             PostForm postForm,
             @PathVariable("id") Integer id,
-            Principal principal,
-            RedirectAttributes redirectAttributes
+            Principal principal
     ) {
         Post post = this.postService.getPost(id);
         if (!post.getAuthor().getUsername().equals(principal.getName())) {
-            redirectAttributes.addAttribute("accessError", "수정 권한이 없는 글 입니다.");
-            return "redirect:/post/access_denied";
+            return rq.redirectIfAccessError("/post/access_denied", "수정 권한이 없는 글 입니다.");
         }
         postForm.setTitle(post.getTitle());
         postForm.setContent(post.getContent());
@@ -164,15 +159,13 @@ public class PostController {
     public String postModify(@Valid PostForm postForm,
                              BindingResult bindingResult,
                              Principal principal,
-                             @PathVariable("id") Integer id,
-                             RedirectAttributes redirectAttributes) {
+                             @PathVariable("id") Integer id) {
         if (bindingResult.hasErrors()) {
             return "post/post/post_form";
         }
         Post post = this.postService.getPost(id);
         if (!post.getAuthor().getUsername().equals(principal.getName())) {
-            redirectAttributes.addAttribute("accessError", "수정 권한이 없는 글 입니다.");
-            return "redirect:/post/access_denied";
+            return rq.redirectIfAccessError("/post/access_denied", "수정 권한이 없는 글 입니다.");
         }
         this.postService.modify(post, postForm.getTitle(), postForm.getContent(), postForm.isPaid(), postForm.isNotPublished());
         return rq.redirect("/post/detail/%s".formatted(id), "게시물이 수정 되었습니다.");
@@ -181,13 +174,11 @@ public class PostController {
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/delete/{id}")
     public String postDelete(
-            @PathVariable("id") Integer id,
-            RedirectAttributes redirectAttributes
+            @PathVariable("id") Integer id
     ) {
         Post post = this.postService.getPost(id);
         if (!postService.canDelete(rq.getMember(), post)) {
-            redirectAttributes.addAttribute("accessError", "삭제 권한이 없는 글 입니다.");
-            return "redirect:/post/access_denied";
+            return rq.redirectIfAccessError("/post/access_denied", "삭제 권한이 없는 글 입니다.");
         }
         this.postService.delete(post);
 
