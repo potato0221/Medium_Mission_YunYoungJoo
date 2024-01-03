@@ -25,4 +25,6 @@ public interface GenFileRepository extends JpaRepository<GenFile, Long> {
     List<GenFile> findByRelTypeCode(String relTypeCode);
 
     List<GenFile> findByRelTypeCodeAndCreateDateBefore(String relTypeCode, LocalDateTime dateTime);
+
+
 }

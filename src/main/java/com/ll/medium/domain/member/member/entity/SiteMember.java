@@ -33,7 +33,7 @@ public class SiteMember extends BaseEntity {
     @Column(unique = true)
     private String email;
 
-    private Integer count;
+    private Long count;
 
     private boolean isPaid;
 

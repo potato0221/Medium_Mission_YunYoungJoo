@@ -42,8 +42,9 @@ public class Post extends BaseEntity {
 
     private boolean isPaid;
     private boolean isNotPublished;
-    private Integer countByMember;
-    private Integer viewCount;
+    private Long countByMember;
+    private Long viewCount;
+
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<Comment> commentList;

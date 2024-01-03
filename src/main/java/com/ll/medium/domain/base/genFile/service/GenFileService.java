@@ -29,10 +29,26 @@ public class GenFileService {
         return genFileRepository.findByRelTypeCodeAndRelIdAndTypeCodeAndType2CodeAndFileNo(relTypeCode, relId, typeCode, type2Code, fileNo);
     }
 
+    public void deleteGenfileByRelTypeAndRelId(String relTypeCode, Long relId) {
+        List<GenFile> genfiles = genFileRepository.findByRelTypeCodeAndRelId(relTypeCode, relId);
+
+        for (GenFile genfile : genfiles) {
+            // 삭제 로직 구현
+            genFileRepository.delete(genfile);
+        }
+    }
+
+
     @Transactional
     public GenFile save(String relTypeCode, long relId, String typeCode, String type2Code, long fileNo, MultipartFile sourceFile) {
         String sourceFilePath = Ut.file.toFile(sourceFile, AppConfig.getTempDirPath());
         return save(relTypeCode, relId, typeCode, type2Code, fileNo, sourceFilePath);
+    }
+
+    @Transactional
+    public GenFile saveImageByPost(SiteMember actor, MultipartFile file) {
+        // post가 지워지면 이미지도 같이 삭제하기 위해 actor의 개인 포스트 갯수에 해당하는 count를 가져와서 사용한다.
+        return save("post_" + actor.getUsername(), actor.getCount()+1, "post", "editorUpload", 0, file);
     }
 
     // 명령
