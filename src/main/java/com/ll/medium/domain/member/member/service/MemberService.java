@@ -44,7 +44,7 @@ public class MemberService {
                 .email(email)
                 .password(passwordEncoder.encode(password))
                 .nickname(nickname)
-                .count(0L)
+                .count(1L)
                 .isPaid(false)
                 .build();
         this.memberRepository.save(user);
