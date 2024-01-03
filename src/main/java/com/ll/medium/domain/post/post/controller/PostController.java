@@ -118,13 +118,12 @@ public class PostController {
     public String postCreate(@Valid PostForm postForm,
                              BindingResult bindingResult) {
         SiteMember member = rq.getMember();
-        member.setCount(member.getCount() + 1);
-        this.memberService.save(member);
+
         if (bindingResult.hasErrors()) {
             return "post/post/post_form";
         }
 
-        this.postService.create(
+        this.postService.create(member,
                 postForm.getTitle(),
                 postForm.getContent(),
                 rq.getMember(),

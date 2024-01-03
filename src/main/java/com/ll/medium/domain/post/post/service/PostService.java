@@ -2,6 +2,7 @@ package com.ll.medium.domain.post.post.service;
 
 import com.ll.medium.domain.base.genFile.service.GenFileService;
 import com.ll.medium.domain.member.member.entity.SiteMember;
+import com.ll.medium.domain.member.member.service.MemberService;
 import com.ll.medium.domain.post.post.entity.Post;
 import com.ll.medium.domain.post.post.repository.PostRepository;
 import com.ll.medium.global.exception.DataNotFoundException;
@@ -27,6 +28,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final Rq rq;
     private final GenFileService genFileService;
+    private final MemberService memberService;
 
     public Page<Post> search(List<String> kwTypes, String kw, String sort, Pageable pageable) {
         return postRepository.search(kwTypes, kw, sort, pageable);
@@ -82,7 +84,9 @@ public class PostService {
     }
 
     @Transactional
-    public Post create(String title, String content, SiteMember member, boolean isPaid, boolean isNotPublished, Long count) {
+    public Post create(SiteMember siteMember, String title, String content, SiteMember member, boolean isPaid, boolean isNotPublished, Long count) {
+        siteMember.setCount(member.getCount() + 1);
+        memberService.save(member);
         Post post = Post.builder()
                 .title(title)
                 .content(content)

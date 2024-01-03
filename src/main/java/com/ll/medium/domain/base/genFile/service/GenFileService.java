@@ -48,7 +48,7 @@ public class GenFileService {
     @Transactional
     public GenFile saveImageByPost(SiteMember actor, MultipartFile file) {
         // post가 지워지면 이미지도 같이 삭제하기 위해 actor의 개인 포스트 갯수에 해당하는 count를 가져와서 사용한다.
-        return save("post_" + actor.getUsername(), actor.getCount()+1, "post", "editorUpload", 0, file);
+        return save("post_" + actor.getUsername(), actor.getCount(), "post", "editorUpload", 0, file);
     }
 
     // 명령
@@ -105,6 +105,8 @@ public class GenFileService {
         return genFile;
     }
 
+
+
     private long genNextFileNo(String relTypeCode, long relId, String typeCode, String type2Code) {
         return genFileRepository
                 .findTop1ByRelTypeCodeAndRelIdAndTypeCodeAndType2CodeOrderByFileNoDesc(relTypeCode, relId, typeCode, type2Code)
@@ -114,6 +116,10 @@ public class GenFileService {
 
     private String getCurrentDirName(String relTypeCode) {
         return relTypeCode + "/" + Ut.date.getCurrentDateFormatted("yyyy_MM_dd");
+    }
+
+    private String getImageCurrentDirName(String relTypeCode, SiteMember siteMember) {
+        return relTypeCode + "/" + siteMember.getCount();
     }
 
     public Map<String, GenFile> findGenFilesMapKeyByFileNo(String relTypeCode, long relId, String typeCode, String type2Code) {

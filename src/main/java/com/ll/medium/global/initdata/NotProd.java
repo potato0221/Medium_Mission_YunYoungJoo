@@ -36,9 +36,8 @@ public class NotProd {
 
 
             for (int i = 1; i <= 60; i++) {
-                siteMember1.setCount(siteMember1.getCount() + 1);
-                memberService.save(siteMember1);
                 Post post = postService.create(
+                        siteMember1,
                         "글 제목 " + i,
                         "글 내용 " + i,
                         siteMember1
@@ -51,9 +50,8 @@ public class NotProd {
             }
 
             for (int i = 1; i <= 50; i++) {
-                siteMember2.setCount(siteMember2.getCount() + 1);
-                memberService.save(siteMember2);
                 Post post = postService.create(
+                        siteMember2,
                         "유료 글 " + i,
                         "유료 글 내용" + i,
                         siteMember2
@@ -63,9 +61,8 @@ public class NotProd {
                 );
             }
             for (int i = 51; i <= 100; i++) {
-                siteMember3.setCount(siteMember3.getCount() + 1);
-                memberService.save(siteMember3);
                 Post post = postService.create(
+                        siteMember3,
                         "유료 글 " + i,
                         "유료 글 내용" + i,
                         siteMember3

@@ -178,7 +178,7 @@ public class BlogController {
             return "post/post/post_form";
         }
 
-        this.postService.create(
+        this.postService.create(member,
                 postForm.getTitle(),
                 postForm.getContent(),
                 rq.getMember(),

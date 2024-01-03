@@ -13,7 +13,6 @@
                 <div th:unless="${post.isPaid() and not @rq.isPaid()}">
                     <!-- Toast UI Viewer 컨테이너 -->
                     <div id="viewer"></div>
-
                     <!-- 게시글 정보 -->
                     <div class="flex justify-end mb-2">
                         <div th:if="${post.modifyDate != null}" class="flex justify-end badge badge-ghost dark:text-gray-300 p-2 text-start">

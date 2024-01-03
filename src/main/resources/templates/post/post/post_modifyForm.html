@@ -37,7 +37,36 @@
                         height: '400px',
                         initialEditType: 'markdown',
                         previewStyle: 'vertical',
-                        initialValue: content
+                        initialValue: content,
+                        hooks: {
+                            addImageBlobHook: (blob, callback) => {
+                                var formData = new FormData();
+                                formData.append('image', blob); // 'image'는 서버에서 기대하는 필드명
+
+                                // CSRF 토큰을 HTML 문서의 meta 태그에서 가져옴
+                                var csrfHeader = 'X-CSRF-TOKEN';
+                                var csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute("content");
+
+
+                                $.ajax({
+                                    url: '/upload_image',
+                                    method: 'POST',
+                                    data: formData,
+                                    processData: false,
+                                    contentType: false,
+                                    beforeSend: function(xhr) {
+                                        xhr.setRequestHeader(csrfHeader, csrfToken);
+                                    },
+                                    success: function(response) {
+                                        // 서버로부터 반환된 이미지 URL을 에디터에 삽입
+                                        callback(response.imageUrl, "image");
+                                    },
+                                    error: function(xhr, status, error) {
+                                        console.error('이미지 업로드 실패:', xhr.responseText, status, error);
+                                    }
+                                });
+                            }
+                        }
                     });
                 });
                 /*]]>*/
