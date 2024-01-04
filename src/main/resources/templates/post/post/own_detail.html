@@ -8,7 +8,7 @@
         <div class="card w-96 bg-base-100 border border-base-300 mt-3 w-full px-2">
             <div class="card-body">
                 <div th:if="${post.isPaid() and not @rq.isPaid()}">
-                <span class="text-red-500 text-lg">이 글은 유료멤버십전용 입니다.</span>
+                    <span class="text-red-500 text-lg">이 글은 유료멤버십전용 입니다.</span>
                 </div>
                 <div th:unless="${post.isPaid() and not @rq.isPaid()}">
                     <!-- Toast UI Viewer 컨테이너 -->

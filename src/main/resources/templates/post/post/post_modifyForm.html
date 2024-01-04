@@ -54,14 +54,14 @@
                                     data: formData,
                                     processData: false,
                                     contentType: false,
-                                    beforeSend: function(xhr) {
+                                    beforeSend: function (xhr) {
                                         xhr.setRequestHeader(csrfHeader, csrfToken);
                                     },
-                                    success: function(response) {
+                                    success: function (response) {
                                         // 서버로부터 반환된 이미지 URL을 에디터에 삽입
                                         callback(response.imageUrl, "image");
                                     },
-                                    error: function(xhr, status, error) {
+                                    error: function (xhr, status, error) {
                                         console.error('이미지 업로드 실패:', xhr.responseText, status, error);
                                     }
                                 });
@@ -82,7 +82,7 @@
 
     <script>
 
-        function contentSave(form){
+        function contentSave(form) {
 
             // 에디터의 내용을 가져옴
             var editorContent = editor.getMarkdown();

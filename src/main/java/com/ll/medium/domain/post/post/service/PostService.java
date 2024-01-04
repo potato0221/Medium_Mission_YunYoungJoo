@@ -114,10 +114,9 @@ public class PostService {
     @Transactional
     public void delete(Post post) {
         //해당 글 삭제 시 포함된 이미지도 같이 삭제
-        genFileService.deleteGenfileByRelTypeAndRelId("post_"+post.getAuthor().getUsername(),post.getCountByMember());
+        genFileService.deleteGenfileByRelTypeAndRelId("post_" + post.getAuthor().getUsername(), post.getCountByMember());
         this.postRepository.delete(post);
     }
-
 
 
     public boolean canDelete(SiteMember siteMember, Post post) {

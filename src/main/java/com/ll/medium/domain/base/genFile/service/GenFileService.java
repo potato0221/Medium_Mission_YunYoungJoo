@@ -106,7 +106,6 @@ public class GenFileService {
     }
 
 
-
     private long genNextFileNo(String relTypeCode, long relId, String typeCode, String type2Code) {
         return genFileRepository
                 .findTop1ByRelTypeCodeAndRelIdAndTypeCodeAndType2CodeOrderByFileNoDesc(relTypeCode, relId, typeCode, type2Code)
