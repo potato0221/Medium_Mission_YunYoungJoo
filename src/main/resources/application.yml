@@ -57,3 +57,7 @@ custom:
   tempDirPath: c:/temp/medium_dev/temp
   genFile:
     dirPath: c:/temp/medium_dev
+  tossPayments:
+    widget:
+      clientKey: test_ck_Z61JOxRQVEmmvqyOn4NaVW0X9bAq
+      secretKey: ON_SECRET

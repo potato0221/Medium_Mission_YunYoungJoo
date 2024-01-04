@@ -60,4 +60,11 @@ public class MemberController {
         return "member/member/login_form";
     }
 
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/join/membership")
+    public String joinMembership() {
+        if (rq.isPaid()) return rq.redirectIfAccessError("/", "이미 유료 회원 입니다.");
+        return "member/member/join_membership";
+    }
+
 }
