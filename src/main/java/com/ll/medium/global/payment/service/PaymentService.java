@@ -1,14 +1,17 @@
 package com.ll.medium.global.payment.service;
 
 import com.ll.medium.domain.member.member.entity.SiteMember;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class PaymentService {
 
-
+    @Transactional
     public boolean checkPaymentStatusFromPaymentSystem(SiteMember siteMember) {
-        // 결제를 도입하지 않아서 가짜로 결제 되었다고 설정
         if (siteMember.isPaid()) {
             return true;
         }

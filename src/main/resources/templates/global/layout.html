@@ -92,7 +92,7 @@
         <a href="/" class="btn btn-ghost text-lg">Medium</a>
     </div>
     <div class="navbar-end">
-        <a th:if="${!@rq.isPaid()}" th:href="@{/member/join/membership}" class="btn btn-warning mr-2">MemberShip</a>
+        <a th:if="${!@rq.isPaid()}" th:href="@{/member/membership/join}" class="btn btn-warning mr-2">MemberShip</a>
         <a th:if="${@rq.isLogined}" th:href="@{'/b/' + ${@rq.member.username}}" class="btn btn-ghost text-lg">
             <img th:classappend="${@rq.isPaid} ? 'mask mask-hexagon' : 'rounded-full'" class="w-10 h-10"
                  th:src="${@rq.profileImgUrl}">

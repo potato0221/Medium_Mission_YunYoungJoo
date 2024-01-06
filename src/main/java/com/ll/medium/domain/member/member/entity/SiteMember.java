@@ -1,8 +1,10 @@
 package com.ll.medium.domain.member.member.entity;
 
+import com.ll.medium.domain.member.membership.entity.Membership;
 import com.ll.medium.global.jpa.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Transient;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -36,6 +38,9 @@ public class SiteMember extends BaseEntity {
     private Long count;
 
     private boolean isPaid;
+
+    @OneToOne(mappedBy = "siteMember")
+    private Membership membership;
 
     @Transient
     public Collection<? extends GrantedAuthority> getAuthorities() {

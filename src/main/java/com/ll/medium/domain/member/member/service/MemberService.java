@@ -7,6 +7,7 @@ import com.ll.medium.domain.member.member.repository.MemberRepository;
 import com.ll.medium.global.app.AppConfig;
 import com.ll.medium.global.exception.DataNotFoundException;
 import com.ll.medium.global.rsData.RsData;
+import com.ll.medium.global.security.MemberSecurityService;
 import com.ll.medium.standard.util.Ut;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,6 +25,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final GenFileService genFileService;
+    private final MemberSecurityService memberSecurityService;
 
     @Transactional
     public RsData<SiteMember> join(String username, String email, String password, String nickname) {
@@ -63,6 +65,7 @@ public class MemberService {
     @Transactional
     public void alreadyPaid(SiteMember siteMember) {
         siteMember.setPaid(true);
+        memberSecurityService.addPaidRole(siteMember);
         this.memberRepository.save(siteMember);
     }
 

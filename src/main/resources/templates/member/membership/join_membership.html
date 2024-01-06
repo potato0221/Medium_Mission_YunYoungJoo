@@ -1,0 +1,138 @@
+<html layout:decorate="~{global/layout}">
+<div layout:fragment="content" class="mt-3">
+
+    <div class="w-full">
+        <h2 class="bg-blue-900 text-white px-4 py-3 mb-2">멤버십 결제 [월 2,000원]</h2>
+    </div>
+    <div class="card w-full bg-base-100 shadow-xl mt-32" id="membership-signup">
+        <div class="card-body">
+            <h2 class="card-title mb-4">멤버십</h2>
+            <div class="flex justify-center items-center">
+                <button class="btn btn-info w-full flex justify-center px-10 py-32" id="membership-signup-button">멤버십 가입</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="wrapper" id="payment-module" style="display: none;">
+        <div class="box_section p-10 mt-3 mb-5">
+
+
+
+            <!-- 결제 UI -->
+            <div id="payment-method"></div>
+            <!-- 이용약관 UI -->
+            <div id="agreement"></div>
+
+            <form onsubmit="submitPayForm(this); return false;">
+                <div class="mb-2">
+                    <label>이메일</label>
+                    <input type="email" name="customerEmail" class="input input-bordered" placeholder="yong@email.com">
+                </div>
+                <div class="mb-2">
+                    <label>이름(실명)</label>
+                    <input type="text" name="customerName" class="input input-bordered" placeholder="김용선">
+                </div>
+                <div class="mb-2">
+                    <label>휴대전화 번호( - 제외)</label>
+                    <input type="text" name="customerMobilePhone" placeholder="01019910221" class="input input-bordered">
+                </div>
+                <!-- 결제하기 버튼 -->
+                <div class="result wrapper mt-3 flex justify-end">
+                    <button type="submit" class="btn" id="payment-button">
+                        결제하기
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+    <script>
+        document.getElementById("membership-signup-button").addEventListener("click", function() {
+            document.getElementById("payment-module").style.display = "block";
+            document.getElementById("membership-signup").style.display = "none";
+        });
+
+        function getCurrentDateTimeFormatted() {
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+            var yyyy = today.getFullYear();
+            var hh = String(today.getHours()).padStart(2, '0');
+            var min = String(today.getMinutes()).padStart(2, '0');
+
+            return yyyy + '-' + mm + '-' + dd + '-' + hh + '-' + min;
+        }
+
+        const currentDate = getCurrentDateTimeFormatted();
+
+        const button = document.getElementById("payment-button");
+
+        const generateRandomString = () =>
+            window.btoa(Math.random()).slice(0, 20);
+        var amount = 2000;
+        // ------  결제위젯 초기화 ------
+        // TODO: clientKey는 개발자센터의 결제위젯 연동 키 > 클라이언트 키로 바꾸세요.
+        // TODO: 구매자의 고유 아이디를 불러와서 customerKey로 설정하세요. 이메일・전화번호와 같이 유추가 가능한 값은 안전하지 않습니다.
+        // @docs https://docs.tosspayments.com/reference/widget-sdk#sdk-설치-및-초기화
+        // 결제 위젯 연동 키 (클라이언트 키)
+        const clientKey = "test_ck_Z61JOxRQVEmmvqyOn4NaVW0X9bAq";
+        const customerKey = generateRandomString();
+        const paymentWidget = PaymentWidget(clientKey, customerKey); // 회원 결제
+        // const paymentWidget = PaymentWidget(clientKey, PaymentWidget.ANONYMOUS); // 비회원 결제
+
+        // ------  결제 UI 렌더링 ------
+        // @docs https://docs.tosspayments.com/reference/widget-sdk#renderpaymentmethods선택자-결제-금액-옵션
+        paymentMethodWidget = paymentWidget.renderPaymentMethods(
+            "#payment-method",
+            {value: amount},
+            // 렌더링하고 싶은 결제 UI의 variantKey
+            // 결제 수단 및 스타일이 다른 멀티 UI를 직접 만들고 싶다면 계약이 필요해요.
+            // @docs https://docs.tosspayments.com/guides/payment-widget/admin#멀티-결제-ui
+            {variantKey: "DEFAULT"}
+        );
+        // ------  이용약관 UI 렌더링 ------
+        // @docs https://docs.tosspayments.com/reference/widget-sdk#renderagreement선택자-옵션
+        paymentWidget.renderAgreement("#agreement", {variantKey: "AGREEMENT"});
+
+        function submitPayForm(form){
+            form.customerEmail.value=form.customerEmail.value.trim();
+
+            if(form.customerEmail.value.length==0){
+                toastWarning("이메일을 입력 해 주세요.")
+                form.customerEmail.focus();
+
+                return;
+            }
+
+            form.customerName.value=form.customerName.value.trim();
+
+            if(form.customerName.value.length==0){
+                toastWarning("이름(실명)을 입력 해 주세요.")
+                form.customerName.focus();
+
+                return;
+            }
+
+            form.customerMobilePhone.value=form.customerMobilePhone.value.trim();
+
+            if(form.customerMobilePhone.value.length==0){
+                toastWarning("휴대전화 번호를 입력 해 주세요.")
+                form.customerMobilePhone.focus();
+
+                return;
+            }
+
+            paymentWidget.requestPayment({
+                orderId: currentDate +[[${member.id}]],
+                orderName: "멤버십 결제",
+                successUrl: window.location.origin + "/member/membership/success",
+                failUrl: window.location.origin + "/member/membership/fail",
+                customerEmail: form.customerEmail.value,
+                customerName: form.customerName.value,
+                customerMobilePhone: form.customerMobilePhone.value,
+            });
+        }
+
+    </script>
+</div>
+</html>

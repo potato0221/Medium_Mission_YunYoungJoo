@@ -23,6 +23,9 @@ public class AppConfig {
     @Getter
     public static String siteBaseUrl;
 
+    @Getter
+    private static String tossPaymentsWidgetSecretKey;
+
     @Value("${custom.tempDirPath}")
     public void setTempDirPath(String tempDirPath) {
         AppConfig.tempDirPath = tempDirPath;
@@ -54,5 +57,10 @@ public class AppConfig {
         }
 
         return resourcesStaticDirPath;
+    }
+
+    @Value("${custom.tossPayments.widget.secretKey}")
+    public void setTossPaymentsWidgetSecretKey(String tossPaymentsWidgetSecretKey) {
+        AppConfig.tossPaymentsWidgetSecretKey = tossPaymentsWidgetSecretKey;
     }
 }
