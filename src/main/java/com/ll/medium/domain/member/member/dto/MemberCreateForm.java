@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
@@ -23,5 +24,11 @@ public class MemberCreateForm {
     @NotEmpty(message = "이메일을 입력 해 주세요.")
     @Email
     private String email;
+
+    @NotEmpty
+    private String nickname;
+
+    private MultipartFile profileImg;
+
 
 }

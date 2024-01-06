@@ -22,11 +22,11 @@ public class CommentService {
     @Transactional
     public void create(Post post, String content, SiteMember author) {
 
-        Comment comment = new Comment();
-        comment.setContent(content);
-        comment.setCreateDate(LocalDateTime.now());
-        comment.setPost(post);
-        comment.setAuthor(author);
+        Comment comment = Comment.builder()
+                .content(content)
+                .post(post)
+                .author(author)
+                .build();
         this.commentRepository.save(comment);
     }
 
@@ -68,6 +68,20 @@ public class CommentService {
     public void deleteVote(Comment comment, SiteMember siteMember) {
         comment.getVoter().remove(siteMember);
         this.commentRepository.save(comment);
+    }
+
+    public boolean canLike(SiteMember member, Comment comment) {
+        if (member == null) {
+            return false;
+        }
+        return !comment.getVoter().contains(member);
+    }
+
+    public boolean canCancelLike(SiteMember member, Comment comment) {
+        if (member == null) {
+            return false;
+        }
+        return comment.getVoter().contains(member);
     }
 
 }

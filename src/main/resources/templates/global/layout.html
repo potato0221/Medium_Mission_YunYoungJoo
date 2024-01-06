@@ -6,16 +6,25 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- csrf토큰을 AJAX요청에 포함시키기 위함 -->
+    <meta name="_csrf" content="${_csrf.token}">
     <title>Medium</title>
 
     <!-- 제이쿼리 불러오기 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
+
+    <script>
+
+    </script>
+
     <!--daisyui-->
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.0.8/dist/full.min.css" rel="stylesheet" type="text/css"/>
 
+
     <!--테일윈드-->
     <script src="https://cdn.tailwindcss.com"></script>
+
 
     <!-- toastr 불러오기 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
@@ -26,10 +35,18 @@
 
     <link rel="stylesheet" href="/resource/global.css">
     <script src="/resource/global.js"></script>
+    <!--토스 페이먼츠 결제 위젯 SDK-->
+    <script src="https://js.tosspayments.com/v1/payment-widget"></script>
 
 </head>
 
 <body>
+
+<!-- Toast UI Editor의 CSS -->
+<link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"/>
+
+<!-- Toast UI Editor의 JS -->
+<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
 <script>
     const queryParams = getQueryParams();
 
@@ -75,13 +92,18 @@
         <a href="/" class="btn btn-ghost text-lg">Medium</a>
     </div>
     <div class="navbar-end">
+        <a th:if="${!@rq.isPaid()}" th:href="@{/member/membership/join}" class="btn btn-warning mr-2">MemberShip</a>
         <a th:if="${@rq.isLogined}" th:href="@{'/b/' + ${@rq.member.username}}" class="btn btn-ghost text-lg">
-            <span th:text="${@rq.member.username}"></span>
+            <img th:classappend="${@rq.isPaid} ? 'mask mask-hexagon' : 'rounded-full'" class="w-10 h-10"
+                 th:src="${@rq.profileImgUrl}">
+            <span th:text="${@rq.member.nickname}"></span>
         </a>
     </div>
 </div>
 
 <th:block layout:fragment="content"></th:block>
-<th:block layout:fragment="script"></th:block>
+<th:block layout:fragment="script">
+
+</th:block>
 </body>
 </html>

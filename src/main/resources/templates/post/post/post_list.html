@@ -2,7 +2,8 @@
 <div layout:fragment="content" class="mx-2 overflow-x-auto">
     <div class="input-group flex flex-row my-2 flex justify-between">
         <div class="mt-2 flex gap-2">
-            <a th:href="@{/post/create}" class="btn btn-outline mr-3 mb-2">글 등록</a>
+            <a th:href="@{/post/create}" class="btn btn-outline mr-3 mb-2"><i class="fa-solid fa-pen-to-square"></i> 글
+                등록</a>
         </div>
         <div class="flex pt-4">
             <form method="get" action="/post/list" class="flex">
@@ -42,18 +43,14 @@
              class="p-6 bg-white shadow-md rounded-lg border border-gray-200 hover:shadow-xl">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-lg font-semibold">
-                    <span th:if="${post.isPremium}" class="text-yellow-500"><i class="fa-solid fa-m"></i> . </span>
+                    <span th:if="${post.isPaid}" class="text-yellow-500"><i class="fa-solid fa-m"></i> . </span>
                     <span th:if="${post.isNotPublished()}" class="text-red-600"><i class="fas fa-lock"></i> </span>
-                    <span th:unless="${post.isPremium and not @rq.isPremium()}" class="text-blue-700">
-                    <a th:href="@{|/post/detail/${post.id}|}" th:text="${post.title}"></a>
-                        <span th:text="'(' + ${post.getCommentCount()} + ')'" class="text-orange-400"></span>
-                </span>
-                    <span th:if="${post.isPremium and not @rq.isPremium()}"
-                          class="text-red-500">멤버십 회원만 열람 가능한 글입니다.</span>
+                    <a th:href="@{|/post/detail/${post.id}|}" th:text="${post.title}" class="text-blue-700"></a>
+                    <span th:text="'(' + ${post.getCommentCount()} + ')'" class="text-orange-400"></span>
                 </h3>
             </div>
             <p class="text-gray-700 mb-4">
-                <a th:href="@{|/b/${post.author.username}|}" th:text="${post.author.username}"></a>
+                <a th:href="@{|/b/${post.author.username}|}" th:text="${post.author.nickname}"></a>
             </p>
             <div class="flex justify-between">
                 <div class="flex justify-colum">

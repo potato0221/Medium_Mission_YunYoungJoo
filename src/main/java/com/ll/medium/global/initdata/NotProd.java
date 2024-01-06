@@ -8,12 +8,14 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.annotation.Order;
 
 @Profile("!prod")
 @Configuration
 public class NotProd {
 
     @Bean
+    @Order(3)
     public ApplicationRunner initNotProd(
             MemberService memberService,
             PostService postService
@@ -21,41 +23,52 @@ public class NotProd {
         return args -> {
 
             if (memberService.count() > 0) return;
-            SiteMember siteMember1 = new SiteMember();
-            SiteMember siteMember2 = new SiteMember();
-            siteMember1 = memberService.create("user1", "www1@email.com", "1234", 0);
-            siteMember2 = memberService.create("premium1", "www2@email.com", "1234", 0);
+            SiteMember siteMember1 = memberService.join("user1", "www1@email.com", "1234", "유저1").getData();
+            SiteMember siteMember2 = memberService.join("paid1", "paid1@email.com", "1234", "유료회원1").getData();
+            SiteMember siteMember3 = memberService.join("paid2", "paid2@email.com", "1234", "유료회원2").getData();
+            memberService.alreadyPaid(siteMember2);
+            memberService.alreadyPaid(siteMember3);
+
+            for (int i = 3; i <= 100; i++) {
+                SiteMember siteMember = memberService.join("paid" + i, "paid" + i + "@email.com", "1234", "유료회원" + i).getData();
+                memberService.alreadyPaid(siteMember);
+            }
+
 
             for (int i = 1; i <= 60; i++) {
-                Post post = new Post();
-                siteMember1.setCount(siteMember1.getCount() + 1);
-                memberService.save(siteMember1);
-                postService.create(
+                Post post = postService.create(
+                        siteMember1,
                         "글 제목 " + i,
                         "글 내용 " + i,
                         siteMember1
                         , false,
                         false,
-                        siteMember1.getCount(),
-                        0
+                        siteMember1.getCount()
                 );
 
 
             }
 
-            Integer count2 = 0;
-            for (int i = 1; i <= 20; i++) {
-                Post post = new Post();
-                siteMember2.setCount(siteMember2.getCount() + 1);
-                memberService.save(siteMember2);
-                postService.create(
+            for (int i = 1; i <= 50; i++) {
+                Post post = postService.create(
+                        siteMember2,
                         "유료 글 " + i,
                         "유료 글 내용" + i,
                         siteMember2
                         , true,
                         false,
-                        siteMember2.getCount(),
-                        0
+                        siteMember2.getCount()
+                );
+            }
+            for (int i = 51; i <= 100; i++) {
+                Post post = postService.create(
+                        siteMember3,
+                        "유료 글 " + i,
+                        "유료 글 내용" + i,
+                        siteMember3
+                        , true,
+                        false,
+                        siteMember3.getCount()
                 );
             }
 

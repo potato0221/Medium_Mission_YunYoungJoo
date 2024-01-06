@@ -1,23 +1,25 @@
 <html layout:decorate="~{global/layout}">
 <div layout:fragment="content" class="mt-2">
     <h2 class="bg-blue-600 text-white px-4 py-3 mb-2">글 등록</h2>
-    <form th:object="${postForm}" method="post" class="mx-2">
+    <form onsubmit="contentSave(this); return false;" id="postForm" th:object="${postForm}" method="post" class="mx-2">
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
         <div th:replace="~{global/form_errors :: formErrorsFragment}"></div>
 
-        <div th:if="${@rq.premium}" class="form-check w-10">
-            <label class="cursor-pointer label" for="isPremium">Premium
-                <input type="checkbox" class="checkbox checkbox-info ml-3" id="isPremium" th:field="*{premium}"
-                       value="true"/>
-            </label>
-        </div>
+        <div class="flex flex-row">
+            <div th:if="${@rq.paid}" class="form-check mr-4">
+                <label class="cursor-pointer label" for="isPaid">유료글
+                    <input type="checkbox" class="checkbox checkbox-info ml-3" id="isPaid" th:field="*{paid}"
+                           value="true"/>
+                </label>
+            </div>
 
-        <div class="form-check w-10 flex items-center">
-            <label class="cursor-pointer label" for="isNotPublished">Private
-                <input type="checkbox" class="checkbox checkbox-error ml-6" id="isNotPublished"
-                       th:field="*{notPublished}"
-                       value="true"/>
-            </label>
+            <div class="form-check flex items-center">
+                <label class="cursor-pointer label" for="isNotPublished">비공개
+                    <input type="checkbox" class="checkbox checkbox-error ml-3" id="isNotPublished"
+                           th:field="*{notPublished}"
+                           value="true"/>
+                </label>
+            </div>
         </div>
 
         <div class="my-3 px-2">
@@ -26,12 +28,70 @@
         </div>
         <div class="mb-3 px-2">
             <label for="content" class="form-label">내용</label>
-            <textarea th:field="*{content}" class="form-control textarea textarea-bordered textarea-md w-full mt-2"
-                      rows="10"></textarea>
+            <script>
+                var editor;
+                $(document).ready(function () {
+                    editor = new toastui.Editor({
+                        el: document.querySelector('#editor'),
+                        height: '400px',
+                        initialEditType: 'markdown',
+                        previewStyle: 'vertical',
+                        hooks: {
+                            addImageBlobHook: (blob, callback) => {
+                                var formData = new FormData();
+                                formData.append('image', blob); // 'image'는 서버에서 기대하는 필드명
+
+                                // CSRF 토큰을 HTML 문서의 meta 태그에서 가져옴
+                                var csrfHeader = 'X-CSRF-TOKEN';
+                                var csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute("content");
+
+
+                                $.ajax({
+                                    url: '/upload_image',
+                                    method: 'POST',
+                                    data: formData,
+                                    processData: false,
+                                    contentType: false,
+                                    beforeSend: function (xhr) {
+                                        xhr.setRequestHeader(csrfHeader, csrfToken);
+                                    },
+                                    success: function (response) {
+                                        // 서버로부터 반환된 이미지 URL을 에디터에 삽입
+                                        callback(response.imageUrl, "image");
+                                    },
+                                    error: function (xhr, status, error) {
+                                        console.error('이미지 업로드 실패:', xhr.responseText, status, error);
+                                    }
+                                });
+                            }
+                        }
+                    });
+                });
+            </script>
+            <div id="editor" class="textarea textarea-bordered textarea-md w-full mt-2"></div>
+            <!-- 이 textarea는 실제로 서버로 제출될 내용을 담게 됩니다 -->
+            <textarea name="content" th:field="*{content}" id="hiddenContent" style="display:none;"></textarea>
         </div>
         <div class="mt-2 flex gap-2 flex justify-end">
             <input type="submit" value="저장하기" class="btn btn-outline btn-primary mr-3 mb-2">
         </div>
     </form>
+
+    <script>
+
+        function contentSave(form) {
+
+            // 에디터의 내용을 가져옴
+            var editorContent = editor.getMarkdown();
+
+            console.log(editorContent)
+
+            // 에디터의 내용을 Thymeleaf가 처리할 수 있는 content 필드에 설정
+            document.querySelector('textarea[name="content"]').value = editorContent;
+
+            form.submit();
+        }
+    </script>
 </div>
+
 </html>

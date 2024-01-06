@@ -1,6 +1,7 @@
 package com.ll.medium.domain.member.member.controller;
 
 import com.ll.medium.domain.member.member.dto.MemberCreateForm;
+import com.ll.medium.domain.member.member.entity.SiteMember;
 import com.ll.medium.domain.member.member.service.MemberService;
 import com.ll.medium.global.rq.Rq;
 import jakarta.validation.Valid;
@@ -8,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,15 +23,16 @@ public class MemberController {
     private final MemberService memberService;
     private final Rq rq;
 
-    @PreAuthorize("isAnonymous()")
     @GetMapping("/join")
     public String signup(MemberCreateForm memberCreateForm) {
+        if (rq.isLogined()) return rq.redirectIfAccessError("/", "이미 회원가입 되어있습니다.");
         return "member/member/signup_form";
     }
 
     @PreAuthorize("isAnonymous()")
     @PostMapping("/join")
     public String signup(@Valid MemberCreateForm memberCreateForm, BindingResult bindingResult) {
+
         if (bindingResult.hasErrors()) {
             return "member/member/signup_form";
         }
@@ -39,8 +42,8 @@ public class MemberController {
             return "member/member/signup_form";
         }
         try {
-            memberService.create(memberCreateForm.getUsername(),
-                    memberCreateForm.getEmail(), memberCreateForm.getPassword1(), 0);
+            memberService.join(memberCreateForm.getUsername(),
+                    memberCreateForm.getEmail(), memberCreateForm.getPassword1(), memberCreateForm.getNickname(), memberCreateForm.getProfileImg());
         } catch (DataIntegrityViolationException e) {
             e.printStackTrace();
             bindingResult.reject("signupFailed", "이미 등록된 사용자입니다.");
@@ -53,10 +56,22 @@ public class MemberController {
         return rq.redirect("/member/login", "회원가입이 완료 되었습니다.");
     }
 
-    @PreAuthorize("isAnonymous()")
     @GetMapping("/login")
     public String login() {
+        if (rq.isLogined()) return rq.redirectIfAccessError("/", "이미 로그인 되어있습니다.");
         return "member/member/login_form";
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/join/membership")
+    public String joinMembership(Model model) {
+        if (rq.isPaid()) return rq.redirectIfAccessError("/", "이미 유료 회원 입니다.");
+        SiteMember member=rq.getMember();
+        model.addAttribute("member",member);
+        return "member/member/join_membership";
+    }
+
+
+
 
 }

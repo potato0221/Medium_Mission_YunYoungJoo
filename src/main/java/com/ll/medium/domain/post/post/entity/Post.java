@@ -3,27 +3,25 @@ package com.ll.medium.domain.post.post.entity;
 
 import com.ll.medium.domain.member.member.entity.SiteMember;
 import com.ll.medium.domain.post.comment.entity.Comment;
+import com.ll.medium.global.jpa.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.Formula;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
-@Entity
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-public class Post {
+import static lombok.AccessLevel.PROTECTED;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+@Entity
+@Builder
+@AllArgsConstructor(access = PROTECTED)
+@NoArgsConstructor(access = PROTECTED)
+@Setter
+@Getter
+@ToString(callSuper = true)
+public class Post extends BaseEntity {
 
     @Column(length = 200)
     private String title;
@@ -31,12 +29,10 @@ public class Post {
     @Column(columnDefinition = "Text")
     private String content;
 
-    private LocalDateTime createDate;
+    private LocalDateTime modifyDate;
 
     @ManyToOne
     private SiteMember author;
-
-    private LocalDateTime modifyDate;
 
     @ManyToMany
     Set<SiteMember> voter;
@@ -44,23 +40,16 @@ public class Post {
     @Formula("(select count(*) from post_voter pv where pv.post_id = id)")
     private int voteCount;
 
-
-    private boolean isPremium;
+    private boolean isPaid;
     private boolean isNotPublished;
-    private Integer countByMember;
-    private Integer viewCount;
+    private Long countByMember;
+    private Long viewCount;
+
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<Comment> commentList;
 
-    public Post(String title, String content, LocalDateTime now) {
-        this.title = title;
-        this.content = content;
-        this.createDate = now;
-    }
-
     public int getCommentCount() {
         return this.commentList.size();
     }
-
 }

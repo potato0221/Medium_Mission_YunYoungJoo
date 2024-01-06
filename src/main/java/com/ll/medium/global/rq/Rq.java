@@ -60,13 +60,13 @@ public class Rq {
         return member;
     }
 
-    public boolean isPremium() {
+    public boolean isPaid() {
         if (!isLogined()) {
             return false;
         }
         return user.getAuthorities()
                 .stream()
-                .anyMatch(a -> a.getAuthority().equals("ROLE_PREMIUM"));
+                .anyMatch(a -> a.getAuthority().equals("ROLE_PAID"));
     }
 
 
@@ -90,5 +90,24 @@ public class Rq {
         return "redirect:" + path + "?msg=" + msg;
     }
 
+    public String redirectIfAccessError(String path, String msg) {
+        if (msg == null)
+            return "redirect:" + path;
+
+        boolean containsTtl = msg.contains(";ttl=");
+
+        if (containsTtl) {
+            msg = msg.split(";ttl=", 2)[0];
+        }
+
+        msg = URLEncoder.encode(msg, StandardCharsets.UTF_8);
+        msg += ";ttl=" + (new Date().getTime() + 1000 * 2);
+
+        return "redirect:" + path + "?accessError=" + msg;
+    }
+
+    public String getProfileImgUrl() {
+        return memberService.getProfileImgUrl(getMember());
+    }
 
 }
