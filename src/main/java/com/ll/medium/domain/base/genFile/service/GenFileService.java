@@ -48,7 +48,7 @@ public class GenFileService {
     @Transactional
     public GenFile saveImageByPost(SiteMember actor, MultipartFile file) {
         // post가 지워지면 이미지도 같이 삭제하기 위해 actor의 개인 포스트 갯수에 해당하는 count를 가져와서 사용한다.
-        return save("post_" + actor.getUsername(), actor.getCount(), "post", "editorUpload", 0, file);
+        return save("post_" + actor.getUsername(), actor.getCount(), "common", "editorUpload", 0, file);
     }
 
     // 명령
