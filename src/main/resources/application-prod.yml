@@ -23,6 +23,6 @@ logging:
 custom:
   tempDirPath: /tmp
   site:
-    baseUrl: "www.medium.kys.blue"
+    baseUrl: "medium.kys.blue"
   genFile:
     dirPath: /gen
