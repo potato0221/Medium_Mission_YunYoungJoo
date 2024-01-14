@@ -76,6 +76,10 @@ public class PostController {
                          @PathVariable("id") Integer id,
                          HttpServletRequest request,
                          HttpServletResponse response) {
+
+        if(postService.findById(id).isEmpty()){
+            return rq.redirectIfAccessError("/post/access_denied", "존재 하지 않는 글 입니다.");
+        }
         Post post = this.postService.getPost(id);
         model.addAttribute("post", post);
 
