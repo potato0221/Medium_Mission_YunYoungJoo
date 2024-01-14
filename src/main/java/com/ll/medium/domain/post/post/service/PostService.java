@@ -161,4 +161,7 @@ public class PostService {
         return post.getVoter().contains(member);
     }
 
+    public Optional<Post> findById(Integer id) {
+        return postRepository.findById(id);
+    }
 }

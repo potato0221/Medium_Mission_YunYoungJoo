@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ko">
+<html lang="ko" data-theme="winter">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -40,7 +40,43 @@
 
 </head>
 
-<body>
+<body class="min-h-[100dvh] flex flex-col">
+
+<header class="flex gap-2 ">
+    <div class="navbar bg-base-100">
+        <div class="navbar-start">
+            <div class="dropdown">
+                <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                         stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/>
+                    </svg>
+                </div>
+                <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+                    <li><a href="/post/list"><i class="fa-solid fa-list"></i> 글 목록</a></li>
+                    <li th:if="${@rq.logined}"><a href="/post/myList"><i class="fa-solid fa-list"></i> 마이 페이지 </a></li>
+                    <li th:unless="${@rq.logined}"><a href="/member/join"><i class="fa-solid fa-user-plus"></i> 회원가입</a>
+                    </li>
+                    <li th:unless="${@rq.logined}"><a th:href="@{/member/login}"><i
+                            class="fa-solid fa-right-to-bracket"></i> 로그인</a></li>
+                    <li th:if="${@rq.logined}"><a th:href="@{/member/logout}"><i class="fa-solid fa-right-from-bracket"></i>
+                        로그아웃</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="navbar-center">
+            <a href="/" class="btn btn-ghost text-lg">Medium</a>
+        </div>
+        <div class="navbar-end">
+            <a th:if="${!@rq.isPaid()}" th:href="@{/member/membership/join}" class="btn btn-warning mr-2">MemberShip</a>
+            <a th:if="${@rq.isLogined}" th:href="@{'/b/' + ${@rq.member.username}}" class="btn btn-ghost text-lg">
+                <img th:classappend="${@rq.isPaid} ? 'mask mask-hexagon' : 'rounded-full'" class="w-10 h-10"
+                     th:src="${@rq.profileImgUrl}">
+                <span th:text="${@rq.member.nickname}"></span>
+            </a>
+        </div>
+    </div>
+</header>
 
 <!-- Toast UI Editor의 CSS -->
 <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"/>
@@ -67,43 +103,14 @@
     });
 </script>
 
-<div class="navbar bg-base-100">
-    <div class="navbar-start">
-        <div class="dropdown">
-            <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                     stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/>
-                </svg>
-            </div>
-            <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
-                <li><a href="/post/list"><i class="fa-solid fa-list"></i> 글 목록</a></li>
-                <li th:if="${@rq.logined}"><a href="/post/myList"><i class="fa-solid fa-list"></i> 내 글 목록 </a></li>
-                <li th:unless="${@rq.logined}"><a href="/member/join"><i class="fa-solid fa-user-plus"></i> 회원가입</a>
-                </li>
-                <li th:unless="${@rq.logined}"><a th:href="@{/member/login}"><i
-                        class="fa-solid fa-right-to-bracket"></i> 로그인</a></li>
-                <li th:if="${@rq.logined}"><a th:href="@{/member/logout}"><i class="fa-solid fa-right-from-bracket"></i>
-                    로그아웃</a></li>
-            </ul>
-        </div>
-    </div>
-    <div class="navbar-center">
-        <a href="/" class="btn btn-ghost text-lg">Medium</a>
-    </div>
-    <div class="navbar-end">
-        <a th:if="${!@rq.isPaid()}" th:href="@{/member/membership/join}" class="btn btn-warning mr-2">MemberShip</a>
-        <a th:if="${@rq.isLogined}" th:href="@{'/b/' + ${@rq.member.username}}" class="btn btn-ghost text-lg">
-            <img th:classappend="${@rq.isPaid} ? 'mask mask-hexagon' : 'rounded-full'" class="w-10 h-10"
-                 th:src="${@rq.profileImgUrl}">
-            <span th:text="${@rq.member.nickname}"></span>
-        </a>
-    </div>
-</div>
 
-<th:block layout:fragment="content"></th:block>
-<th:block layout:fragment="script">
 
-</th:block>
+<main class="flex-1 flex justify-center">
+    <th:block layout:fragment="content"></th:block>
+</main>
+<footer class="p-8 shadow text-center bg-black text-gray-300 text-sm mt-3">
+    MEDIUM ALL RIGHTS RESERVED.
+</footer>
+<th:block layout:fragment="script"></th:block>
 </body>
 </html>
