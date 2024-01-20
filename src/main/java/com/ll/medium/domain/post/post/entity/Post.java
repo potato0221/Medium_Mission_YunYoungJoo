@@ -46,6 +46,7 @@ public class Post extends BaseEntity {
     private Long viewCount;
 
 
+
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<Comment> commentList;
 

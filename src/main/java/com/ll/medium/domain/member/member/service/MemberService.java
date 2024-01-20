@@ -32,6 +32,8 @@ public class MemberService {
         return join(username, email, password, nickname, "");
     }
 
+
+
     @Transactional
     public RsData<SiteMember> join(String username, String email, String password, String nickname, MultipartFile profileImg) {
         String profileImgFilePath = Ut.file.toFile(profileImg, AppConfig.getTempDirPath());

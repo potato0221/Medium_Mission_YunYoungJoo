@@ -127,6 +127,7 @@ public class PostController {
             return "post/post/post_form";
         }
 
+
         this.postService.create(member,
                 postForm.getTitle(),
                 postForm.getContent(),
@@ -146,7 +147,7 @@ public class PostController {
             Principal principal
     ) {
         Post post = this.postService.getPost(id);
-        if (!post.getAuthor().getUsername().equals(principal.getName())) {
+        if (!post.getAuthor().getUsername().equals(rq.getMember().getUsername())) {
             return rq.redirectIfAccessError("/post/access_denied", "수정 권한이 없는 글 입니다.");
         }
         postForm.setTitle(post.getTitle());
